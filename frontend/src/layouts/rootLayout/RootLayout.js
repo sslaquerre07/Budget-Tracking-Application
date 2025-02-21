@@ -9,7 +9,7 @@ function RootLayout() {
                 <Link to="/" className="logo">
                     {/* Change when we have a logo */}
                     <ImageFiller />
-                    <span> Budget Tracker</span>
+                    <span>AutoBudget</span>
                 </Link>
             </header>
             <main>
