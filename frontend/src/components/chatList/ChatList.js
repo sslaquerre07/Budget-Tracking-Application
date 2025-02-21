@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './chatList.css'
-import { ClerkProvider, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
 
 function ChatList() {
     const navigate = useNavigate();
