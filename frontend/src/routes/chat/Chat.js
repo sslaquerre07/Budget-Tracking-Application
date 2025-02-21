@@ -3,7 +3,7 @@ import "./chat.css"
 function Chat() {
     return (
         <div className="Chat">
-            Hello World
+            Chat
         </div>
     );
 }

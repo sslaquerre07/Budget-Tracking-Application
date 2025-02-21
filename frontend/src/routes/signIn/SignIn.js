@@ -3,7 +3,7 @@ import "./signIn.css"
 function SignIn() {
     return (
         <div className="SignIn">
-            Hello World
+            Sign In
         </div>
     );
 }

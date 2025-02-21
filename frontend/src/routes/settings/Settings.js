@@ -3,7 +3,7 @@ import "./settings.css"
 function Settings() {
     return (
         <div className="Settings">
-            Hello World
+            Settings
         </div>
     );
 }
