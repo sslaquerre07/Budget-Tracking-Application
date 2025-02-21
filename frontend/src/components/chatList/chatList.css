@@ -39,11 +39,5 @@
         align-items: center;
         gap: 10px;
         font-style: 12px;
-
-        /* Change to img css for profile*/
-        img {
-            width: 24px;
-            height: 24px;
-        }
     }
 }
