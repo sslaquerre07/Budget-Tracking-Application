@@ -1,19 +1,14 @@
 import { Link, Outlet } from "react-router-dom";
+import ImageFiller from 'react-image-filler';
 import "./rootLayout.css"
 
 function RootLayout() {
     return (
         <div className="RootLayout">
             <header>
-                <Link to="/">
+                <Link to="/" className="logo">
                     {/* Change when we have a logo */}
-                    <img
-                        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"
-                        width="0"
-                        height="0"
-                        alt=""
-                    />
-
+                    <ImageFiller />
                     <span> Budget Tracker</span>
                 </Link>
             </header>
