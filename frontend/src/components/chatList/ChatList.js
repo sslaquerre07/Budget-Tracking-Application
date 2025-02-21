@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './chatList.css'
-import ImageFiller from 'react-image-filler';
+import { ClerkProvider, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
 
 function ChatList() {
+    const navigate = useNavigate();
+
     return (
         <div className="ChatList">
             <span className='title'>DASHBOARD</span>
@@ -19,9 +21,14 @@ function ChatList() {
             </div>
             <hr />
             <div className="profile">
-                {/* Add user profile here */}
-                <ImageFiller />
-                <span>Profile</span>
+                <SignedOut>
+                    <button onClick={() => navigate('/sign-in')}>
+                        Sign In
+                    </button>
+                </SignedOut>
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
             </div>
         </div>
     );
