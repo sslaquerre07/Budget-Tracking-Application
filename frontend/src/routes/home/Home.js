@@ -11,9 +11,6 @@ function Home() {
                 <h3>description?</h3>
                 <Link to="/dashboard">Get Started</Link>
             </div>
-            <div className="right">
-                <ImageFiller />
-            </div>
         </div>
     );
 }
