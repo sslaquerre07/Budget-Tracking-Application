@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import ImageFiller from 'react-image-filler';
 import "./home.css"
 
 function Home() {
