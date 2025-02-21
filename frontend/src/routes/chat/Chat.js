@@ -3,7 +3,10 @@ import "./chat.css"
 function Chat() {
     return (
         <div className="Chat">
-            Chat
+            <div className="wrapper">
+                <div className="box">
+                </div>
+            </div>
         </div>
     );
 }

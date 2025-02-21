@@ -3,7 +3,7 @@ import "./dashboard.css"
 function Dashboard() {
     return (
         <div className="Dashboard">
-            Dashboard
+            <div className="formContainer"></div>
         </div>
     );
 }
