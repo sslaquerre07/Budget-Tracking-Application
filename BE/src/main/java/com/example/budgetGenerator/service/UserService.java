@@ -17,4 +17,8 @@ public class UserService {
     public Optional<User> getUser(String email){
         return userRepository.findById(email);
     }
+
+    public User registerUser(User newUser){
+        return userRepository.save(newUser);
+    }
 }
