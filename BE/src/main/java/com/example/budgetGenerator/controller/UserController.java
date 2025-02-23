@@ -31,11 +31,11 @@ public class UserController {
     public ResponseEntity<?> verifyLogin(@RequestBody BasicUserDTO loginDetails) {
         try{
             Optional<User> potentialUser = userService.getUser(loginDetails.getEmail());
-            //If the username is incorrect, return -1 as the privilege level
+            //If the username is incorrect, throw a bad username/password exception
             if(!potentialUser.isPresent()){
                 throw new Exception("Bad Username/Password, please try again");
             }
-            //If password is incorrect, also return -1 (Not in the same if statement because not sure if it works like C++)
+            //If password is incorrect, also throw a bad username/password exception
             else if(!potentialUser.get().getPassword().equals(loginDetails.getPassword())){
                 throw new Exception("Bad Username/Password, please try again");
             } 
@@ -50,5 +50,29 @@ public class UserController {
             ));
         }
         
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody BasicUserDTO registerDetails){
+        try{
+            Optional<User> potentialUser = userService.getUser(registerDetails.getEmail());
+            //If user already exists, notify the user
+            if(potentialUser.isPresent()){
+                throw new Exception("Email already has an account registered, please pick another email");
+            }
+
+            //Save the new user
+            userService.registerUser(new User(registerDetails.getEmail(), registerDetails.getPassword()));
+
+            //If no issues, return a notice of successful registration
+            return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, String>(Map.ofEntries(
+                Map.entry("response", "Registration successful")
+            )));
+        }
+        catch(Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
     }
 }
