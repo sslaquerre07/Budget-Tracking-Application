@@ -1,8 +1,8 @@
-import "./chat.css"
+import "./budget.css"
 
-function Chat() {
+function Budget() {
     return (
-        <div className="Chat">
+        <div className="Budget">
             <div className="wrapper">
                 <div className="box">
                     <span>here</span>
@@ -12,4 +12,4 @@ function Chat() {
     );
 }
 
-export default Chat;
+export default Budget;

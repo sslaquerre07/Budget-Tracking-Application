@@ -4,7 +4,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
 import Dashboard from './routes/dashboard/Dashboard.js';
-import Chat from './routes/chat/Chat.js';
+import Budget from './routes/budget/Budget.js';
 import Home from './routes/home/Home.js';
 import RootLayout from './layouts/rootLayout/RootLayout.js';
 import DashboardLayout from './layouts/dashboardLayout/DashboardLayout.js';
@@ -41,8 +41,8 @@ const router = createBrowserRouter([
             element: <Dashboard />
           },
           {
-            path: "/dashboard/chats/:id",
-            element: <Chat />
+            path: "/dashboard/budgets/:id",
+            element: <Budget />
           },
         ]
       },
