@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./home.css";
+import { ExpenseWrapper } from "../../components/chatList/budgetComponents/ExpenseWrapper";
 
 function Home() {
     return (
