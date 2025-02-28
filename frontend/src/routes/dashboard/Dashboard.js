@@ -40,13 +40,13 @@ function Dashboard() {
             <Paper elevation={3}>
                 <BudgetType ref={budgetTypeRef} />
             </Paper>
-            <Paper>
+            <Paper elevation={3}>
                 <Income ref={incomeRef} />
             </Paper>
-            <Paper>
+            <Paper elevation={3}>
                 <Expenses ref={expensesRef} />
             </Paper>
-            <Paper>
+            <Paper elevation={3}>
                 <FinancialGoals ref={financialGoalsRef} />
             </Paper>
             <button type="submit" onClick={handleGenerateBudget}>
