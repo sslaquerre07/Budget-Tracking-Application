@@ -41,7 +41,7 @@ const Expenses = forwardRef((props, ref) => {
         const filteredExpenses = expenses.filter(expense => expense.id !== id);
         setExpenses(filteredExpenses);
     };
-    
+
     useImperativeHandle(ref, () => ({
         getExpenseData: () => expenses.map(({ id, ...rest }) => rest)
     }));
