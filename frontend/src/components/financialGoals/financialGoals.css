@@ -1,0 +1,112 @@
+.FinancialGoals {
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.goals-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    align-items: flex-start;
+}
+
+.goals-input textarea {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    resize: none;
+    overflow: hidden;
+    min-height: 42px;
+    font-family: inherit;
+    line-height: 1.5;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.goals-input button {
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.goals-input button:hover {
+    background-color: #3b5998;
+}
+
+.goals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.goal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 15px;
+    background-color: #f0f7ff;
+    /* Light blue to match the theme */
+    border-radius: 4px;
+    border-left: 3px solid #4a6fa5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.goal-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+}
+
+.goal-text {
+    font-size: 16px;
+    transition: all 0.2s ease;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.delete-goal {
+    background: none;
+    border: none;
+    color: #f44336;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.delete-goal:hover {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.no-goals {
+    color: #666;
+    font-style: italic;
+    margin-top: 20px;
+}
