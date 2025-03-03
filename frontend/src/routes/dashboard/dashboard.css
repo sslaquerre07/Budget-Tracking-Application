@@ -1,0 +1,15 @@
+.Dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: antiquewhite;
+}
+
+button{
+    background: #228B22;
+    color: #fff;
+    border: none;
+    padding: 0.55rem;
+    cursor: pointer;
+}
