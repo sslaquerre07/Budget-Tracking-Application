@@ -1,0 +1,117 @@
+.Expenses {
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.expense-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.expense-form input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 120px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.expense-form button {
+    background-color: #FF5722;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.expense-form button:hover {
+    background-color: #E64A19;
+}
+
+.expense-form button:last-child {
+    background-color: #f44336;
+}
+
+.expense-form button:last-child:hover {
+    background-color: #d32f2f;
+}
+
+.expense-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff0f0;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+    border-left: 3px solid #d32f2f;
+}
+
+.expense-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+    flex: 1;
+}
+
+.expense-type {
+    font-weight: bold;
+}
+
+.expense-amount {
+    color: #c62828;
+    font-size: 1.1em;
+}
+
+.expense-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.expense-actions button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.expense-actions button:hover {
+    background-color: #0b7dda;
+}
+
+.expense-actions button:last-child {
+    background-color: #f44336;
+}
+
+.expense-actions button:last-child:hover {
+    background-color: #d32f2f;
+}
