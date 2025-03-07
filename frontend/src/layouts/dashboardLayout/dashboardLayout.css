@@ -1,0 +1,17 @@
+.DashboardLayout {
+    display: flex;
+    gap: 50px;
+    padding-top: 20px;
+    height: 100%;
+    background-color: lightgoldenrodyellow;
+
+    .menu {
+        flex: 1;
+    }
+
+    .content {
+        flex: 4;
+        background-color: lightsalmon;
+        overflow: auto;
+    }
+}
