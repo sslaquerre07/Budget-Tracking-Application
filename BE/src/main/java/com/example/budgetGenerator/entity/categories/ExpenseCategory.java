@@ -4,6 +4,13 @@ import java.util.List;
 
 import com.example.budgetGenerator.entity.accounts.Account;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.NoArgsConstructor;
+
+@Entity
+@DiscriminatorValue("EXPENSE")
+@NoArgsConstructor
 public class ExpenseCategory extends Category{
     //Ctor
     public ExpenseCategory(List<Account> accounts, String title){

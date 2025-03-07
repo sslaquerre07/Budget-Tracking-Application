@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BudgetDTO {
     //Data members
+    private String budgetTitle;
     private Integer budgetType;
     private ArrayList<CategoryDTO> categories;
 }
