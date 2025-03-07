@@ -7,10 +7,14 @@ import com.example.budgetGenerator.entity.categories.Category;
 import com.example.budgetGenerator.entity.interfaces.CreateString;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,6 +26,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "budget")
+//Following annotations used for Inheritance purposes
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "budget_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Budget implements CreateString{
     //ID for the class in the DB
     @Id

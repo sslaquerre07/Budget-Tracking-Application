@@ -22,6 +22,7 @@ CREATE TABLE budget (
 	budget_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     creation_date DATE NOT NULL,
+    budget_type VARCHAR(100) NOT NULL,
     response VARCHAR(10000)
 )ENGINE=InnoDB;
 
@@ -32,7 +33,7 @@ CREATE TABLE category (
 	category_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     budget_id BIGINT NOT NULL,
-    is_expense BOOLEAN NOT NULL,
+    category_type VARCHAR(100) NOT NULL,
     FOREIGN KEY (budget_id) REFERENCES budget(budget_id) ON DELETE CASCADE
 )ENGINE=InnoDB;
 

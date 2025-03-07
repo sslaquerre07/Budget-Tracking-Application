@@ -3,13 +3,21 @@ package com.example.budgetGenerator.entity.categories;
 import java.util.List;
 
 import com.example.budgetGenerator.entity.accounts.Account;
+import com.example.budgetGenerator.entity.budgets.Budget;
 import com.example.budgetGenerator.entity.interfaces.CreateString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,6 +29,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "category")
+//The following annotations are for inheritance purposes
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "category_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Category implements CreateString{
     //Variable instances
     @Id
@@ -33,6 +44,12 @@ public abstract class Category implements CreateString{
     @OneToMany(mappedBy = "category")
     private List<Account> accounts;
     private String title;
+
+    //Additional data member to map the reference in the DB, not needed for any other purpose
+    @ManyToOne
+    @JoinColumn(name = "budget_id")
+    @JsonIgnore
+    private Budget budget;
 
     //Ctor
     public Category(List<Account> accounts, String title){

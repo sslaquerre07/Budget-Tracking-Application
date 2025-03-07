@@ -8,20 +8,20 @@ INSERT INTO user (email, password) VALUES
 -- -----------------------------------------------------
 -- Inserting sample data into the Budget table
 -- -----------------------------------------------------
-INSERT INTO budget (title, creation_date, response) VALUES 
-('Monthly Household Budget', '2025-03-01', 'All expenses for March'),
-('Vacation Budget', '2025-04-01', 'Budget plan for the vacation trip');
+INSERT INTO budget (title, creation_date, budget_type, response) VALUES 
+('Monthly Household Budget', '2025-03-01', 'MONTHLY', 'All expenses for March'),
+('Vacation Budget', '2025-04-01', 'MONTHLY', 'Budget plan for the vacation trip');
 
 -- -----------------------------------------------------
 -- Inserting sample data into the Category table
 -- -----------------------------------------------------
-INSERT INTO category (title, budget_id, is_expense) VALUES 
-('Groceries', 1, true),
-('Entertainment', 1, true),
-('Dining Out', 1, true),
-('Flights', 2, true),
-('Hotel', 2, true),
-('Activities', 2, true);
+INSERT INTO category (title, budget_id, category_type) VALUES 
+('Groceries', 1, "INCOME"),
+('Entertainment', 1, "INCOME"),
+('Dining Out', 1, "INCOME"),
+('Flights', 2, "INCOME"),
+('Hotel', 2, "INCOME"),
+('Activities', 2, "INCOME");
 
 -- -----------------------------------------------------
 -- Inserting sample data into the Account table
