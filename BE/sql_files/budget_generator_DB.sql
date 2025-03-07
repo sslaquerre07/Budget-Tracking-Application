@@ -14,3 +14,35 @@ CREATE TABLE user (
     email VARCHAR(100) PRIMARY KEY,
     password VARCHAR(255) NOT NULL
 )ENGINE=InnoDB;
+
+-- -----------------------------------------------------
+-- Table: Budget (User reference to be added later)
+-- -----------------------------------------------------
+CREATE TABLE budget (
+	budget_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    creation_date DATE NOT NULL,
+    response VARCHAR(10000)
+)ENGINE=InnoDB;
+
+-- -----------------------------------------------------
+-- Table: Category
+-- -----------------------------------------------------
+CREATE TABLE category (
+	category_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    budget_id BIGINT NOT NULL,
+    is_expense BOOLEAN NOT NULL,
+    FOREIGN KEY (budget_id) REFERENCES budget(budget_id) ON DELETE CASCADE
+)ENGINE=InnoDB;
+
+-- -----------------------------------------------------
+-- Table: Category
+-- -----------------------------------------------------
+CREATE TABLE account (
+	account_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    balance DOUBLE NOT NULL,
+    category_id BIGINT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE
+)ENGINE=InnoDB;
