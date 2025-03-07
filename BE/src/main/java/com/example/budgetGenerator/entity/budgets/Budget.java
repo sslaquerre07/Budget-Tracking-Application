@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,8 @@ public abstract class Budget implements CreateString{
 
     //Other data members
     private String title;
+    //Setting up the relationship for the DB
+    @OneToMany(mappedBy = "budget")
     private List<Category> categories;
     private Date creationDate;
     //Response String to be put in here later
