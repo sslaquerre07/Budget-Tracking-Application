@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.budgetGenerator.entity.categories.Category;
 import com.example.budgetGenerator.entity.interfaces.CreateString;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -39,7 +40,7 @@ public abstract class Budget implements CreateString{
     //Other data members
     private String title;
     //Setting up the relationship for the DB
-    @OneToMany(mappedBy = "budget")
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
     private List<Category> categories;
     private Date creationDate;
     //Response String to be put in here later
