@@ -10,10 +10,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.budgetGenerator.dto.BudgetDTO;
+import com.example.budgetGenerator.entity.accounts.Account;
 import com.example.budgetGenerator.entity.budgets.Budget;
+import com.example.budgetGenerator.entity.categories.Category;
 import com.example.budgetGenerator.service.BudgetService;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @CrossOrigin(origins = "*")
@@ -36,5 +42,28 @@ public class BudgetController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
-    
+
+    /*ALL POST REQUESTS */
+    @PostMapping("/save")
+    public ResponseEntity<?> saveNewBudget(@RequestBody BudgetDTO newBudgetDTO){
+        try {
+            //Generating the new budget
+            Budget newBudget = BudgetService.generateBudget(newBudgetDTO);
+            //Manually assigning back references since Spring cannot
+            for(Category category: newBudget.getCategories()){
+                for(Account account: category.getAccounts()){
+                    account.setCategory(category);
+                }
+                category.setBudget(newBudget);
+            }
+            //Saving the entity to the DB
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
+                Map.entry("response", budgetService.saveNewBudget(newBudget))
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
 }

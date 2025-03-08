@@ -49,4 +49,9 @@ public class BudgetService {
         }
         return finalBudget;
     }
+
+    //Save a budget to the DB
+    public Budget saveNewBudget(Budget newBudget){
+        return budgetRepository.save(newBudget);
+    }
 }  
