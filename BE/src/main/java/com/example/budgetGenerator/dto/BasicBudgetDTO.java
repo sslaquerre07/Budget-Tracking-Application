@@ -1,6 +1,6 @@
 package com.example.budgetGenerator.dto;
 
-import java.util.List;
+import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BudgetDTO {
-    //Data members
+public class BasicBudgetDTO {
+    private Long budgetId;
     private String budgetTitle;
-    private Integer budgetType;
-    private List<CategoryDTO> categories;
+    private Date creationDate;
 }

@@ -3,18 +3,24 @@ package com.example.budgetGenerator.entity.budgets;
 import java.sql.Date;
 import java.util.List;
 
+import com.example.budgetGenerator.entity.User;
 import com.example.budgetGenerator.entity.categories.Category;
 import com.example.budgetGenerator.entity.interfaces.CreateString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -39,16 +45,23 @@ public abstract class Budget implements CreateString{
     //Other data members
     private String title;
     //Setting up the relationship for the DB
-    @OneToMany(mappedBy = "budget")
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
     private List<Category> categories;
     private Date creationDate;
     //Response String to be put in here later
+    private String response;
+    //Additional data member to map the reference in the DB, not needed for any other purpose
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_email")
+    @JsonIgnore
+    private User user;
 
     //CTOR
     public Budget(String title, List<Category> categories){
         this.title = title;
         this.categories = categories;
         this.creationDate = new Date(System.currentTimeMillis());
+        this.response = null;
     }
 
     //Other public methods

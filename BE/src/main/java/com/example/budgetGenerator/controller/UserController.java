@@ -1,8 +1,9 @@
 package com.example.budgetGenerator.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.budgetGenerator.dto.BasicBudgetDTO;
 import com.example.budgetGenerator.dto.BasicUserDTO;
 import com.example.budgetGenerator.entity.User;
+import com.example.budgetGenerator.entity.budgets.Budget;
+import com.example.budgetGenerator.service.BudgetService;
 import com.example.budgetGenerator.service.UserService;
 
 @CrossOrigin(origins = "*")
@@ -25,18 +29,16 @@ public class UserController {
     //All necesary services
     @Autowired
     private UserService userService;
+    @Autowired
+    private BudgetService budgetService;
 
     //Verifying a user login and returning the privilege level
     @PostMapping  ("/login")
     public ResponseEntity<?> verifyLogin(@RequestBody BasicUserDTO loginDetails) {
         try{
-            Optional<User> potentialUser = userService.getUser(loginDetails.getEmail());
-            //If the username is incorrect, throw a bad username/password exception
-            if(!potentialUser.isPresent()){
-                throw new Exception("Bad Username/Password, please try again");
-            }
+            User user = userService.getUser(loginDetails.getEmail(), true);
             //If password is incorrect, also throw a bad username/password exception
-            else if(!potentialUser.get().getPassword().equals(loginDetails.getPassword())){
+            if(!user.getPassword().equals(loginDetails.getPassword())){
                 throw new Exception("Bad Username/Password, please try again");
             } 
             //Finally, if both username and password match, notify user of successful login
@@ -52,14 +54,12 @@ public class UserController {
         
     }
 
+    //Registers a user into the system
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody BasicUserDTO registerDetails){
         try{
-            Optional<User> potentialUser = userService.getUser(registerDetails.getEmail());
-            //If user already exists, notify the user
-            if(potentialUser.isPresent()){
-                throw new Exception("Email already has an account registered, please pick another email");
-            }
+            //Check that the user does not exist
+            userService.getUser(registerDetails.getEmail(), false);
 
             //Save the new user
             userService.registerUser(new User(registerDetails.getEmail(), registerDetails.getPassword()));
@@ -70,6 +70,29 @@ public class UserController {
             )));
         }
         catch(Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
+
+    //Return the basic info about a user's budgets
+    @PostMapping("/budgets")
+    public ResponseEntity<?> getUserBudget(@RequestBody Map<String, String> request){
+        try {
+            //First verify that the user exists
+            userService.getUser(request.get("email"), true);
+            //Retrieve user budgets
+            List<Budget> userBudgets = budgetService.getUserBudgets(request.get("email"));
+            List<BasicBudgetDTO> response = new ArrayList<>();
+            //Only send critical information to the FE
+            for(Budget budget: userBudgets){
+                response.add(new BasicBudgetDTO(budget.getBudgetId(), budget.getTitle(), budget.getCreationDate()));
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, List<BasicBudgetDTO>>(Map.ofEntries(
+                Map.entry("response", response)
+            )));
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
                 Map.entry("response", e.getMessage())
             ));

@@ -7,10 +7,12 @@ import com.example.budgetGenerator.entity.budgets.Budget;
 import com.example.budgetGenerator.entity.interfaces.CreateString;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,12 +43,12 @@ public abstract class Category implements CreateString{
 
     //Other data members
     //Setting up the relationship for the DB
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Account> accounts;
     private String title;
 
     //Additional data member to map the reference in the DB, not needed for any other purpose
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "budget_id")
     @JsonIgnore
     private Budget budget;

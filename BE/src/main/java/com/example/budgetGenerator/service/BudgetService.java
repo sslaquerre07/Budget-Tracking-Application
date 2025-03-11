@@ -49,4 +49,14 @@ public class BudgetService {
         }
         return finalBudget;
     }
+
+    //Save a budget to the DB
+    public Budget saveNewBudget(Budget newBudget){
+        return budgetRepository.save(newBudget);
+    }
+
+    //Retrieve a list of budgets corresponding to a user:
+    public List<Budget> getUserBudgets(String userEmail){
+        return budgetRepository.findByUserEmail(userEmail);
+    }
 }  
