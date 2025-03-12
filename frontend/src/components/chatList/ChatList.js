@@ -1,10 +1,18 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import './chatList.css';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+// Import Material UI icons
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 function ChatList() {
     const apiUrl = process.env.REACT_APP_BUDGETS_API;
-    // const apiUrl = "http://localhost:8080"
+    const queryClient = useQueryClient();
+    const [editingId, setEditingId] = useState(null);
+    const [editTitle, setEditTitle] = useState('');
 
     const { isPending, error, data } = useQuery({
         queryKey: ['budgets'],
@@ -20,6 +28,79 @@ function ChatList() {
             }).then((res) => res.json()),
     });
 
+    const deleteMutation = useMutation({
+        mutationFn: async (budgetId) => {
+            const payload = {
+                email: "jane.smith@example.com", // !TEST
+                budgetId
+            };
+            console.log('DELETE request', JSON.stringify(payload, null, 2));
+
+            const response = await fetch(`${apiUrl}/user/budgets/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+            console.log('Delete Response:', data);
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['budgets'] });
+        }
+    });
+
+    const updateMutation = useMutation({
+        mutationFn: async ({ budgetId, newTitle }) => {
+            const payload = {
+                email: "jane.smith@example.com", // !TEST
+                budgetId,
+                budgetTitle: newTitle
+            };
+            console.log('UPDATE request', JSON.stringify(payload, null, 2));
+
+            const response = await fetch(`${apiUrl}/user/budgets/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+            console.log('Update Response:', data);
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['budgets'] });
+            setEditingId(null);
+        }
+    });
+
+
+    const handleDelete = (e, budgetId) => {
+        e.preventDefault();
+        e.stopPropagation();
+        deleteMutation.mutate(budgetId);
+    };
+
+    const handleEditStart = (e, budget) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setEditingId(budget.budgetId);
+        setEditTitle(budget.budgetTitle);
+    };
+
+    const handleEditSave = (e, budgetId) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (editTitle.trim()) {
+            updateMutation.mutate({ budgetId, newTitle: editTitle });
+        }
+    };
 
     const budgets = data?.response || [];
 
@@ -35,9 +116,52 @@ function ChatList() {
                     : error
                         ? "Something went wrong!"
                         : budgets.map((budget) => (
-                            <Link to={`/dashboard/budgets/${budget.budgetId}`} key={budget.budgetId}>
-                                {budget.budgetTitle}
-                            </Link>
+                            <div className="budget-item" key={budget.budgetId}>
+                                {editingId === budget.budgetId ? (
+                                    <form
+                                        className="edit-form"
+                                        onSubmit={(e) => handleEditSave(e, budget.budgetId)}
+                                    >
+                                        <input
+                                            type="text"
+                                            value={editTitle}
+                                            onChange={(e) => setEditTitle(e.target.value)}
+                                            autoFocus
+                                        />
+                                        <button type="submit" className="icon-btn save-btn" title="Save">
+                                            <CheckIcon fontSize="small" />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="icon-btn cancel-btn"
+                                            onClick={() => setEditingId(null)}
+                                            title="Cancel"
+                                        >
+                                            <CloseIcon fontSize="small" />
+                                        </button>
+                                    </form>
+                                ) : (
+                                    <Link to={`/dashboard/budgets/${budget.budgetId}`}>
+                                        {budget.budgetTitle}
+                                        <div className="hover-controls">
+                                            <button
+                                                className="icon-btn edit-btn"
+                                                onClick={(e) => handleEditStart(e, budget)}
+                                                title="Edit"
+                                            >
+                                                <EditIcon fontSize="small" />
+                                            </button>
+                                            <button
+                                                className="icon-btn delete-btn"
+                                                onClick={(e) => handleDelete(e, budget.budgetId)}
+                                                title="Delete"
+                                            >
+                                                <DeleteIcon fontSize="small" />
+                                            </button>
+                                        </div>
+                                    </Link>
+                                )}
+                            </div>
                         ))}
             </div>
         </div>

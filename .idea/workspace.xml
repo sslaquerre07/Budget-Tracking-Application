@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70d2e8e7-9893-4f82-800e-3b49e3ea6caf" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BE/sql_files/budget_generator_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/BE/sql_files/budget_generator_data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/BE/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +93,7 @@
       <workItem from="1741720417140" duration="2304000" />
       <workItem from="1741722774449" duration="505000" />
       <workItem from="1741737235658" duration="40000" />
-      <workItem from="1741750808661" duration="746000" />
+      <workItem from="1741750808661" duration="1382000" />
     </task>
     <servers />
   </component>
