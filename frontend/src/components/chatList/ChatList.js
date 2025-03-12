@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import './chatList.css';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-// Import Material UI icons
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
@@ -102,7 +101,11 @@ function ChatList() {
         }
     };
 
+
     const budgets = data?.response || [];
+    const sortedBudgets = [...budgets].sort((a, b) => {
+        return new Date(b.creationDate) - new Date(a.creationDate);
+    });
 
     return (
         <div className="ChatList">
@@ -115,7 +118,7 @@ function ChatList() {
                     ? "Loading..."
                     : error
                         ? "Something went wrong!"
-                        : budgets.map((budget) => (
+                        : sortedBudgets.map((budget) => (
                             <div className="budget-item" key={budget.budgetId}>
                                 {editingId === budget.budgetId ? (
                                     <form
