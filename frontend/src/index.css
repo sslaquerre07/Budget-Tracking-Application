@@ -1,15 +1,36 @@
+/* Reset and Global Styles */
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
 }
 
+/* Body Styling */
 body {
     background-color: white;
-    overflow:auto;
+    color: #007bff; /* Improved text contrast */
+    overflow: auto;
+    line-height: 1.6;
+    padding: 10px;
 }
 
+/* Links */
 a {
     text-decoration: none;
-    color: inherit; 
+    color: inherit;
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+a:hover {
+    color: #007bff; /* Subtle hover effect */
+    opacity: 0.8;
+}
+
+/* Container for better layout structure */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
 }
