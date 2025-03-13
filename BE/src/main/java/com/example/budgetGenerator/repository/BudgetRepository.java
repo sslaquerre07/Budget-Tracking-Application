@@ -11,6 +11,6 @@ import com.example.budgetGenerator.entity.budgets.Budget;
 
 @Repository
 public interface BudgetRepository extends JpaRepository<Budget, Long>{
-    @Query(value = "SELECT * FROM BUDGET b WHERE b.user_email = :userEmail", nativeQuery = true)
+    @Query(value = "SELECT * FROM budget b WHERE b.user_email = :userEmail", nativeQuery = true)
     List<Budget> findByUserEmail(@Param("userEmail") String userEmail);
 }
