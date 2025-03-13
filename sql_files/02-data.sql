@@ -8,9 +8,17 @@ INSERT INTO user (email, password) VALUES
 -- -----------------------------------------------------
 -- Inserting sample data into the Budget table
 -- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Inserting sample LLM responses into the Budget table
+-- -----------------------------------------------------
 INSERT INTO budget (title, creation_date, budget_type, response, user_email) VALUES 
-('Monthly Household Budget', '2025-03-01', 'MONTHLY', 'All expenses for March', 'jane.smith@example.com'),
-('Vacation Budget', '2025-04-01', 'MONTHLY', 'Budget plan for the vacation trip', 'jane.smith@example.com');
+('Monthly Household Budget', '2025-03-01', 'MONTHLY', 
+    'This budget outlines expected expenses for March, including groceries, entertainment, and dining out. The plan aims to balance spending while saving for unexpected expenses.', 
+    'jane.smith@example.com'),
+    
+('Vacation Budget', '2025-04-01', 'MONTHLY', 
+    'This budget is designed to cover the costs of your upcoming vacation, including flights, hotel accommodations, and activities. The goal is to stay within the planned budget while allowing for flexibility in spending.', 
+    'jane.smith@example.com');
 
 -- -----------------------------------------------------
 -- Inserting sample data into the Category table
