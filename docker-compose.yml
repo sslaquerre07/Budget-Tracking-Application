@@ -32,7 +32,13 @@ services:
     networks:
       - mynetwork
 
-  # react-app: Yet to be implemented
+  react-app:
+    build: ./frontend
+    container_name: react-app
+    ports:
+      - "3000:80"
+    networks:
+      - mynetwork
 
 
 # Network definition
