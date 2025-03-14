@@ -1,6 +1,6 @@
-/* signUp.css */
+/* signUpPage.css */
 
-.SignUp {
+.signUpPage {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +8,7 @@
     background-color: #f5f5f5;
 }
 
-.signUp-container {
+.signUpPage-container {
     background: white;
     padding: 2rem;
     border-radius: 10px;
@@ -17,18 +17,18 @@
     text-align: center;
 }
 
-.signUp-container h1 {
+.signUpPage-container h1 {
     font-size: 24px;
     margin-bottom: 20px;
     color: #333;
 }
 
-.signUp-form {
+.signUpPage-form {
     display: flex;
     flex-direction: column;
 }
 
-.signUp-form input {
+.signUpPage-form input {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -37,7 +37,7 @@
     font-size: 16px;
 }
 
-.signUp-form button {
+.signUpPage-form button {
     background-color: #007bff;
     color: white;
     padding: 10px;
@@ -48,21 +48,21 @@
     transition: background-color 0.3s;
 }
 
-.signUp-form button:hover {
+.signUpPage-form button:hover {
     background-color: #0056b3;
 }
 
-.signUp-link {
+.signUpPage-link {
     margin-top: 15px;
     font-size: 14px;
 }
 
-.signUp-link a {
+.signUpPage-link a {
     color: #007bff;
     text-decoration: none;
     font-weight: bold;
 }
 
-.signUp-link a:hover {
+.signUpPage-link a:hover {
     text-decoration: underline;
 }
