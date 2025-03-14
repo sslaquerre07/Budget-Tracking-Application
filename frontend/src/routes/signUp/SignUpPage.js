@@ -1,14 +1,3 @@
-import { SignUp } from "@clerk/clerk-react";
-import "./signUpPage.css"
-
-function SignUpPage() {
-    return (
-        <div className="SignUpPage">
-            <SignUp path="/sign-up" signInUrl="/sign-in" />
-        </div>
-    );
-}
-
 import { Link } from "react-router-dom";
 import "./signUpPage.css";
 import { useRef } from "react";
@@ -66,5 +55,6 @@ function SignUpPage() {
         </div>
     );
 }
+
 
 export default SignUpPage;

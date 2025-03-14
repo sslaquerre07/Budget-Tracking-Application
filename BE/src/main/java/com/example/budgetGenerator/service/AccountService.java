@@ -19,7 +19,7 @@ public class AccountService {
     public static List<Account> generateAccounts(List<AccountDTO> accountDTOs){
         List<Account> accounts = new ArrayList<>();
         for(AccountDTO accountDTO : accountDTOs){
-            accounts.add(new Account(accountDTO.getAmount(), accountDTO.getTitle()));
+            accounts.add(new Account(accountDTO.getBalance(), accountDTO.getTitle()));
         }
         return accounts;
     }
