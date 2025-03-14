@@ -1,33 +1,21 @@
-import { SignUp } from "@clerk/clerk-react";
-import "./signUpPage.css"
-
-function SignUpPage() {
-    return (
-        <div className="SignUpPage">
-            <SignUp path="/sign-up" signInUrl="/sign-in" />
-        </div>
-    );
-}
-
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./signUpPage.css";
-import { useRef } from "react";
 
 function SignUpPage() {
-    const nameRef = useRef(null);
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        const userData = {
-            name: nameRef.current.value,
-            email: emailRef.current.value,
-            password: passwordRef.current.value,
-        };
-
-        console.log("User Signed Up:", userData);
+        console.log("User Signed Up:", formData);
         // Add sign-up logic (API call, authentication, etc.)
     };
 
@@ -40,21 +28,24 @@ function SignUpPage() {
                         type="text"
                         name="name"
                         placeholder="Full Name"
-                        ref={nameRef}
+                        value={formData.name}
+                        onChange={handleChange}
                         required
                     />
                     <input
                         type="email"
                         name="email"
                         placeholder="Email"
-                        ref={emailRef}
+                        value={formData.email}
+                        onChange={handleChange}
                         required
                     />
                     <input
                         type="password"
                         name="password"
                         placeholder="Password"
-                        ref={passwordRef}
+                        value={formData.password}
+                        onChange={handleChange}
                         required
                     />
                     <button type="submit">Sign Up</button>
