@@ -1,0 +1,47 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: budgetgeneratordatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - ./sql_files:/docker-entrypoint-initdb.d
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p1234"]
+      timeout: 20s
+      retries: 10
+
+  spring-boot-app:
+    build: ./BE
+    container_name: spring-app
+    ports: 
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/budgetgeneratordatabase
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=mypassword
+    networks:
+      - mynetwork
+
+  react-app:
+    build: ./frontend
+    container_name: react-app
+    ports:
+      - "3000:80"
+    networks:
+      - mynetwork
+
+
+# Network definition
+networks:
+  mynetwork:
+    driver: bridge

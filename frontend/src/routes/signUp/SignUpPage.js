@@ -1,21 +1,22 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./signUpPage.css";
+import { useRef } from "react";
 
 function SignUpPage() {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-    });
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    const nameRef = useRef(null);
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("User Signed Up:", formData);
+        
+        const userData = {
+            name: nameRef.current.value,
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        };
+
+        console.log("User Signed Up:", userData);
         // Add sign-up logic (API call, authentication, etc.)
     };
 
@@ -28,24 +29,21 @@ function SignUpPage() {
                         type="text"
                         name="name"
                         placeholder="Full Name"
-                        value={formData.name}
-                        onChange={handleChange}
+                        ref={nameRef}
                         required
                     />
                     <input
                         type="email"
                         name="email"
                         placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        ref={emailRef}
                         required
                     />
                     <input
                         type="password"
                         name="password"
                         placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
+                        ref={passwordRef}
                         required
                     />
                     <button type="submit">Sign Up</button>
