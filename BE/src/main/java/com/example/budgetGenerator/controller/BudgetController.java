@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.budgetGenerator.dto.BasicBudgetDTO;
 import com.example.budgetGenerator.dto.BudgetDTO;
-import com.example.budgetGenerator.entity.accounts.Account;
 import com.example.budgetGenerator.entity.budgets.Budget;
-import com.example.budgetGenerator.entity.categories.Category;
+import com.example.budgetGenerator.repository.BudgetRepository;
 import com.example.budgetGenerator.service.BudgetService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +28,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/budget")
 public class BudgetController {
+
+    private final BudgetRepository budgetRepository;
     @Autowired
     private BudgetService budgetService;
 
+    BudgetController(BudgetRepository budgetRepository) {
+        this.budgetRepository = budgetRepository;
+    }
+
     /*ALL GET REQUESTS */
     @GetMapping("/{budgetId}")
-    public ResponseEntity<?> getMethodName(@PathVariable Long budgetId) {
+    public ResponseEntity<?> getBudget(@PathVariable Long budgetId) {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, Budget>(Map.ofEntries(
                 Map.entry("response", budgetService.getById(budgetId))
@@ -49,13 +56,6 @@ public class BudgetController {
         try {
             //Generating the new budget
             Budget newBudget = BudgetService.generateBudget(newBudgetDTO);
-            //Manually assigning back references since Spring cannot
-            for(Category category: newBudget.getCategories()){
-                for(Account account: category.getAccounts()){
-                    account.setCategory(category);
-                }
-                category.setBudget(newBudget);
-            }
             //Saving the entity to the DB
             return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
                 Map.entry("response", budgetService.saveNewBudget(newBudget))
@@ -66,4 +66,62 @@ public class BudgetController {
             ));
         }
     }
+
+    //Update a budget's title and creation date
+    @PostMapping("/updateBasics")
+    public ResponseEntity<?> updateEssentialInfo(@RequestBody BasicBudgetDTO updateInfo){
+        try {
+            //Ensure that the budget exists first
+            budgetService.getById(updateInfo.getBudgetId());
+            //Now update the database
+            budgetService.updateBudget(updateInfo.getBudgetId(), updateInfo.getBudgetTitle(), updateInfo.getCreationDate());
+            //Saving the entity to the DB
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
+                Map.entry("response", "Budget updated successfully")
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
+
+    //Update a budget's title and creation date
+    @PostMapping("/update/{budgetId}")
+    public ResponseEntity<?> updateBudgetContent(@RequestBody BudgetDTO updateInfo, @PathVariable Long budgetId){
+        try {
+            //Ensure that the budget exists first, and create new budget
+            budgetService.getById(budgetId);
+            Budget updatedBudget = BudgetService.generateBudget(updateInfo);
+            updatedBudget.setBudgetId(budgetId);
+            //Now update the database
+            budgetRepository.save(updatedBudget);
+            //Saving the entity to the DB
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
+                Map.entry("response", "Budget updated successfully")
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
+
+    //Delete a budget based on its id
+    @DeleteMapping("/{budgetId}")
+    public ResponseEntity<?> deleteBudget(@PathVariable Long budgetId) {
+        try{
+            //Prior to deleting the budget check for its prescence
+            budgetService.getById(budgetId);
+            //Now that it is present, can be deleted
+            budgetService.deleteBudget(budgetId);
+            return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, String>(Map.ofEntries(
+                Map.entry("response", "Budget Successfully removed")
+            )));
+        }
+        catch(Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
 }
