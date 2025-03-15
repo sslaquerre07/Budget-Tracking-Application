@@ -10,6 +10,11 @@ function Home() {
                 <h3>description?</h3>
                 <Link to="/dashboard">Get Started</Link>
                 <Link to="/signUp" className="button">Sign Up</Link>
+                
+                <Link to="/settings"> 
+                    <button className="settings-btn">Settings</button> 
+                </Link>
+
             </div>
         </div>
     );

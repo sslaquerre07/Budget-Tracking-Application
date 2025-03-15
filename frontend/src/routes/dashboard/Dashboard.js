@@ -5,6 +5,8 @@ import Income from "../../components/income/Income";
 import "./dashboard.css";
 import Paper from '@mui/material/Paper';
 import FinancialNotes from '../../components/financialGoals/FinancialNotes';
+import { Link } from "react-router-dom";
+
 
 function Dashboard() {
     const budgetTypeRef = useRef();
@@ -49,9 +51,13 @@ function Dashboard() {
             <Paper elevation={3}>
                 <FinancialNotes ref={financialNotesRef} />
             </Paper>
+            
             <button type="submit" onClick={handleGenerateBudget}>
                 Generate Budget
             </button>
+            
+            
+            
         </div>
     );
 }
