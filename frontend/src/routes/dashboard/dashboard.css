@@ -1,15 +1,18 @@
-.Dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    background-color: antiquewhite;
+.button-dash {
+    margin-top: 20px;
+    text-align: center;
 }
 
-button{
-    background: #228B22;
-    color: #fff;
+.button-dash button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
     border: none;
-    padding: 0.55rem;
     cursor: pointer;
+    font-size: 16px;
+}
+
+.button-dash button:hover {
+    background-color: #0056b3;
 }

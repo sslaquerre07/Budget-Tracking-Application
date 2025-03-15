@@ -8,12 +8,15 @@ function Home() {
                 <h1>AutoBudget</h1>
                 <h2>Create your budget here!</h2>
                 <h3>description?</h3>
-                <Link to="/dashboard">Get Started</Link>
-                <Link to="/signUp" className="button">Sign Up</Link>
-                
-                <Link to="/settings"> 
-                    <button className="settings-btn">Settings</button> 
-                </Link>
+
+                {/* Link styled as a button */}
+                <Link to="/dashboard" className="button3">Get Started</Link>
+
+                {/* Sign Up button */}
+                <Link to="/signUp" className="button3">Sign Up</Link>
+
+                {/* Settings button (fixed) */}
+                <Link to="/settings" className="button3">Settings</Link>
 
             </div>
         </div>

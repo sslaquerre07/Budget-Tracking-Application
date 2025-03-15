@@ -1,9 +1,8 @@
 .RootLayout {
     padding: 16px 64px;
-    height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: lightgreen;
+    background-color: rgb(87, 110, 125);
 
     header {
         display: flex;

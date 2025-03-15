@@ -2,55 +2,70 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 80px;
-    height: 100vh; /* Full viewport height */
-    padding: 20px;
-    background-color: #f9f9f9; /* Subtle background for contrast */
+  
+    height: 82vh; /* Full viewport height */
+   
+    margin: 90px;
+   
+    background-color: #dee4ed; /* Subtle background for contrast */
+    border-radius: 20px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-    /* Responsive Design */
-    @media screen and (max-width: 1024px) {
+  
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .Home {
         flex-direction: column;
         gap: 20px;
         text-align: center;
-    }
-
-    .left {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        text-align: center;
-        max-width: 500px;
-
-        h1 {
-            font-size: 2rem;
-            color: #333;
-        }
-
-        p {
-            font-size: 1rem;
-            color: #555;
-            line-height: 1.6;
-            max-width: 400px;
-        }
-
-        a {
-            padding: 12px 30px;
-            background-color: lightblue;
-            color: white;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-
-            &:hover {
-                background-color: blue;
-                transform: scale(1.05);
-                box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.15);
-            }
-        }
     }
 }
+
+.left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    text-align: center;
+    max-width: 500px;
+}
+
+.left h1 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.left p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+/* Link Styling */
+.left a {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: lightblue;
+    color: white;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    text-decoration: none; /* Removes underline */
+}
+
+.left a:hover {
+    background-color: blue;
+    transform: scale(1.05);
+    box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
