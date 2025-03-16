@@ -1,6 +1,8 @@
-package com.example.budgetGenerator.dto;
+package com.example.budgetGenerator.dto.budget;
 
 import java.util.List;
+
+import com.example.budgetGenerator.dto.category.CategoryDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
