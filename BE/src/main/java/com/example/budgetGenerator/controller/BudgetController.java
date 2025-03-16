@@ -2,7 +2,7 @@ package com.example.budgetGenerator.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import com.example.budgetGenerator.service.LLMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/budget")
 public class BudgetController {
     @Autowired
+    private LLMService LLMService;
+    @Autowired
     private BudgetService budgetService;
+
+    BudgetController(LLMService LLMService) {
+        this.LLMService = LLMService;
+    }
 
     /*ALL GET REQUESTS */
     @GetMapping("/{budgetId}")
@@ -52,6 +58,23 @@ public class BudgetController {
             //Saving the entity to the DB
             return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
                 Map.entry("response", budgetService.saveNewBudget(newBudget))
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
+
+    //Retrieve a response for a budget (for guest users)
+    @PostMapping("/save")
+    public ResponseEntity<?> generateResponse(@RequestBody BudgetDTO budgetDTO){
+        try {
+            //Generating the new budget
+            Budget budget = BudgetService.generateBudget(budgetDTO);
+            //Return the response
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
+                Map.entry("response", LLMService.generateBudget(budget))
             ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
