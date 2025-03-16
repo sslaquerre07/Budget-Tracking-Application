@@ -4,6 +4,7 @@
 INSERT INTO user (email, password) VALUES 
 ('john.doe@example.com', 'password123'),
 ('jane.smith@example.com', 'mypassword456');
+--Inserts two users 
 
 -- -----------------------------------------------------
 -- Inserting sample data into the Budget table
@@ -20,6 +21,8 @@ INSERT INTO budget (title, creation_date, budget_type, response, user_email) VAL
     'This budget is designed to cover the costs of your upcoming vacation, including flights, hotel accommodations, and activities. The goal is to stay within the planned budget while allowing for flexibility in spending.', 
     'jane.smith@example.com');
 
+--Inserts two budgets linked to jane.smith@example.com, "Monthlu Household Budget" and "Vacation Budget" with descriptions (responses)
+
 -- -----------------------------------------------------
 -- Inserting sample data into the Category table
 -- -----------------------------------------------------
@@ -31,6 +34,9 @@ INSERT INTO category (title, budget_id, category_type) VALUES
 ('Hotel', 2, "INCOME"),
 ('Activities', 2, "INCOME");
 
+--Creates categories linked to budgets above (budget IDs 1 and 2)
+--Categories are: Groceries, Entertainment, Dining Out, Flights, Hotel, Activities.
+
 -- -----------------------------------------------------
 -- Inserting sample data into the Account table
 -- -----------------------------------------------------
@@ -41,3 +47,6 @@ INSERT INTO account (title, balance, category_id) VALUES
 ('Delta Airlines', 1000.00, 4),  -- Flights
 ('Hilton Hotel', 800.00, 5),  -- Hotel
 ('Theme Park Tickets', 500.00, 6);  -- Activities
+
+--Adds accounts (transactions/spending) linked to each category: Walmart ($200), AMC Theater ($150), Restaurant XYZ ($100), Delta Airlines ($1000), Hilton Hotel ($800), Theme Park Tickets ($500).
+--This file fills the structure of the database with actual examples to demonstrate usage. 
