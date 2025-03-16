@@ -29,10 +29,8 @@ import com.example.budgetGenerator.service.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-    private final AccountController accountController;
-
-    private final LLMService LLMService;
+    @Autowired
+    private LLMService LLMService;
     //All necesary services
     @Autowired
     private UserService userService;
@@ -40,11 +38,6 @@ public class UserController {
     private BudgetService budgetService;
     @Autowired
     private MailService mailService;
-
-    UserController(LLMService LLMService, AccountController accountController) {
-        this.LLMService = LLMService;
-        this.accountController = accountController;
-    }
 
     //Verifying a user login and returning the privilege level
     @PostMapping  ("/login")
