@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.budgetGenerator.dto.BasicBudgetDTO;
-import com.example.budgetGenerator.dto.BasicUserDTO;
+import com.example.budgetGenerator.dto.budget.BasicBudgetDTO;
+import com.example.budgetGenerator.dto.user.BasicUserDTO;
 import com.example.budgetGenerator.entity.User;
 import com.example.budgetGenerator.entity.budgets.Budget;
 import com.example.budgetGenerator.service.BudgetService;
+import com.example.budgetGenerator.service.MailService;
 import com.example.budgetGenerator.service.UserService;
 
 @CrossOrigin(origins = "*")
@@ -31,6 +32,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private BudgetService budgetService;
+    @Autowired
+    private MailService mailService;
 
     //Verifying a user login and returning the privilege level
     @PostMapping  ("/login")
@@ -62,7 +65,7 @@ public class UserController {
             userService.getUser(registerDetails.getEmail(), false);
 
             //Save the new user
-            userService.registerUser(new User(registerDetails.getEmail(), registerDetails.getPassword()));
+            userService.saveUser(new User(registerDetails.getEmail(), registerDetails.getPassword()));
 
             //If no issues, return a notice of successful registration
             return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, String>(Map.ofEntries(
@@ -92,6 +95,25 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, List<BasicBudgetDTO>>(Map.ofEntries(
                 Map.entry("response", response)
             )));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
+
+    @PostMapping("/updatePassword")
+    public ResponseEntity<?> updateUserPassword(@RequestBody BasicUserDTO newUserInfo){
+        try {
+            User user = userService.getUser(newUserInfo.getEmail(), true);
+            //Set the new password and save the data.
+            user.setPassword(newUserInfo.getPassword());
+            userService.saveUser(user);
+            //Notify user of success
+            mailService.sendPasswordUpdate(user.getEmail());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", "Password successfully updated")
+            ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
                 Map.entry("response", e.getMessage())

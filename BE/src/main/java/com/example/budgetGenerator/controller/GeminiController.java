@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.budgetGenerator.dto.BudgetDTO;
+import com.example.budgetGenerator.dto.budget.BudgetDTO;
 import com.example.budgetGenerator.entity.budgets.Budget;
 import com.example.budgetGenerator.service.BudgetService;
 

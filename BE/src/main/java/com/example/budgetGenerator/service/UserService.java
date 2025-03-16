@@ -26,7 +26,7 @@ public class UserService {
         return potentialUser.get();
     }
 
-    public User registerUser(User newUser){
+    public User saveUser(User newUser){
         return userRepository.save(newUser);
     }
 }

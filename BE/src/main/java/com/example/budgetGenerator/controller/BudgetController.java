@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.budgetGenerator.dto.BasicBudgetDTO;
-import com.example.budgetGenerator.dto.BudgetDTO;
+import com.example.budgetGenerator.dto.budget.BasicBudgetDTO;
+import com.example.budgetGenerator.dto.budget.BudgetDTO;
 import com.example.budgetGenerator.entity.budgets.Budget;
-import com.example.budgetGenerator.repository.BudgetRepository;
 import com.example.budgetGenerator.service.BudgetService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,14 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/budget")
 public class BudgetController {
-
-    private final BudgetRepository budgetRepository;
     @Autowired
     private BudgetService budgetService;
-
-    BudgetController(BudgetRepository budgetRepository) {
-        this.budgetRepository = budgetRepository;
-    }
 
     /*ALL GET REQUESTS */
     @GetMapping("/{budgetId}")
@@ -95,7 +88,7 @@ public class BudgetController {
             Budget updatedBudget = BudgetService.generateBudget(updateInfo);
             updatedBudget.setBudgetId(budgetId);
             //Now update the database
-            budgetRepository.save(updatedBudget);
+            budgetService.saveNewBudget(updatedBudget);
             //Saving the entity to the DB
             return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
                 Map.entry("response", "Budget updated successfully")
