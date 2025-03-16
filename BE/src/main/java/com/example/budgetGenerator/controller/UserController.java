@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.budgetGenerator.dto.budget.BasicBudgetDTO;
+import com.example.budgetGenerator.dto.budget.UserBudgetDTO;
 import com.example.budgetGenerator.dto.user.BasicUserDTO;
 import com.example.budgetGenerator.entity.User;
 import com.example.budgetGenerator.entity.budgets.Budget;
 import com.example.budgetGenerator.service.BudgetService;
+import com.example.budgetGenerator.service.LLMService;
 import com.example.budgetGenerator.service.MailService;
 import com.example.budgetGenerator.service.UserService;
 
@@ -27,6 +29,10 @@ import com.example.budgetGenerator.service.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    private final AccountController accountController;
+
+    private final LLMService LLMService;
     //All necesary services
     @Autowired
     private UserService userService;
@@ -34,6 +40,11 @@ public class UserController {
     private BudgetService budgetService;
     @Autowired
     private MailService mailService;
+
+    UserController(LLMService LLMService, AccountController accountController) {
+        this.LLMService = LLMService;
+        this.accountController = accountController;
+    }
 
     //Verifying a user login and returning the privilege level
     @PostMapping  ("/login")
@@ -95,6 +106,33 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, List<BasicBudgetDTO>>(Map.ofEntries(
                 Map.entry("response", response)
             )));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
+
+    //Generate a budget response, associate it to a user, and potentially email it to them
+    @PostMapping("/generate")
+    public ResponseEntity<?> generateBudget(@RequestBody UserBudgetDTO userBudgetDTO){
+        try {
+            //Initialize needed objects
+            Budget newBudget = BudgetService.generateBudget(userBudgetDTO.getBudgetDTO());
+            User user = userService.getUser(userBudgetDTO.getUserEmail(), true);
+            String response = LLMService.generateBudget(newBudget);
+            //Save budget to the database
+            newBudget.setUser(user);
+            newBudget.setResponse(response);
+            budgetService.saveNewBudget(newBudget);
+            //Potentially email the response to the user
+            if(userBudgetDTO.isToBeEmailed()){
+                mailService.sendBudgetReceipt(user.getEmail(), response);
+            }
+            //Return the AI response to the user
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
+                Map.entry("response", response)
+            ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
                 Map.entry("response", e.getMessage())

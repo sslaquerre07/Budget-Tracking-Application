@@ -67,7 +67,7 @@ public class BudgetController {
     }
 
     //Retrieve a response for a budget (for guest users)
-    @PostMapping("/save")
+    @PostMapping("/generate")
     public ResponseEntity<?> generateResponse(@RequestBody BudgetDTO budgetDTO){
         try {
             //Generating the new budget
