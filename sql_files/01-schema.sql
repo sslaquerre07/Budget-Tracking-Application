@@ -8,6 +8,13 @@ CREATE DATABASE IF NOT EXISTS budgetgeneratordatabase;
 USE budgetgeneratordatabase; 
 
 -- -----------------------------------------------------
+-- Alternate user definition
+-- -----------------------------------------------------
+CREATE USER IF NOT EXISTS 'myuser'@'%' IDENTIFIED WITH caching_sha2_password BY 'mypassword';
+GRANT ALL PRIVILEGES ON materialsdatabase.* TO 'myuser'@'%';
+FLUSH PRIVILEGES;
+
+-- -----------------------------------------------------
 -- Table: User
 -- -----------------------------------------------------
 CREATE TABLE user (
