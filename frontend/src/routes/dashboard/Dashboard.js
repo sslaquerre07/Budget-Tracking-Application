@@ -49,9 +49,13 @@ function Dashboard() {
             <Paper elevation={3}>
                 <FinancialNotes ref={financialNotesRef} />
             </Paper>
-            <button type="submit" onClick={handleGenerateBudget}>
-                Generate Budget
-            </button>
+
+            {/* Wrapping the button inside a div with the class "button-dash" */}
+            <div className="button-dash">
+                <button type="submit" onClick={handleGenerateBudget}>
+                    Generate Budget
+                </button>
+            </div>
         </div>
     );
 }
