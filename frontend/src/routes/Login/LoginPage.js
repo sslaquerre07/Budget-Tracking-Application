@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useRef } from "react";
-import "./loginPage.css"; // Make sure to create this CSS file
+import "./LoginPage.css"; // Make sure to create this CSS file
 
 function LoginPage() {
     const emailRef = useRef(null);
