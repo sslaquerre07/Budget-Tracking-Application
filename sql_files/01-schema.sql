@@ -3,9 +3,16 @@
 -- -----------------------------------------------------
 -- Schema Creation
 -- -----------------------------------------------------
-DROP DATABASE IF EXISTS budgetgeneratordatabase;
-CREATE DATABASE IF NOT EXISTS budgetgeneratordatabase;
-USE budgetgeneratordatabase;
+DROP DATABASE IF EXISTS budgetgeneratordatabase; 
+CREATE DATABASE IF NOT EXISTS budgetgeneratordatabase; 
+USE budgetgeneratordatabase; 
+
+-- -----------------------------------------------------
+-- Alternate user definition
+-- -----------------------------------------------------
+CREATE USER IF NOT EXISTS 'myuser'@'%' IDENTIFIED WITH caching_sha2_password BY 'mypassword';
+GRANT ALL PRIVILEGES ON materialsdatabase.* TO 'myuser'@'%';
+FLUSH PRIVILEGES;
 
 -- -----------------------------------------------------
 -- Table: User
@@ -23,7 +30,7 @@ CREATE TABLE budget (
     title VARCHAR(100) NOT NULL,
     creation_date DATE NOT NULL,
     budget_type VARCHAR(100) NOT NULL,
-    response VARCHAR(10000),
+    response VARCHAR(15000),
     user_email VARCHAR(100),
     FOREIGN KEY (user_email) REFERENCES user(email) ON DELETE CASCADE
 )ENGINE=InnoDB;

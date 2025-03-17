@@ -1,4 +1,4 @@
-package com.example.budgetGenerator.dto;
+package com.example.budgetGenerator.dto.budget;
 
 import java.sql.Date;
 
