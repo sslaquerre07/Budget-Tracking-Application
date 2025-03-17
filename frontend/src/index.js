@@ -12,6 +12,7 @@ import SignInPage from './routes/signIn/SignInPage.js';
 import SignUpPage from './routes/signUp/signUpPage.js';
 import SettingsPage from './routes/Settings/settings.js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import LoginPage from './routes/Login/LoginPage.js'
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       },
 
 
+      {
+        path: "/login/*",
+        element: <LoginPage />,
+      },
       {
         element: <DashboardLayout />,
         children: [

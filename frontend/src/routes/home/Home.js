@@ -9,6 +9,7 @@ function Home() {
                 <h2>Create your budget here!</h2>
                 <h3>description?</h3>
 
+
                 {/* Link styled as a button */}
                 <Link to="/dashboard" className="button3">Get Started</Link>
 
@@ -18,6 +19,9 @@ function Home() {
                 {/* Settings button (fixed) */}
                 <Link to="/settings" className="button3">Settings</Link>
 
+                <Link to="/dashboard">Get Started</Link>
+                <Link to="/sign-up" className="button">Sign Up</Link>
+                <Link to="/login" className="button">Login</Link>
             </div>
         </div>
     );
