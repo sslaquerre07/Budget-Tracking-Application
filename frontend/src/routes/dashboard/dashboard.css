@@ -3,13 +3,20 @@
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-    background-color: antiquewhite;
+    background-color: #e3f2fd; /* Light blue background */
+    border-radius: 10px; /* Soft rounded edges */
 }
 
-button{
-    background: #228B22;
+button {
+    background: #1e88e5; /* Blue button */
     color: #fff;
     border: none;
     padding: 0.55rem;
     cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #1565c0; /* Darker blue on hover */
 }

@@ -7,9 +7,12 @@ function Home() {
             <div className="left">
                 <h1>AutoBudget</h1>
                 <h2>Create your budget here!</h2>
-                <h3>description?</h3>
+                <h3>AutoBudget simplifies budgeting by organizing your income and expenses into clear categories. With AI-generated recommendations and intuitive visualizations, you get a structured, personalized budget—without the hassle of manual calculations.</h3>
                 <Link to="/dashboard">Get Started</Link>
-                <Link to="/sign-up" className="button">Sign Up</Link>
+                <div className="auth-buttons">
+                    <Link to="/sign-up" className="button">Sign Up</Link>
+                    <Link to="/sign-in" className="button">Sign In</Link>
+                </div>
             </div>
         </div>
     );
