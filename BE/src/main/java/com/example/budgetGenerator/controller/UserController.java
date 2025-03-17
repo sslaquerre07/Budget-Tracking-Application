@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.budgetGenerator.dto.budget.BasicBudgetDTO;
@@ -142,7 +143,7 @@ public class UserController {
             userService.saveUser(user);
             //Notify user of success
             mailService.sendPasswordUpdate(user.getEmail());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
                 Map.entry("response", "Password successfully updated")
             ));
         } catch (Exception e) {
@@ -150,5 +151,22 @@ public class UserController {
                 Map.entry("response", e.getMessage())
             ));
         }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteAccount(@RequestBody BasicUserDTO toBeDeleted){
+        try{
+            User user = userService.getUser(toBeDeleted.getEmail(), true);
+            userService.deleteUser(user);
+            //Notify user of successful deletion
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
+                Map.entry("response", "Password successfully updated")
+            ));
+        }
+        catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+            Map.entry("response", e.getMessage())
+        ));
+    }
     }
 }
