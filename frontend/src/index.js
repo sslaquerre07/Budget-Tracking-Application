@@ -11,6 +11,7 @@ import DashboardLayout from './layouts/dashboardLayout/DashboardLayout.js';
 import SignInPage from './routes/signIn/SignInPage.js';
 import SignUpPage from './routes/signUp/signUpPage.js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import LoginPage from './routes/Login/LoginPage.js'
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-up/*",
         element: <SignUpPage />,
+      },
+      {
+        path: "/login/*",
+        element: <LoginPage />,
       },
       {
         element: <DashboardLayout />,
