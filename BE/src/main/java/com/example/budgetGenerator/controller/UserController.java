@@ -142,7 +142,7 @@ public class UserController {
             userService.saveUser(user);
             //Notify user of success
             mailService.sendPasswordUpdate(user.getEmail());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
                 Map.entry("response", "Password successfully updated")
             ));
         } catch (Exception e) {

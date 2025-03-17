@@ -1,34 +1,68 @@
 import { Link } from "react-router-dom";
-import React from "react";
-import "./settings.css"
-
+import React, { useState } from "react";
+import "./settings.css";
 
 const SettingsPage = () => {
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Function to update the password
+  const handlePasswordChange = async () => {
+    if (!email || !newPassword) {
+      setMessage("Email and password cannot be empty!");
+      return; // Stop execution if fields are empty
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/user/updatePassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: newPassword }), // ✅ Ensure correct key name
+      });
+
+      const data = await response.json();
+      console.log("Server Response:", data);
+
+      if (response.ok) {
+        setMessage("Password updated successfully!");
+      } else {
+        setMessage(`Error: ${data.response || "Failed to update password"}`);
+      }
+    } catch (error) {
+      console.error("Network Error:", error);
+      setMessage("Network error: Could not connect to the server");
+    }
+  };
+
   return (
     <div className="settings-container">
       <h2 className="settings-title">User Settings</h2>
 
-      {/* Change Name Section */}
-      <div className="settings-card">
-        <h3>Change Name</h3>
-        <input type="text" placeholder="First Name" />
-        <input type="text" placeholder="Last Name" />
-        <button className="save-btn">Save Name</button>
-      </div>
-
       {/* Change Password Section */}
       <div className="settings-card">
         <h3>Change Password</h3>
-        <input type="password" placeholder="New Password" />
-        <button className="save-btn">Save Password</button>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="New Password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <button className="save-btn" onClick={handlePasswordChange}>
+          Save Password
+        </button>
+        {message && <p className="message">{message}</p>}
       </div>
 
-      {/* Change Email Section */}
-      <div className="settings-card">
-        <h3>Change Email</h3>
-        <input type="email" placeholder="Email" />
-        <button className="save-btn">Save Email</button>
-      </div>
+     
+
+     
 
       {/* Danger Zone */}
       <div className="danger-zone">
