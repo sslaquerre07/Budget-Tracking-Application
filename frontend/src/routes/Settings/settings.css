@@ -1,13 +1,13 @@
 /* General Page Style */
 .settings-container {
   max-width: 1000px;
-  margin: 40px auto;
+  margin: 80px auto;
   padding: 20px;
   background-color: #dee4ed; 
-  border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-  height: 800px;
+  height: 700px;
+  border-radius: 20px; /* Curved edges */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 
  
 }
@@ -44,14 +44,14 @@
 }
 
 .settings-card input:focus {
-  border-color: #9ea8d7;
+  border-color: #d1eff8;
   outline: none;
 }
 
 .save-btn {
   width: 100%;
   padding: 12px;
-  background-color: #22273f;
+  background-color: #0d6e92;
   border: none;
   border-radius: 5px;
   font-size: 1.1rem;
@@ -60,7 +60,7 @@
 }
 
 .save-btn:hover {
-  background-color: #087d12;
+  background-color: #031267;
 }
 
 /* Danger Zone */
