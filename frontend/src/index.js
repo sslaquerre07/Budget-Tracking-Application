@@ -2,24 +2,16 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { ClerkProvider } from '@clerk/clerk-react'
 import Dashboard from './routes/dashboard/Dashboard.js';
 import Budget from './routes/budget/Budget.js';
 import Home from './routes/home/Home.js';
 import RootLayout from './layouts/rootLayout/RootLayout.js';
 import DashboardLayout from './layouts/dashboardLayout/DashboardLayout.js';
-import SignInPage from './routes/signIn/SignInPage.js';
+import LoginPage from './routes/Login/LoginPage.js';
 import SignUpPage from './routes/signUp/signUpPage.js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import LoginPage from './routes/Login/LoginPage.js'
 
 const queryClient = new QueryClient();
-
-const PUBLISHABLE_KEY = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key")
-}
 
 const router = createBrowserRouter([  
   {
@@ -30,16 +22,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/sign-in/*",
-        element: <SignInPage />,
-      },
-      {
-        path: "/sign-up/*",
-        element: <SignUpPage />,
-      },
-      {
-        path: "/login/*",
+        path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: "/sign-up",
+        element: <SignUpPage />,
       },
       {
         element: <DashboardLayout />,
@@ -61,14 +49,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ClerkProvider
-        publishableKey={PUBLISHABLE_KEY}
-        signInUrl="/sign-in"
-        signUpUrl="/sign-up"
-        afterSignOutUrl="/"
-      >
-        <RouterProvider router={router} />
-      </ClerkProvider>
+      <RouterProvider router={router} />
     </QueryClientProvider>
   </React.StrictMode>,
 );
