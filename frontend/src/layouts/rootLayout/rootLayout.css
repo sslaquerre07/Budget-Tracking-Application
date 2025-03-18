@@ -2,7 +2,9 @@
     padding: 16px 64px;
     display: flex;
     flex-direction: column;
-    background-color: rgb(87, 110, 125);
+    background: linear-gradient(to bottom, #02025a, #82b9e5); 
+    
+    
 }
 
 header {
@@ -17,7 +19,8 @@ header {
     font-weight: bold;
     gap: 8px;
     text-decoration: none;
-    color: white;
+    color: rgb(204, 217, 232);
+    height:70px; 
 }
 
 .logo img {
@@ -25,7 +28,6 @@ header {
     height: 40px;
     object-fit: contain;
     border-radius: 50%; /* Optional: Makes it circular */
-    background-color: white; /* Ensures visibility */
 }
 
 .profile {

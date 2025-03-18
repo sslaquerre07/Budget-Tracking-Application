@@ -7,13 +7,11 @@
     background-color: #eaf4f9; /* Soft Blue */
 }
 
+/* Container for Content */
 .home-container {
     width: 90%;
     max-width: 1200px;
-    background: white;
     padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Navbar */
@@ -37,6 +35,10 @@
     gap: 20px;
 }
 
+.nav-links li {
+    display: inline;
+}
+
 .nav-links li a {
     text-decoration: none;
     color: #333;
@@ -56,6 +58,7 @@
     margin-top: 30px;
 }
 
+/* Left Side Text */
 .hero-text {
     max-width: 500px;
 }
@@ -88,7 +91,7 @@
     background-color: #0056b3;
 }
 
-/* Illustration */
+/* Right Side Image */
 .hero-image img {
     max-width: 100%;
     height: auto;
