@@ -1,6 +1,6 @@
-/* signUpPage.css */
+/* loginPage.css */
 
-.signUpPage {
+.loginPage {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +8,7 @@
     background-color: #f5f5f5;
 }
 
-.signUpPage-container {
+.loginPage-container {
     background: white;
     padding: 2rem;
     border-radius: 10px;
@@ -17,41 +17,27 @@
     text-align: center;
 }
 
-.signUpPage-container h1 {
+.loginPage-container h1 {
     font-size: 24px;
     margin-bottom: 20px;
     color: #333;
 }
 
-.signUpPage-form {
+.loginPage-form {
     display: flex;
     flex-direction: column;
 }
 
-.signUpPage-form input {
+.loginPage-form input {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    transition: border 0.3s, background-color 0.3s;
 }
 
-/* 🚨 Invalid input styling */
-.signUpPage-form input.invalid-input {
-    border: 2px solid red;
-    background-color: #ffe6e6;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 5px;
-    text-align: left;
-}
-
-.signUpPage-form button {
+.loginPage-form button {
     background-color: #007bff;
     color: white;
     padding: 10px;
@@ -62,21 +48,21 @@
     transition: background-color 0.3s;
 }
 
-.signUpPage-form button:hover {
+.loginPage-form button:hover {
     background-color: #0056b3;
 }
 
-.signUpPage-link {
+.loginPage-link {
     margin-top: 15px;
     font-size: 14px;
 }
 
-.signUpPage-link a {
+.loginPage-link a {
     color: #007bff;
     text-decoration: none;
     font-weight: bold;
 }
 
-.signUpPage-link a:hover {
+.loginPage-link a:hover {
     text-decoration: underline;
 }
