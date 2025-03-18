@@ -3,22 +3,27 @@ import React, { useState } from "react";
 import "./settings.css";
 
 const SettingsPage = () => {
+  // Separate states for password update and account deletion
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  const [deleteEmail, setDeleteEmail] = useState("");
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteMessage, setDeleteMessage] = useState("");
 
   // Function to update the password
   const handlePasswordChange = async () => {
     if (!email || !newPassword) {
       setMessage("Email and password cannot be empty!");
-      return; // Stop execution if fields are empty
+      return;
     }
 
     try {
       const response = await fetch("http://localhost:8080/user/updatePassword", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password: newPassword }), // ✅ Ensure correct key name
+        body: JSON.stringify({ email, password: newPassword }),
       });
 
       const data = await response.json();
@@ -32,6 +37,39 @@ const SettingsPage = () => {
     } catch (error) {
       console.error("Network Error:", error);
       setMessage("Network error: Could not connect to the server");
+    }
+  };
+
+  // Function to delete the account
+  const handleDeleteAccount = async () => {
+    if (!deleteEmail || !deletePassword) {
+      setDeleteMessage("Email and password cannot be empty!");
+      return;
+    }
+
+    try {
+      console.log("Sending request with:", { email: deleteEmail, password: deletePassword });
+
+      const response = await fetch("http://localhost:8080/user/delete", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: deleteEmail.trim(),
+          password: deletePassword.trim()
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Server Response:", data);
+
+      if (response.ok) {
+        setDeleteMessage("Account deleted successfully!");
+      } else {
+        setDeleteMessage(`Error: ${data.response || "Failed to delete account"}`);
+      }
+    } catch (error) {
+      console.error("Network Error:", error);
+      setDeleteMessage("Network error: Could not connect to the server");
     }
   };
 
@@ -60,15 +98,26 @@ const SettingsPage = () => {
         {message && <p className="message">{message}</p>}
       </div>
 
-     
-
-     
-
-      {/* Danger Zone */}
-      <div className="danger-zone">
+      {/* Danger Zone - Delete Account */}
+      <div className="settings-card danger-zone">
         <h3>Danger Zone</h3>
         <p>Permanently delete your account. This action cannot be undone.</p>
-        <button className="delete-btn">Delete Account</button>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          value={deleteEmail}
+          onChange={(e) => setDeleteEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Current Password"
+          value={deletePassword}
+          onChange={(e) => setDeletePassword(e.target.value)}
+        />
+        <button className="delete-btn" onClick={handleDeleteAccount}>
+          Delete Account
+        </button>
+        {deleteMessage && <p className="message">{deleteMessage}</p>}
       </div>
     </div>
   );

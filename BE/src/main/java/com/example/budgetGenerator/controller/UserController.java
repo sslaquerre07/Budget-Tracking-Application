@@ -160,7 +160,7 @@ public class UserController {
             userService.deleteUser(user);
             //Notify user of successful deletion
             return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
-                Map.entry("response", "Password successfully updated")
+                Map.entry("response", "Account successfully deleted")
             ));
         }
         catch (Exception e) {
