@@ -14,16 +14,19 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User getUser(String email, boolean checkPresent) throws Exception{
+    public User getUser(String email) throws Exception{
         Optional<User> potentialUser = userRepository.findById(email);
         //If user already exists, notify the user
-        if(potentialUser.isPresent() != checkPresent){
-            if(checkPresent)
-                throw new Exception("Email does not have an account associated with it");
-            else
-                throw new Exception("Email already has an account registered, please pick another email");
+        if(potentialUser.isPresent()){
+            throw new Exception("Email does not have an account associated with it");
         }
         return potentialUser.get();
+    }
+
+    public void checkPresent(String email) throws Exception{
+        if(userRepository.findById(email).isPresent()){
+            throw new Exception("Email already has an account registered");
+        }
     }
 
     public User saveUser(User newUser){
