@@ -35,6 +35,20 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    transition: border 0.3s, background-color 0.3s;
+}
+
+/* 🚨 Invalid input styling */
+.signUpPage-form input.invalid-input {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
 }
 
 .signUpPage-form button {

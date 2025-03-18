@@ -1,51 +1,77 @@
 import { Link } from "react-router-dom";
 import "./signUpPage.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function SignUpPage() {
     const nameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
+    const [error, setError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [passwordValid, setPasswordValid] = useState(true);
 
-    const handleSubmit = (e) => {
+    const validatePassword = (password) => {
+        if (password.length < 6) {
+            setPasswordError("Password must be at least 6 characters long.");
+            setPasswordValid(false);
+        } else {
+            setPasswordError("");
+            setPasswordValid(true);
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        setError("");
+
         const userData = {
             name: nameRef.current.value,
             email: emailRef.current.value,
             password: passwordRef.current.value,
         };
 
-        console.log("User Signed Up:", userData);
-        // Add sign-up logic (API call, authentication, etc.)
+        validatePassword(userData.password);
+
+        if (!passwordValid) return; // Prevent submission if password is invalid
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BUDGETS_API}/user/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                console.log("User signed up:", userData);
+                alert("Signup successful! Redirecting to login...");
+                window.location.href = "/login";
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || "Signup failed. Try again.");
+            }
+        } catch (error) {
+            setError("Server error. Please try again later.");
+        }
     };
 
     return (
         <div className="signUpPage">
             <div className="signUpPage-container">
                 <h1>Sign Up</h1>
+                {error && <p className="error-message">{error}</p>}
                 <form className="signUpPage-form" onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Full Name"
-                        ref={nameRef}
-                        required
+                    <input type="text" name="name" placeholder="Full Name" ref={nameRef} required />
+                    <input type="email" name="email" placeholder="Email" ref={emailRef} required />
+                    <input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Password" 
+                        ref={passwordRef} 
+                        onChange={(e) => validatePassword(e.target.value)}
+                        className={!passwordValid ? "invalid-input" : ""}
+                        required 
                     />
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        ref={emailRef}
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        ref={passwordRef}
-                        required
-                    />
+                    {passwordError && <p className="error-message">{passwordError}</p>}
                     <button type="submit">Sign Up</button>
                 </form>
                 <p className="signUpPage-link">
