@@ -4,17 +4,34 @@ import "./home.css";
 function Home() {
     return (
         <div className="Home">
-            <div className="left">
-                <h1>AutoBudget</h1>
-                <h2>Create your budget here!</h2>
-                <h3>AutoBudget simplifies budgeting by organizing your income and expenses into clear categories. With AI-generated recommendations and intuitive visualizations, you get a structured, personalized budget—without the hassle of manual calculations.</h3>
+            <div className="home-container">
+                {/* Navigation Bar */}
+                <header className="navbar">
+                    <div className="logo">AutoBudget</div>
+                    <nav>
+                        <ul className="nav-links">
+                            <li><Link to="/login">Login</Link></li>
+                            <li><Link to="/sign-up">Sign Up</Link></li>
+                            <li><Link to="/settings">Settings</Link></li>
+                        </ul>
+                    </nav>
+                </header>
 
-                <Link to="/dashboard" className="button3">Get Started</Link>
-                <Link to="/settings" className="button3">Settings</Link>
+                {/* Hero Section */}
+                <div className="hero">
+                    <div className="hero-text">
+                        <h1>Smart Finance 💰</h1>
+                        <p>
+                            Simplify your financial planning with our intuitive budgeting tool.
+                            Organize your expenses, track your income, and stay in control!
+                        </p>
+                        <Link to="/dashboard" className="explore-button">Get Started</Link>
+                    </div>
 
-                <div className="auth-buttons">
-                    <Link to="/sign-up" className="button">Sign Up</Link>
-                    <Link to="/login" className="button">Login</Link>
+                    {/* Illustration Section */}
+                    <div className="hero-image">
+                        <img src="/images/budget-illustration.png" alt="Budget Planning" />
+                    </div>
                 </div>
             </div>
         </div>
