@@ -3,7 +3,7 @@
   max-width: 1000px;
   margin: 40px auto;
   padding: 20px;
-  background-color: #f8f8f8;
+  background-color: #dee4ed; 
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   height: 1000px;
@@ -68,12 +68,12 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 50px;
+  height: 300px;
 }
 
 .danger-zone h3 {
   font-size: 1.5rem;
-  color: #ff4d4d;
+  color: #cf0404;
 }
 
 .danger-zone p {
@@ -84,7 +84,7 @@
 .delete-btn {
   width: 100%;
   padding: 12px;
-  background-color: #ff4d4d;
+  background-color: #cf0404;
   border: none;
   border-radius: 5px;
   font-size: 1.1rem;

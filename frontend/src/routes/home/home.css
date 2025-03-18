@@ -50,8 +50,8 @@
 .left a {
     display: inline-block;
     padding: 12px 30px;
-    background-color: lightblue;
-    color: white;
+    background-color: rgba(157, 227, 248, 0.838);
+    color: rgb(62, 59, 59);
     border-radius: 25px;
     font-size: 16px;
     font-weight: 600;
@@ -61,9 +61,10 @@
 }
 
 .left a:hover {
-    background-color: blue;
+    background-color: rgb(29, 29, 67);
     transform: scale(1.05);
     box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.15);
+    color: aliceblue;
 }
 
 
