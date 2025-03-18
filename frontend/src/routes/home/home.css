@@ -1,87 +1,111 @@
+/* General Page Styling */
 .Home {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    height: 100vh; /* Full viewport height */
-    background-color: #dee4ed; /* Subtle background for contrast */
-    border-radius: 20px; 
+    height: 100vh;
+    background-color: #eaf4f9; /* Soft Blue */
+}
+
+.home-container {
+    width: 90%;
+    max-width: 1200px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive Design */
-@media screen and (max-width: 1024px) {
-    .Home {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
 }
 
-.left {
-    flex: 1;
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.nav-links {
+    list-style: none;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     gap: 20px;
-    text-align: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #007bff;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.hero-text {
     max-width: 500px;
 }
 
-.left h1 {
-    font-size: 2rem;
-    color: #4191e1; /* Deep blue */
+.hero-text h1 {
+    font-size: 2.5rem;
+    color: #333;
 }
 
-.left p {
-    font-size: 1rem;
+.hero-text p {
+    font-size: 1.1rem;
     color: #555;
-    line-height: 1.6;
-    max-width: 400px;
+    margin-bottom: 20px;
 }
 
-/* Link Styling */
-.left a {
+/* Get Started Button */
+.explore-button {
     display: inline-block;
-    padding: 12px 30px;
-    background-color: rgba(157, 227, 248, 0.838);
-    color: rgb(62, 59, 59);
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-    text-decoration: none; /* Removes underline */
-}
-
-.left a:hover {
-    background-color: rgb(29, 29, 67);
-    transform: scale(1.05);
-    box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.15);
-    color: aliceblue;
-}
-
-/* Auth Buttons */
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.button {
-    padding: 10px 20px;
-    background-color: #176db8;
+    padding: 12px 25px;
+    background-color: #007bff;
     color: white;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    font-weight: bold;
     text-decoration: none;
-    text-align: center;
+    transition: 0.3s;
 }
 
-.button:hover {
-    background-color: #1565c0;
-    transform: scale(1.05);
+.explore-button:hover {
+    background-color: #0056b3;
+}
+
+/* Illustration */
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text {
+        margin-bottom: 20px;
+    }
+
+    .hero-image img {
+        width: 80%;
+    }
 }
