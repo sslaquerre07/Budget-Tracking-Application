@@ -44,7 +44,7 @@ public class UserController {
     @PostMapping  ("/login")
     public ResponseEntity<?> verifyLogin(@RequestBody BasicUserDTO loginDetails) {
         try{
-            User user = userService.getUser(loginDetails.getEmail(), true);
+            User user = userService.getUser(loginDetails.getEmail());
             //If password is incorrect, also throw a bad username/password exception
             if(!user.getPassword().equals(loginDetails.getPassword())){
                 throw new Exception("Bad Username/Password, please try again");
@@ -67,7 +67,7 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody BasicUserDTO registerDetails){
         try{
             //Check that the user does not exist
-            userService.getUser(registerDetails.getEmail(), false);
+            userService.checkPresent(registerDetails.getEmail());
 
             //Save the new user
             userService.saveUser(new User(registerDetails.getEmail(), registerDetails.getPassword()));
@@ -89,7 +89,7 @@ public class UserController {
     public ResponseEntity<?> getUserBudget(@RequestBody Map<String, String> request){
         try {
             //First verify that the user exists
-            userService.getUser(request.get("email"), true);
+            userService.getUser(request.get("email"));
             //Retrieve user budgets
             List<Budget> userBudgets = budgetService.getUserBudgets(request.get("email"));
             List<BasicBudgetDTO> response = new ArrayList<>();
@@ -113,7 +113,7 @@ public class UserController {
         try {
             //Initialize needed objects
             Budget newBudget = BudgetService.generateBudget(userBudgetDTO.getBudgetDTO());
-            User user = userService.getUser(userBudgetDTO.getUserEmail(), true);
+            User user = userService.getUser(userBudgetDTO.getUserEmail());
             String response = LLMService.generateBudget(newBudget);
             //Save budget to the database
             newBudget.setUser(user);
@@ -137,7 +137,7 @@ public class UserController {
     @PostMapping("/updatePassword")
     public ResponseEntity<?> updateUserPassword(@RequestBody BasicUserDTO newUserInfo){
         try {
-            User user = userService.getUser(newUserInfo.getEmail(), true);
+            User user = userService.getUser(newUserInfo.getEmail());
             //Set the new password and save the data.
             user.setPassword(newUserInfo.getPassword());
             userService.saveUser(user);
@@ -156,7 +156,7 @@ public class UserController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteAccount(@RequestBody BasicUserDTO toBeDeleted){
         try{
-            User user = userService.getUser(toBeDeleted.getEmail(), true);
+            User user = userService.getUser(toBeDeleted.getEmail());
             userService.deleteUser(user);
             //Notify user of successful deletion
             return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
