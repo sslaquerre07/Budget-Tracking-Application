@@ -2,16 +2,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  
-    height: 82vh; /* Full viewport height */
-   
-    margin: 90px;
-   
+    gap: 10px;
+    height: 100vh; /* Full viewport height */
     background-color: #dee4ed; /* Subtle background for contrast */
     border-radius: 20px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  
 }
 
 /* Responsive Design */
@@ -36,7 +31,7 @@
 
 .left h1 {
     font-size: 2rem;
-    color: #333;
+    color: #4191e1; /* Deep blue */
 }
 
 .left p {
@@ -67,6 +62,26 @@
     color: aliceblue;
 }
 
+/* Auth Buttons */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
 
+.button {
+    padding: 10px 20px;
+    background-color: #176db8;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+}
 
-
+.button:hover {
+    background-color: #1565c0;
+    transform: scale(1.05);
+}
