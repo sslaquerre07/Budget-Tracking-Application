@@ -4,7 +4,8 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #eaf4f9; /* Soft Blue */
+    background-color: #eaf5fb; /* Soft Blue */
+    border-radius: 20px;
 }
 
 /* Container for Content */
@@ -12,6 +13,8 @@
     width: 90%;
     max-width: 1200px;
     padding: 30px;
+    border-radius: 20px; /* Curved edges */
+    box-shadow: 0 8px 16px rgba(2, 47, 92, 0.4);
 }
 
 /* Navbar */
@@ -20,13 +23,13 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #adc5ec;
 }
 
-.logo {
+.logoH {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #007bff;
+   
 }
 
 .nav-links {
@@ -74,6 +77,8 @@
     margin-bottom: 20px;
 }
 
+
+
 /* Get Started Button */
 .explore-button {
     display: inline-block;
@@ -89,6 +94,7 @@
 
 .explore-button:hover {
     background-color: #0056b3;
+    color: #eaf4f9;
 }
 
 /* Right Side Image */
