@@ -1,42 +1,130 @@
-.Dashboard {
+.dashboard-tabs {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    background-color: #e3f2fd; /* Light blue background */
-    border-radius: 10px; /* Soft rounded edges */
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.button-dash {
-    margin-top: 20px;
-    text-align: center;
+.tab-button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.button-dash button {
-    background-color: #007bff; /* Original button color */
+.tab-button.active {
+    background-color: #2196f3;
     color: white;
-    padding: 10px 20px;
+}
+
+.tab-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-buttons button {
+    padding: 10px 15px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.action-buttons button:hover {
+    background-color: #388e3c;
+}
+
+.llm-response {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.llm-response h2 {
+    margin-top: 0;
+    color: #2196f3;
+}
+
+.response-content {
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.title-container {
+    margin-bottom: 20px;
+    padding: 15px 20px;
+}
+
+.budget-title {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.edit-icon {
+    margin-left: 10px;
+    opacity: 0.5;
+    visibility: hidden;
+    transition: opacity 0.2s;
+}
+
+.budget-title:hover .edit-icon {
+    visibility: visible;
+    opacity: 0.8;
+}
+
+.edit-title-form {
+    display: flex;
+    align-items: center;
+}
+
+.title-input {
+    font-size: 1.8rem;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.icon-btn {
+    background: none;
     border: none;
     cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+    padding: 5px;
+    border-radius: 50%;
 }
 
-.button-dash button:hover {
-    background-color: #0056b3;
+.save-btn {
+    color: #4caf50;
 }
 
-/* General Button Styling */
-button {
-    background: #1e88e5; /* Blue button */
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease-in-out;
+.save-btn:hover {
+    background-color: rgba(76, 175, 80, 0.1);
 }
 
-button:hover {
-    background: #1565c0; /* Darker blue on hover */
+.cancel-btn {
+    color: #f44336;
 }
+
+.cancel-btn:hover {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
