@@ -241,7 +241,11 @@ function Dashboard({ budgetData }) {
             });
         });
 
-        fetch('http://localhost:8080/budget/save', {
+        const saveBudgetUrl = budgetId
+            ? `http://localhost:8080/budget/update/${budgetId}`
+            : 'http://localhost:8080/budget/save';
+
+        fetch(saveBudgetUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(budgetDTO)
@@ -273,13 +277,22 @@ function Dashboard({ budgetData }) {
                     });
                 }
 
-                const generateRequestData = {
-                    "userEmail": "jane.smith@example.com",
-                    "budgetDTO": budgetDTO,
-                    "toBeEmailed": false
-                };
+                const isLoggedIn = /* LOG IN LOGIC ADD HERE */
+                    localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
 
-                return fetch('http://localhost:8080/user/generate', {
+                const generateUrl = isLoggedIn
+                    ? 'http://localhost:8080/user/generate'
+                    : 'http://localhost:8080/budget/generate';
+
+                const generateRequestData = isLoggedIn
+                    ? {
+                        "userEmail": "jane.smith@example.com", // Change dynamically
+                        "budgetDTO": budgetDTO,
+                        "toBeEmailed": false
+                    }
+                    : budgetDTO;
+
+                return fetch(generateUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(generateRequestData)
