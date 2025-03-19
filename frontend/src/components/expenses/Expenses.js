@@ -42,8 +42,18 @@ const Expenses = forwardRef((props, ref) => {
         setExpenses(filteredExpenses);
     };
 
+    // Method to programmatically set expenses from parent component
+    const setExpensesData = (expensesData) => {
+        const formattedExpenses = expensesData.map(expense => ({
+            id: Date.now() + Math.random(),  // Generate unique IDs
+            ...expense
+        }));
+        setExpenses(formattedExpenses);
+    };
+
     useImperativeHandle(ref, () => ({
-        getExpenseData: () => expenses.map(({ id, ...rest }) => rest)
+        getExpenseData: () => expenses.map(({ id, ...rest }) => rest),
+        setExpenses: setExpensesData
     }));
 
     return (
