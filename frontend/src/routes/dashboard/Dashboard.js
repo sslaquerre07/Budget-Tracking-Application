@@ -115,7 +115,7 @@ function Dashboard({ budgetData }) {
 
                         category.accounts.forEach(account => {
                             const item = {
-                                type: `${category.title}: ${account.title}`,
+                                type: `${account.title}`,
                                 amount: account.balance.toString()
                             };
 
@@ -177,11 +177,16 @@ function Dashboard({ budgetData }) {
 
     const handleGenerateBudget = () => {
         // First save the budget to get a budgetId if it doesn't exist
+        const budgetData = budgetTypeRef.current.getBudgetData();
+        const incomeData = incomeRef.current.getIncomeData();
+        const expensesData = expensesRef.current.getExpenseData();
+        const financialNotesData = financialNotesRef.current.getFinancialNotesData();
+
         const saveRequestData = {
-            budget: { selectedType: "monthly" },
-            income: [],
-            expenses: [],
-            financialNotes: [],
+            budget: budgetData,
+            income: incomeData,
+            expenses: expensesData,
+            financialNotes: financialNotesData,
             budgetTitle: title
         };
 
@@ -205,95 +210,113 @@ function Dashboard({ budgetData }) {
                     queryClient.invalidateQueries({ queryKey: ['budgets'] });
                 }
 
-                // Hardcoded test data exactly matching the required format
+                // Build generate request data from form components
                 const generateRequestData = {
                     "userEmail": "jane.smith@example.com",
                     "budgetDTO": {
-                        "budgetType": 1,
-                        "budgetTitle": "Monthly Budget",
-                        "categories": [
-                            {
-                                "categoryTitle": "Groceries",
-                                "expense": true,
-                                "items": [
-                                    {
-                                        "title": "Fruits & Vegetables",
-                                        "balance": 50.00
-                                    },
-                                    {
-                                        "title": "Dairy Products",
-                                        "balance": 30.00
-                                    }
-                                ]
-                            },
-                            {
-                                "categoryTitle": "Entertainment",
-                                "expense": true,
-                                "items": [
-                                    {
-                                        "title": "Streaming Services",
-                                        "balance": 15.99
-                                    },
-                                    {
-                                        "title": "Concert Tickets",
-                                        "balance": 100.00
-                                    }
-                                ]
-                            },
-                            {
-                                "categoryTitle": "Savings",
-                                "expense": false,
-                                "items": [
-                                    {
-                                        "title": "Emergency Fund",
-                                        "balance": 500.00
-                                    },
-                                    {
-                                        "title": "Investment Account",
-                                        "balance": 300.00
-                                    }
-                                ]
-                            }
-                        ]
+                        "budgetType":
+                            budgetData.selectedType === "weekly" ? 0 :
+                                budgetData.selectedType === "monthly" ? 1 :
+                                    budgetData.selectedType === "yearly" ? 2 : 1,
+                        "budgetTitle": title,
+                        "categories": []
                     },
                     "toBeEmailed": false
                 };
 
-                // Send to generate endpoint
-                return fetch('http://localhost:8080/user/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(generateRequestData)
-                });
-            })
-            .then(response => response.json())
-            .then(generateData => {
-                console.log("Budget generated:", generateData);
+                // Process expenses into categories
+                expensesData.forEach(expense => {
+                    const parts = expense.type.split(':');
+                    const categoryTitle = "Expense";
+                    const itemTitle = parts.length > 1 ? parts[1].trim() : expense.type;
 
-                // Update the LLM response
-                if (generateData.response) {
-                    setLlmResponse(generateData.response);
-                    setHasLlmResponse(true);
-
-                    // Switch to the response tab
-                    setActiveTab('response');
-
-                    // Also update the processed data to include the response
-                    setProcessedData(prevData => ({
-                        ...prevData,
-                        notes: [{ text: generateData.response }]
-                    }));
-
-                    // Update URL to show the budget ID
-                    window.history.pushState(
-                        {},
-                        '',
-                        `/budget/${budgetId || generateData.response?.budgetId}`
+                    // Check if category already exists
+                    let category = generateRequestData.budgetDTO.categories.find(
+                        cat => cat.categoryTitle === categoryTitle && cat.expense === true
                     );
-                }
+
+                    // Create new category if it doesn't exist
+                    if (!category) {
+                        category = {
+                            categoryTitle: "Expense",
+                            expense: true,
+                            items: []
+                        };
+                        generateRequestData.budgetDTO.categories.push(category);
+                    }
+
+                    // Add expense item
+                    category.items.push({
+                        title: itemTitle,
+                        balance: parseFloat(expense.amount) || 0
+                    });
+                });
+
+                // Process income into categories
+                incomeData.forEach(income => {
+                    const parts = income.type.split(':');
+                    const categoryTitle = "Income";
+                    const itemTitle = parts.length > 1 ? parts[1].trim() : income.type;
+
+                    // Check if category already exists
+                    let category = generateRequestData.budgetDTO.categories.find(
+                        cat => cat.categoryTitle === categoryTitle && cat.expense === false
+                    );
+
+                    // Create new category if it doesn't exist
+                    if (!category) {
+                        category = {
+                            categoryTitle: "Income",
+                            expense: false,
+                            items: []
+                        };
+                        generateRequestData.budgetDTO.categories.push(category);
+                    }
+
+                    // Add income item
+                    category.items.push({
+                        title: itemTitle,
+                        balance: parseFloat(income.amount) || 0
+                    });
+                });
+
+                console.log(savedBudgetId);
+
+                // Send to generate endpoint
+                // return fetch('http://localhost:8080/user/generate', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(generateRequestData)
+                // }).then(response => response.json())
+                //     .then(generateData => {
+                //         console.log("Budget generated:", generateData);
+
+                //         // Update the LLM response
+                //         if (generateData.response) {
+                //             setLlmResponse(generateData.response);
+                //             setHasLlmResponse(true);
+
+                //             // Switch to the response tab
+                //             setActiveTab('response');
+
+                //             // Also update the processed data to include the response
+                //             setProcessedData(prevData => ({
+                //                 ...prevData,
+                //                 notes: [{ text: generateData.response }]
+                //             }));
+
+                //             // Update URL to show the budget ID
+                //             window.history.pushState(
+                //                 {},
+                //                 '',
+                //                 `/dashboard/budgets/${budgetId || generateData.response?.budgetId}`
+                //             );
+                //         }
+                //     })
+                //     .catch(error => console.error("Error generating budget:", error));
+
             })
-            .catch(error => console.error("Error generating budget:", error));
-    };
+    }
 
     const handleSaveBudget = () => {
         const budgetData = budgetTypeRef.current.getBudgetData();

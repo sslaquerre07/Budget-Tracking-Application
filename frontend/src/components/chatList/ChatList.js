@@ -59,10 +59,9 @@ function ChatList() {
 
             const data = await response.json();
             console.log('Update Response:', data);
-            return { budgetId, newTitle, data };  // Return the values we need
+            return { budgetId, newTitle, data };
         },
         onSuccess: (result) => {
-            // Update the cache directly for immediate reflection
             const { budgetId, newTitle } = result;
 
             queryClient.setQueryData(['budgets'], (oldData) => {
@@ -77,7 +76,6 @@ function ChatList() {
                 return { ...oldData, response: updatedBudgets };
             });
 
-            // Also invalidate the query to refresh from server
             queryClient.invalidateQueries({ queryKey: ['budgets'] });
             setEditingId(null);
         }

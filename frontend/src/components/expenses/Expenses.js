@@ -42,10 +42,9 @@ const Expenses = forwardRef((props, ref) => {
         setExpenses(filteredExpenses);
     };
 
-    // Method to programmatically set expenses from parent component
     const setExpensesData = (expensesData) => {
         const formattedExpenses = expensesData.map(expense => ({
-            id: Date.now() + Math.random(),  // Generate unique IDs
+            id: Date.now() + Math.random(), 
             ...expense
         }));
         setExpenses(formattedExpenses);

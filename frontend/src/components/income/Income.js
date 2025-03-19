@@ -42,10 +42,9 @@ const Income = forwardRef((props, ref) => {
         setIncomes(filteredIncomes);
     };
 
-    // Method to programmatically set incomes from parent component
     const setIncomesData = (incomesData) => {
         const formattedIncomes = incomesData.map(income => ({
-            id: Date.now() + Math.random(),  // Generate unique IDs
+            id: Date.now() + Math.random(), 
             ...income
         }));
         setIncomes(formattedIncomes);

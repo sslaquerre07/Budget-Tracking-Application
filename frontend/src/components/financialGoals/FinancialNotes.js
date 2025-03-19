@@ -37,10 +37,9 @@ const FinancialNotes = forwardRef((props, ref) => {
         }
     };
 
-    // Method to programmatically set notes from parent component
     const setNotesData = (notesData) => {
         const formattedNotes = notesData.map(note => ({
-            id: Date.now() + Math.random(),  // Generate unique IDs
+            id: Date.now() + Math.random(),
             ...note
         }));
         setNotes(formattedNotes);

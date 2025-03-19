@@ -16,10 +16,8 @@ function Budget() {
                 setLoading(true);
                 setError(null);
 
-                // Get budget ID from URL params or use a default
-                const budgetId = id || 1;
+                const budgetId = id;
 
-                // Fetch budget data from the API
                 const response = await fetch(`http://localhost:8080/budget/${budgetId}`);
 
                 if (!response.ok) {

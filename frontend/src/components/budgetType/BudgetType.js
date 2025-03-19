@@ -25,7 +25,6 @@ const BudgetType = forwardRef((props, ref) => {
         setCustomUnit(e.target.value);
     };
 
-    // Method to programmatically set budget type
     const setBudgetType = (type) => {
         setSelectedType(type);
     };
