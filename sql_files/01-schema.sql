@@ -30,7 +30,6 @@ CREATE TABLE budget (
     title VARCHAR(100) NOT NULL,
     creation_date DATE NOT NULL,
     budget_type VARCHAR(100) NOT NULL,
-    response VARCHAR(15000),
     user_email VARCHAR(100),
     FOREIGN KEY (user_email) REFERENCES user(email) ON DELETE CASCADE
 )ENGINE=InnoDB;
