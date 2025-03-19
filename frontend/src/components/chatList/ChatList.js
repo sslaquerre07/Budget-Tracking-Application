@@ -59,9 +59,25 @@ function ChatList() {
 
             const data = await response.json();
             console.log('Update Response:', data);
-            return data;
+            return { budgetId, newTitle, data };  // Return the values we need
         },
-        onSuccess: () => {
+        onSuccess: (result) => {
+            // Update the cache directly for immediate reflection
+            const { budgetId, newTitle } = result;
+
+            queryClient.setQueryData(['budgets'], (oldData) => {
+                if (!oldData) return oldData;
+
+                const updatedBudgets = oldData.response.map(budget =>
+                    budget.budgetId === budgetId
+                        ? { ...budget, budgetTitle: newTitle }
+                        : budget
+                );
+
+                return { ...oldData, response: updatedBudgets };
+            });
+
+            // Also invalidate the query to refresh from server
             queryClient.invalidateQueries({ queryKey: ['budgets'] });
             setEditingId(null);
         }
