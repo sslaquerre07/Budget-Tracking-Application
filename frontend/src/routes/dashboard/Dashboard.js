@@ -10,6 +10,7 @@ import FinancialNotes from '../../components/financialGoals/FinancialNotes';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard({ budgetData }) {
     const budgetTypeRef = useRef();
@@ -20,6 +21,7 @@ function Dashboard({ budgetData }) {
     const [llmResponse, setLlmResponse] = useState('');
     const [hasLlmResponse, setHasLlmResponse] = useState(false);
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     const initialBudgetId = budgetData?.response?.budgetId;
     const [budgetId, setBudgetId] = useState(initialBudgetId || null);
@@ -42,6 +44,12 @@ function Dashboard({ budgetData }) {
         }
     }, [currentBudgetData]);
 
+    useEffect(() => {
+        if (budgetId) {
+            queryClient.invalidateQueries({ queryKey: ['budgets'] });
+        }
+    }, [budgetId, queryClient]);
+
     const { data: budgetsList } = useQuery({
         queryKey: ['budgets'],
         queryFn: () =>
@@ -54,8 +62,7 @@ function Dashboard({ budgetData }) {
                     email: "jane.smith@example.com",
                 }),
             }).then(res => res.json()),
-        enabled: !!budgetId,
-    });
+    });  // Removed the 'enabled: !!budgetId' to always fetch budgets
 
     useEffect(() => {
         if (budgetId && budgetsList?.response) {
@@ -127,6 +134,7 @@ function Dashboard({ budgetData }) {
             applyDataToForms(expensesArray, incomesArray, "monthly", response);
         }
     }, [budgetData]);
+
     const applyDataToForms = (expenses, incomes, budgetType, response) => {
         if (budgetTypeRef.current) {
             budgetTypeRef.current.setBudgetType(budgetType);
@@ -153,24 +161,90 @@ function Dashboard({ budgetData }) {
         }
     }, [activeTab, processedData]);
 
+    const handleTabChange = (tab) => {
+        if (activeTab === 'form' && tab === 'response') {
+            // Save form data before switching away from form
+            const budgetData = budgetTypeRef.current?.getBudgetData();
+            const incomeData = incomeRef.current?.getIncomeData();
+            const expensesData = expensesRef.current?.getExpenseData();
+
+            setProcessedData({
+                expensesArray: expensesData || [],
+                incomesArray: incomeData || [],
+                budgetType: budgetData?.selectedType || "monthly",
+                notes: processedData.notes
+            });
+        }
+
+        setActiveTab(tab);
+    };
+
     const handleGenerateBudget = () => {
         const budgetData = budgetTypeRef.current.getBudgetData();
         const incomeData = incomeRef.current.getIncomeData();
         const expensesData = expensesRef.current.getExpenseData();
-        const financialNotesData = financialNotesRef.current.getFinancialNotesData();
 
-        const saveRequestData = {
-            budget: budgetData,
-            income: incomeData,
-            expenses: expensesData,
-            financialNotes: financialNotesData,
-            budgetTitle: title
+        const budgetDTO = {
+            budgetType:
+                budgetData.selectedType === "weekly" ? 0 :
+                    budgetData.selectedType === "monthly" ? 1 :
+                        budgetData.selectedType === "yearly" ? 2 : 1,
+            budgetTitle: title,
+            categories: []
         };
+
+        const expenseCategories = {};
+        expensesData.forEach(expense => {
+            const parts = expense.type.split(':');
+            const categoryTitle = parts.length > 1 ? parts[0].trim() : "Miscellaneous Expenses";
+            const itemTitle = parts.length > 1 ? parts[1].trim() : expense.type;
+
+            if (!expenseCategories[categoryTitle]) {
+                expenseCategories[categoryTitle] = [];
+            }
+
+            expenseCategories[categoryTitle].push({
+                title: itemTitle,
+                balance: parseFloat(expense.amount) || 0
+            });
+        });
+
+        Object.keys(expenseCategories).forEach(categoryTitle => {
+            budgetDTO.categories.push({
+                categoryTitle: categoryTitle,
+                expense: true,
+                items: expenseCategories[categoryTitle]
+            });
+        });
+
+        const incomeCategories = {};
+        incomeData.forEach(income => {
+            const parts = income.type.split(':');
+            const categoryTitle = parts.length > 1 ? parts[0].trim() : "General Income";
+            const itemTitle = parts.length > 1 ? parts[1].trim() : income.type;
+
+            if (!incomeCategories[categoryTitle]) {
+                incomeCategories[categoryTitle] = [];
+            }
+
+            incomeCategories[categoryTitle].push({
+                title: itemTitle,
+                balance: parseFloat(income.amount) || 0
+            });
+        });
+
+        Object.keys(incomeCategories).forEach(categoryTitle => {
+            budgetDTO.categories.push({
+                categoryTitle: categoryTitle,
+                expense: false,
+                items: incomeCategories[categoryTitle]
+            });
+        });
 
         fetch('http://localhost:8080/budget/save', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(saveRequestData)
+            body: JSON.stringify(budgetDTO)
         })
             .then(response => response.json())
             .then(saveData => {
@@ -180,137 +254,77 @@ function Dashboard({ budgetData }) {
 
                 if (savedBudgetId && !budgetId) {
                     setBudgetId(savedBudgetId);
+
                     queryClient.invalidateQueries({ queryKey: ['budgets'] });
+
+                    queryClient.setQueryData(['budgets'], (oldData) => {
+                        if (!oldData) return { response: [] };
+
+                        const newBudget = {
+                            budgetId: savedBudgetId,
+                            budgetTitle: title,
+                            creationDate: new Date().toISOString().split('T')[0]
+                        };
+
+                        return {
+                            ...oldData,
+                            response: [newBudget, ...(oldData.response || [])]
+                        };
+                    });
                 }
 
                 const generateRequestData = {
                     "userEmail": "jane.smith@example.com",
-                    "budgetDTO": {
-                        "budgetType":
-                            budgetData.selectedType === "weekly" ? 0 :
-                                budgetData.selectedType === "monthly" ? 1 :
-                                    budgetData.selectedType === "yearly" ? 2 : 1,
-                        "budgetTitle": title,
-                        "categories": []
-                    },
+                    "budgetDTO": budgetDTO,
                     "toBeEmailed": false
                 };
 
-                expensesData.forEach(expense => {
-                    const parts = expense.type.split(':');
-                    const categoryTitle = "Expense";
-                    const itemTitle = parts.length > 1 ? parts[1].trim() : expense.type;
-
-                    let category = generateRequestData.budgetDTO.categories.find(
-                        cat => cat.categoryTitle === categoryTitle && cat.expense === true
-                    );
-
-                    if (!category) {
-                        category = {
-                            categoryTitle: "Expense",
-                            expense: true,
-                            items: []
-                        };
-                        generateRequestData.budgetDTO.categories.push(category);
-                    }
-
-                    category.items.push({
-                        title: itemTitle,
-                        balance: parseFloat(expense.amount) || 0
-                    });
+                return fetch('http://localhost:8080/user/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(generateRequestData)
                 });
-
-                incomeData.forEach(income => {
-                    const parts = income.type.split(':');
-                    const categoryTitle = "Income";
-                    const itemTitle = parts.length > 1 ? parts[1].trim() : income.type;
-
-                    let category = generateRequestData.budgetDTO.categories.find(
-                        cat => cat.categoryTitle === categoryTitle && cat.expense === false
-                    );
-
-                    if (!category) {
-                        category = {
-                            categoryTitle: "Income",
-                            expense: false,
-                            items: []
-                        };
-                        generateRequestData.budgetDTO.categories.push(category);
-                    }
-
-                    category.items.push({
-                        title: itemTitle,
-                        balance: parseFloat(income.amount) || 0
-                    });
-                });
-
-                console.log(savedBudgetId);
-
-                // Send to generate endpoint
-                // return fetch('http://localhost:8080/user/generate', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(generateRequestData)
-                // }).then(response => response.json())
-                //     .then(generateData => {
-                //         console.log("Budget generated:", generateData);
-
-                //         // Update the LLM response
-                //         if (generateData.response) {
-                //             setLlmResponse(generateData.response);
-                //             setHasLlmResponse(true);
-
-                //             // Switch to the response tab
-                //             setActiveTab('response');
-
-                //             // Also update the processed data to include the response
-                //             setProcessedData(prevData => ({
-                //                 ...prevData,
-                //                 notes: [{ text: generateData.response }]
-                //             }));
-
-                //             // Update URL to show the budget ID
-                //             window.history.pushState(
-                //                 {},
-                //                 '',
-                //                 `/dashboard/budgets/${budgetId || generateData.response?.budgetId}`
-                //             );
-                //         }
-                //     })
-                //     .catch(error => console.error("Error generating budget:", error));
-
             })
-    }
-
-    const handleSaveBudget = () => {
-        const budgetData = budgetTypeRef.current.getBudgetData();
-        const incomeData = incomeRef.current.getIncomeData();
-        const expensesData = expensesRef.current.getExpenseData();
-        const financialNotesData = financialNotesRef.current.getFinancialNotesData();
-
-        const requestData = {
-            budget: budgetData,
-            income: incomeData,
-            expenses: expensesData,
-            financialNotes: financialNotesData,
-            budgetTitle: title
-        };
-
-        fetch('http://localhost:8080/budget/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestData)
-        })
             .then(response => response.json())
-            .then(data => {
-                console.log("Budget saved:", data);
-                if (data.response && data.response.budgetId && !budgetId) {
-                    setBudgetId(data.response.budgetId);
+            .then(generateData => {
+                console.log("Budget generated:", generateData);
 
-                    queryClient.invalidateQueries({ queryKey: ['budgets'] });
+                if (generateData.response) {
+                    setLlmResponse(generateData.response);
+                    setHasLlmResponse(true);
+
+                    setActiveTab('response');
+
+                    setProcessedData(prevData => ({
+                        ...prevData,
+                        notes: [{ text: generateData.response }]
+                    }));
+
+                    const finalBudgetId = budgetId || generateData.response?.budgetId;
+
+                    if (finalBudgetId) {
+                        queryClient.setQueryData(['budget', finalBudgetId], (oldData) => {
+                            if (!oldData) return { response: {} };
+
+                            return {
+                                ...oldData,
+                                response: {
+                                    ...oldData.response,
+                                    budgetId: finalBudgetId,
+                                    budgetTitle: title,
+                                    categories: budgetDTO.categories,
+                                    response: generateData.response
+                                }
+                            };
+                        });
+
+                        queryClient.invalidateQueries({ queryKey: ['budget', finalBudgetId] });
+
+                        navigate(`/dashboard/budgets/${finalBudgetId}`);
+                    }
                 }
             })
-            .catch(error => console.error("Error saving budget:", error));
+            .catch(error => console.error("Error in budget operation:", error));
     };
 
     const handleEditStart = () => {
@@ -382,7 +396,7 @@ function Dashboard({ budgetData }) {
                 <div className="dashboard-tabs">
                     <button
                         className={`tab-button ${activeTab === 'form' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('form')}
+                        onClick={() => handleTabChange('form')}
                     >
                         Enter Info
                     </button>
@@ -420,7 +434,7 @@ function Dashboard({ budgetData }) {
 
                     <button
                         className={`tab-button ${activeTab === 'response' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('response')}
+                        onClick={() => handleTabChange('response')}
                         disabled={!hasLlmResponse}
                     >
                         LLM Budget Response
@@ -445,9 +459,6 @@ function Dashboard({ budgetData }) {
                     <div className="action-buttons">
                         <button type="button" onClick={handleGenerateBudget}>
                             Generate Budget
-                        </button>
-                        <button type="button" onClick={handleSaveBudget}>
-                            Save Budget
                         </button>
                     </div>
                 </>
