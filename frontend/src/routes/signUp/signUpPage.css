@@ -1,6 +1,90 @@
-.SignUpPage {
-    height: 100%;
+/* signUpPage.css */
+
+
+.signUpPage {
+    width: 800px;
+    padding: 100px;
+
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+    /* Centering */
+    margin: auto;
+    height: 100vh;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: center
+}
+
+.signUpPage-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+}
+
+.signUpPage-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.signUpPage-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.signUpPage-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border 0.3s, background-color 0.3s;
+}
+
+/* 🚨 Invalid input styling */
+.signUpPage-form input.invalid-input {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.signUpPage-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.signUpPage-form button:hover {
+    background-color: #0056b3;
+}
+
+.signUpPage-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.signUpPage-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signUpPage-link a:hover {
+    text-decoration: underline;
 }

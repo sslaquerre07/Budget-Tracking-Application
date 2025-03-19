@@ -4,7 +4,8 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #eaf5fb; /* Soft Blue */
+    background-color: #eaf5fb;
+    /* Soft Blue */
     border-radius: 20px;
 }
 
@@ -13,7 +14,8 @@
     width: 90%;
     max-width: 1200px;
     padding: 30px;
-    border-radius: 20px; /* Curved edges */
+    border-radius: 20px;
+    /* Curved edges */
     box-shadow: 0 8px 16px rgba(2, 47, 92, 0.4);
 }
 
@@ -44,9 +46,20 @@
 
 /* 🔥 Glowing and Fading Effect for Navbar Links */
 @keyframes glow {
-    0% { opacity: 0.6; text-shadow: 0 0 5px rgba(0, 123, 255, 0.6); }
-    50% { opacity: 1; text-shadow: 0 0 15px rgba(0, 123, 255, 1); }
-    100% { opacity: 0.6; text-shadow: 0 0 5px rgba(0, 123, 255, 0.6); }
+    0% {
+        opacity: 0.6;
+        text-shadow: 0 0 5px rgba(0, 123, 255, 0.6);
+    }
+
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 15px rgba(0, 123, 255, 1);
+    }
+
+    100% {
+        opacity: 0.6;
+        text-shadow: 0 0 5px rgba(0, 123, 255, 0.6);
+    }
 }
 
 .nav-links li a {
@@ -54,7 +67,8 @@
     color: #333;
     font-weight: 600;
     transition: 0.3s;
-    animation: glow 2s infinite ease-in-out; /* Apply the glowing effect */
+    animation: glow 2s infinite ease-in-out;
+    /* Apply the glowing effect */
 }
 
 .nav-links li a:hover {

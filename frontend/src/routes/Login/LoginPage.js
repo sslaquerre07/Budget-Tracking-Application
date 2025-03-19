@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import "./LoginPage.css"; 
+import "./LoginPage.css";
 
 function LoginPage() {
     const emailRef = useRef(null);

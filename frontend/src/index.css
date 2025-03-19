@@ -1,15 +1,62 @@
+/* Reset and Global Styles */
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', Arial, sans-serif;
+    scroll-behavior: smooth;
 }
 
+/* Body Styling */
 body {
-    background-color: white;
-    overflow:auto;
+    background-color: #f4f4f4;
+    /* Soft light gray background */
+    color: #222;
+    /* Darker text for better readability */
+    overflow: auto;
+    line-height: 1.6;
+    padding: 10px;
 }
 
+/* Links */
 a {
+    text-decoration: underline;
+    /* Adds underline to links */
+    color: #0056b3;
+    /* Deep blue for better visibility */
+    font-weight: 600;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+a:hover {
+    color: #ff4500;
+    /* A warm contrast color for hover */
     text-decoration: none;
-    color: inherit; 
+    /* Removes underline on hover */
+}
+
+/* Container for better layout structure */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+    color: #333;
+    text-transform: capitalize;
+    margin-bottom: 15px;
+}
+
+/* Paragraph Styling */
+p {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #444;
 }

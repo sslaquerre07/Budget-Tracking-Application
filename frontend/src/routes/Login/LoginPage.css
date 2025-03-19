@@ -8,7 +8,7 @@
     border-radius: 20px;
     width: 80%;
     margin: auto;
-    
+
 }
 
 .loginPage-container {
@@ -17,7 +17,8 @@
     border-radius: 10px;
     width: 50%;
     text-align: center;
-    border-radius: 20px; /* Curved edges */
+    border-radius: 20px;
+    /* Curved edges */
     box-shadow: 0 8px 16px rgba(2, 47, 92, 0.4);
     height: 50%;
 }
