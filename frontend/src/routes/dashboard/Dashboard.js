@@ -20,6 +20,7 @@ function Dashboard({ budgetData }) {
     const [activeTab, setActiveTab] = useState('form');
     const [llmResponse, setLlmResponse] = useState('');
     const [hasLlmResponse, setHasLlmResponse] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -62,7 +63,7 @@ function Dashboard({ budgetData }) {
                     email: "jane.smith@example.com",
                 }),
             }).then(res => res.json()),
-    });  // Removed the 'enabled: !!budgetId' to always fetch budgets
+    });
 
     useEffect(() => {
         if (budgetId && budgetsList?.response) {
@@ -82,6 +83,18 @@ function Dashboard({ budgetData }) {
 
     useEffect(() => {
         if (budgetData && budgetData.response) {
+            const { response } = budgetData.response;
+
+            if (response) {
+                console.log("Initial LLM response found:", response);
+                setLlmResponse(response);
+                setHasLlmResponse(true);
+            }
+        }
+    }, [budgetData]);
+
+    useEffect(() => {
+        if (budgetData && budgetData.response) {
             const { response, categories, title: budgetTitle, budgetId: id } = budgetData.response;
 
             if (budgetTitle) {
@@ -90,11 +103,6 @@ function Dashboard({ budgetData }) {
 
             if (id) {
                 setBudgetId(id);
-            }
-
-            if (response) {
-                setLlmResponse(response);
-                setHasLlmResponse(true);
             }
 
             const expensesArray = [];
@@ -162,24 +170,22 @@ function Dashboard({ budgetData }) {
     }, [activeTab, processedData]);
 
     const handleTabChange = (tab) => {
-        if (activeTab === 'form' && tab === 'response') {
-            // Save form data before switching away from form
-            const budgetData = budgetTypeRef.current?.getBudgetData();
-            const incomeData = incomeRef.current?.getIncomeData();
-            const expensesData = expensesRef.current?.getExpenseData();
+        console.log(`Changing tab from ${activeTab} to ${tab}`);
 
-            setProcessedData({
-                expensesArray: expensesData || [],
-                incomesArray: incomeData || [],
-                budgetType: budgetData?.selectedType || "monthly",
-                notes: processedData.notes
-            });
+        if (activeTab === 'response' && tab === 'form') {
+            const { expensesArray, incomesArray, budgetType, notes } = processedData;
+            const noteText = notes.length > 0 ? notes[0].text : '';
+            setTimeout(() => {
+                applyDataToForms(expensesArray, incomesArray, budgetType, noteText);
+            }, 100);
         }
 
         setActiveTab(tab);
     };
 
     const handleGenerateBudget = () => {
+        setIsGenerating(true);
+
         const budgetData = budgetTypeRef.current.getBudgetData();
         const incomeData = incomeRef.current.getIncomeData();
         const expensesData = expensesRef.current.getExpenseData();
@@ -245,6 +251,8 @@ function Dashboard({ budgetData }) {
             ? `http://localhost:8080/budget/update/${budgetId}`
             : 'http://localhost:8080/budget/save';
 
+        let currentBudgetId = budgetId;
+
         fetch(saveBudgetUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -254,10 +262,10 @@ function Dashboard({ budgetData }) {
             .then(saveData => {
                 console.log("Budget saved:", saveData);
 
-                const savedBudgetId = saveData.response?.budgetId || budgetId;
+                currentBudgetId = saveData.response?.budgetId || currentBudgetId;
 
-                if (savedBudgetId && !budgetId) {
-                    setBudgetId(savedBudgetId);
+                if (currentBudgetId && !budgetId) {
+                    setBudgetId(currentBudgetId);
 
                     queryClient.invalidateQueries({ queryKey: ['budgets'] });
 
@@ -265,7 +273,7 @@ function Dashboard({ budgetData }) {
                         if (!oldData) return { response: [] };
 
                         const newBudget = {
-                            budgetId: savedBudgetId,
+                            budgetId: currentBudgetId,
                             budgetTitle: title,
                             creationDate: new Date().toISOString().split('T')[0]
                         };
@@ -277,8 +285,9 @@ function Dashboard({ budgetData }) {
                     });
                 }
 
-                const isLoggedIn = /* LOG IN LOGIC ADD HERE */
-                    localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+                const isLoggedIn = true; //LOG IN LOGIC
+
+                console.log(`isLoggedIn: ${isLoggedIn}`);
 
                 const generateUrl = isLoggedIn
                     ? 'http://localhost:8080/user/generate'
@@ -286,7 +295,7 @@ function Dashboard({ budgetData }) {
 
                 const generateRequestData = isLoggedIn
                     ? {
-                        "userEmail": "jane.smith@example.com", // Change dynamically
+                        "userEmail": "jane.smith@example.com",
                         "budgetDTO": budgetDTO,
                         "toBeEmailed": false
                     }
@@ -301,8 +310,10 @@ function Dashboard({ budgetData }) {
             .then(response => response.json())
             .then(generateData => {
                 console.log("Budget generated:", generateData);
+                setIsGenerating(false);
 
                 if (generateData.response) {
+                    console.log("Setting LLM response:", generateData.response);
                     setLlmResponse(generateData.response);
                     setHasLlmResponse(true);
 
@@ -313,7 +324,7 @@ function Dashboard({ budgetData }) {
                         notes: [{ text: generateData.response }]
                     }));
 
-                    const finalBudgetId = budgetId || generateData.response?.budgetId;
+                    const finalBudgetId = currentBudgetId;
 
                     if (finalBudgetId) {
                         queryClient.setQueryData(['budget', finalBudgetId], (oldData) => {
@@ -337,7 +348,10 @@ function Dashboard({ budgetData }) {
                     }
                 }
             })
-            .catch(error => console.error("Error in budget operation:", error));
+            .catch(error => {
+                console.error("Error in budget operation:", error);
+                setIsGenerating(false);
+            });
     };
 
     const handleEditStart = () => {
@@ -455,33 +469,51 @@ function Dashboard({ budgetData }) {
                 </div>
             </Paper>
 
-            {activeTab === 'form' ? (
-                <>
-                    <Paper elevation={3}>
-                        <BudgetType ref={budgetTypeRef} />
+            <div className="dashboard-content">
+                {activeTab === 'form' && (
+                    <>
+                        <Paper elevation={3}>
+                            <BudgetType ref={budgetTypeRef} />
+                        </Paper>
+                        <Paper elevation={3}>
+                            <Income ref={incomeRef} />
+                        </Paper>
+                        <Paper elevation={3}>
+                            <Expenses ref={expensesRef} />
+                        </Paper>
+                        <Paper elevation={3}>
+                            <FinancialNotes ref={financialNotesRef} />
+                        </Paper>
+                        <div className="action-buttons">
+                            <button
+                                type="button"
+                                onClick={handleGenerateBudget}
+                                disabled={isGenerating}
+                            >
+                                {isGenerating ? 'Generating...' : 'Generate Budget'}
+                            </button>
+                        </div>
+                    </>
+                )}
+
+                {activeTab === 'response' && (
+                    <Paper elevation={3} className="llm-response">
+                        <h2>Budget Analysis</h2>
+                        <div className="response-content markdown-content">
+                            {llmResponse ? (
+                                <ReactMarkdown>{llmResponse}</ReactMarkdown>
+                            ) : (
+                                <p>No budget analysis available yet. Please generate a budget first.</p>
+                            )}
+                        </div>
                     </Paper>
-                    <Paper elevation={3}>
-                        <Income ref={incomeRef} />
-                    </Paper>
-                    <Paper elevation={3}>
-                        <Expenses ref={expensesRef} />
-                    </Paper>
-                    <Paper elevation={3}>
-                        <FinancialNotes ref={financialNotesRef} />
-                    </Paper>
-                    <div className="action-buttons">
-                        <button type="button" onClick={handleGenerateBudget}>
-                            Generate Budget
-                        </button>
-                    </div>
-                </>
-            ) : (
-                <Paper elevation={3} className="llm-response">
-                    <h2>Budget Analysis</h2>
-                    <div className="response-content markdown-content">
-                        <ReactMarkdown>{llmResponse}</ReactMarkdown>
-                    </div>
-                </Paper>
+                )}
+            </div>
+
+            {isGenerating && (
+                <div className="loading-overlay">
+                    <div className="loading-spinner">Generating your budget...</div>
+                </div>
             )}
         </div>
     );
