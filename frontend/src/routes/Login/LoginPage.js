@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./LoginPage.css";
 
 function LoginPage() {
@@ -7,6 +7,14 @@ function LoginPage() {
     const passwordRef = useRef(null);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    // Check if the user is already logged in and redirect them (So that the same user doesn't constantly need to login again)
+    useEffect(() => {
+        const userToken = localStorage.getItem("userToken");
+        if (userToken) {
+            navigate("/dashboard"); // Redirect to Dashboard if already logged in
+        }
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
