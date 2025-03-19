@@ -29,22 +29,9 @@ function ChatList() {
 
     const deleteMutation = useMutation({
         mutationFn: async (budgetId) => {
-            const payload = {
-                email: "jane.smith@example.com", // !TEST
-                budgetId
-            };
-            console.log('DELETE request', JSON.stringify(payload, null, 2));
-
-            const response = await fetch(`${apiUrl}/user/budgets/delete`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
+            const response = await fetch(`${apiUrl}/budget/${budgetId}`, {
+                method: 'DELETE'
             });
-
-            const data = await response.json();
-            console.log('Delete Response:', data);
             return data;
         },
         onSuccess: () => {
@@ -55,13 +42,14 @@ function ChatList() {
     const updateMutation = useMutation({
         mutationFn: async ({ budgetId, newTitle }) => {
             const payload = {
-                email: "jane.smith@example.com", // !TEST
                 budgetId,
-                budgetTitle: newTitle
+                budgetTitle: newTitle,
+                creationDate: new Date().toISOString().split('T')[0]
             };
+
             console.log('UPDATE request', JSON.stringify(payload, null, 2));
 
-            const response = await fetch(`${apiUrl}/user/budgets/update`, {
+            const response = await fetch(`${apiUrl}/budget/updateBasics`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
