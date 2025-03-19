@@ -8,7 +8,7 @@ import Home from './routes/home/Home.js';
 import RootLayout from './layouts/rootLayout/RootLayout.js';
 import DashboardLayout from './layouts/dashboardLayout/DashboardLayout.js';
 import LoginPage from './routes/Login/LoginPage.js';
-import SignUpPage from './routes/signUp/signUpPage.js';
+import SignUpPage from './routes/signUp/SignUpPage.js';
 import SettingsPage from './routes/Settings/settings.js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
