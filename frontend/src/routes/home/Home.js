@@ -30,7 +30,7 @@ function Home() {
 
                     {/* Illustration Section */}
                     <div className="hero-image">
-                        <img src="/images/budget-illustration.png" alt="Budget Planning" />
+                        <img src="/images/budget-illustration.WEBP" alt="Budget Planning" />
                     </div>
                 </div>
             </div>
