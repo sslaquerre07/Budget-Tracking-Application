@@ -7,7 +7,7 @@ function Home() {
             <div className="home-container">
                 {/* Navigation Bar */}
                 <header className="navbar">
-                    <div className="logo">AutoBudget</div>
+                    <div className="logoH">AutoBudget</div>
                     <nav>
                         <ul className="nav-links">
                             <li><Link to="/login">Login</Link></li>
