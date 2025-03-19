@@ -3,7 +3,8 @@ import "./signUpPage.css";
 import { useRef, useState } from "react";
 
 function SignUpPage() {
-    const nameRef = useRef(null);
+    const firstNameRef = useRef(null);
+    const lastNameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
@@ -36,7 +37,8 @@ function SignUpPage() {
         }
 
         const userData = {
-            name: nameRef.current.value,
+            firstName: firstNameRef.current.value,
+            lastName: lastNameRef.current.value,
             email: emailRef.current.value,
             password: password,
         };
@@ -70,7 +72,8 @@ function SignUpPage() {
                 <h1>Sign Up</h1>
                 {error && <p className="error-message">{error}</p>}
                 <form className="signUpPage-form" onSubmit={handleSubmit}>
-                    <input type="text" name="name" placeholder="Full Name" ref={nameRef} required />
+                    <input type="text" name="firstName" placeholder="First Name" ref={firstNameRef} required />
+                    <input type="text" name="lastName" placeholder="Last Name" ref={lastNameRef} required />
                     <input type="email" name="email" placeholder="Email" ref={emailRef} required />
                     <input 
                         type="password" 
