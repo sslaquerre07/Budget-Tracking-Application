@@ -21,25 +21,21 @@ function Dashboard({ budgetData }) {
     const [hasLlmResponse, setHasLlmResponse] = useState(false);
     const queryClient = useQueryClient();
 
-    // Extract budgetId from the provided budgetData
     const initialBudgetId = budgetData?.response?.budgetId;
     const [budgetId, setBudgetId] = useState(initialBudgetId || null);
 
-    // Use React Query to fetch and monitor budget data
     const { data: currentBudgetData } = useQuery({
         queryKey: ['budget', budgetId],
         queryFn: () =>
             fetch(`${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/${budgetId}`)
                 .then(res => res.json()),
-        enabled: !!budgetId, // Only run query when budgetId exists
+        enabled: !!budgetId,
     });
 
-    // Title editing state - now derived from React Query data when available
     const [title, setTitle] = useState(budgetData?.response?.title || 'New Budget Title');
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [editTitle, setEditTitle] = useState('');
 
-    // Update title when budget data changes (including cache updates)
     useEffect(() => {
         if (currentBudgetData?.response?.budgetTitle) {
             setTitle(currentBudgetData.response.budgetTitle);
@@ -55,13 +51,12 @@ function Dashboard({ budgetData }) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email: "jane.smith@example.com", // Replace with actual user email when ready
+                    email: "jane.smith@example.com",
                 }),
             }).then(res => res.json()),
-        enabled: !!budgetId, // Only enable if we have a budgetId
+        enabled: !!budgetId,
     });
 
-    // Update title when it changes in the budgets list
     useEffect(() => {
         if (budgetId && budgetsList?.response) {
             const currentBudget = budgetsList.response.find(b => b.budgetId === budgetId);
@@ -71,7 +66,6 @@ function Dashboard({ budgetData }) {
         }
     }, [budgetsList, budgetId]);
 
-    // Store the processed data to preserve it across tab switches
     const [processedData, setProcessedData] = useState({
         expensesArray: [],
         incomesArray: [],
@@ -80,34 +74,28 @@ function Dashboard({ budgetData }) {
     });
 
     useEffect(() => {
-        // If budget data is provided, process and store it
         if (budgetData && budgetData.response) {
             const { response, categories, title: budgetTitle, budgetId: id } = budgetData.response;
 
-            // Set budget title if available
             if (budgetTitle) {
                 setTitle(budgetTitle);
             }
 
-            // Set budget ID if available
             if (id) {
                 setBudgetId(id);
             }
 
-            // Set LLM response if available
             if (response) {
                 setLlmResponse(response);
                 setHasLlmResponse(true);
             }
 
-            // Process categories into income and expenses
             const expensesArray = [];
             const incomesArray = [];
 
             if (categories && categories.length > 0) {
                 categories.forEach(category => {
                     if (category.accounts && category.accounts.length > 0) {
-                        // Check if the category looks like an income category
                         const isIncome = category.title.toLowerCase().includes('income') ||
                             category.title.toLowerCase().includes('salary') ||
                             category.title.toLowerCase().includes('revenue') ||
@@ -129,7 +117,6 @@ function Dashboard({ budgetData }) {
                 });
             }
 
-            // Save the processed data to state
             setProcessedData({
                 expensesArray,
                 incomesArray,
@@ -137,38 +124,29 @@ function Dashboard({ budgetData }) {
                 notes: response ? [{ text: response }] : []
             });
 
-            // Apply the data to the form components
             applyDataToForms(expensesArray, incomesArray, "monthly", response);
         }
     }, [budgetData]);
-
-    // Function to apply data to form components
     const applyDataToForms = (expenses, incomes, budgetType, response) => {
-        // Set budget type
         if (budgetTypeRef.current) {
             budgetTypeRef.current.setBudgetType(budgetType);
         }
 
-        // Set income data
         if (incomeRef.current && incomes.length > 0) {
             incomeRef.current.setIncomes(incomes);
         }
 
-        // Set expenses data
         if (expensesRef.current && expenses.length > 0) {
             expensesRef.current.setExpenses(expenses);
         }
 
-        // Set financial notes
         // if (financialNotesRef.current && response) {
         //     financialNotesRef.current.setNotes([{ text: response }]);
         // }
     };
 
-    // When switching tabs, ensure form data is preserved
     useEffect(() => {
         if (activeTab === 'form') {
-            // Re-apply the data to forms when switching to the form tab
             const { expensesArray, incomesArray, budgetType, notes } = processedData;
             const noteText = notes.length > 0 ? notes[0].text : '';
             applyDataToForms(expensesArray, incomesArray, budgetType, noteText);
@@ -176,7 +154,6 @@ function Dashboard({ budgetData }) {
     }, [activeTab, processedData]);
 
     const handleGenerateBudget = () => {
-        // First save the budget to get a budgetId if it doesn't exist
         const budgetData = budgetTypeRef.current.getBudgetData();
         const incomeData = incomeRef.current.getIncomeData();
         const expensesData = expensesRef.current.getExpenseData();
@@ -190,7 +167,6 @@ function Dashboard({ budgetData }) {
             budgetTitle: title
         };
 
-        // Save budget first to ensure we have a budgetId
         fetch('http://localhost:8080/budget/save', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -200,17 +176,13 @@ function Dashboard({ budgetData }) {
             .then(saveData => {
                 console.log("Budget saved:", saveData);
 
-                // Get the budgetId (either existing or newly created)
                 const savedBudgetId = saveData.response?.budgetId || budgetId;
 
-                // Update the budgetId state if it's a new budget
                 if (savedBudgetId && !budgetId) {
                     setBudgetId(savedBudgetId);
-                    // Update the cache for the budgets list
                     queryClient.invalidateQueries({ queryKey: ['budgets'] });
                 }
 
-                // Build generate request data from form components
                 const generateRequestData = {
                     "userEmail": "jane.smith@example.com",
                     "budgetDTO": {
@@ -224,18 +196,15 @@ function Dashboard({ budgetData }) {
                     "toBeEmailed": false
                 };
 
-                // Process expenses into categories
                 expensesData.forEach(expense => {
                     const parts = expense.type.split(':');
                     const categoryTitle = "Expense";
                     const itemTitle = parts.length > 1 ? parts[1].trim() : expense.type;
 
-                    // Check if category already exists
                     let category = generateRequestData.budgetDTO.categories.find(
                         cat => cat.categoryTitle === categoryTitle && cat.expense === true
                     );
 
-                    // Create new category if it doesn't exist
                     if (!category) {
                         category = {
                             categoryTitle: "Expense",
@@ -245,25 +214,21 @@ function Dashboard({ budgetData }) {
                         generateRequestData.budgetDTO.categories.push(category);
                     }
 
-                    // Add expense item
                     category.items.push({
                         title: itemTitle,
                         balance: parseFloat(expense.amount) || 0
                     });
                 });
 
-                // Process income into categories
                 incomeData.forEach(income => {
                     const parts = income.type.split(':');
                     const categoryTitle = "Income";
                     const itemTitle = parts.length > 1 ? parts[1].trim() : income.type;
 
-                    // Check if category already exists
                     let category = generateRequestData.budgetDTO.categories.find(
                         cat => cat.categoryTitle === categoryTitle && cat.expense === false
                     );
 
-                    // Create new category if it doesn't exist
                     if (!category) {
                         category = {
                             categoryTitle: "Income",
@@ -273,7 +238,6 @@ function Dashboard({ budgetData }) {
                         generateRequestData.budgetDTO.categories.push(category);
                     }
 
-                    // Add income item
                     category.items.push({
                         title: itemTitle,
                         balance: parseFloat(income.amount) || 0
@@ -340,11 +304,9 @@ function Dashboard({ budgetData }) {
             .then(response => response.json())
             .then(data => {
                 console.log("Budget saved:", data);
-                // Update the budgetId if this is a new budget
                 if (data.response && data.response.budgetId && !budgetId) {
                     setBudgetId(data.response.budgetId);
 
-                    // Update the cache for the budgets list
                     queryClient.invalidateQueries({ queryKey: ['budgets'] });
                 }
             })
@@ -362,7 +324,6 @@ function Dashboard({ budgetData }) {
             setTitle(editTitle);
             setIsEditingTitle(false);
 
-            // If budgetId exists, update the title on the server
             if (budgetId) {
                 const payload = {
                     budgetId,
@@ -380,9 +341,6 @@ function Dashboard({ budgetData }) {
                     .then(response => response.json())
                     .then(data => {
                         console.log('Title updated:', data);
-
-                        // Update both caches to ensure consistency
-                        // Update the specific budget cache
                         queryClient.setQueryData(['budget', budgetId], (oldData) => {
                             if (!oldData) return oldData;
                             return {
@@ -394,7 +352,6 @@ function Dashboard({ budgetData }) {
                             };
                         });
 
-                        // Update the budget in the budgets list cache
                         queryClient.setQueryData(['budgets'], (oldData) => {
                             if (!oldData) return oldData;
 
@@ -407,7 +364,6 @@ function Dashboard({ budgetData }) {
                             return { ...oldData, response: updatedResponse };
                         });
 
-                        // Also invalidate queries to refresh from server
                         queryClient.invalidateQueries({ queryKey: ['budgets'] });
                         queryClient.invalidateQueries({ queryKey: ['budget', budgetId] });
                     })
