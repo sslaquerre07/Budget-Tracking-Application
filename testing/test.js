@@ -1,26 +1,56 @@
-const { Builder, By, Key, until } = require("selenium-webdriver");
+const { Builder, By, until } = require("selenium-webdriver");
+const { describe, it, before, after } = require("mocha");
+const assert = require("assert");
 
-(async function loginTest() {
-    let driver = await new Builder().forBrowser("chrome").build();
+describe("Login Page Tests", function () {
+    let driver;
 
-    try {
-        await driver.get("https://lesso.help/login");
+    // Increase default timeout since Selenium actions may take time
+    this.timeout(20000);
 
-        await driver.findElement(By.id("username")).sendKeys("username1");
-        await driver.findElement(By.id("password")).sendKeys("password1");
+    before(async function () {
+        driver = await new Builder().forBrowser("chrome").build();
+    });
+
+    after(async function () {
+        await driver.quit();
+    });
+
+    // Test Case 1: Login and redirect to dashboard
+    it("should login and redirect to dashboard", async function () {
+        await driver.get("http://localhost:3000/login");
+
+        await driver.findElement(By.name("username")).sendKeys("john.doe@example.com");
+        await driver.findElement(By.name("password")).sendKeys("password123");
         await driver.findElement(By.xpath("//button[@type='submit']")).click();
 
-        // Wait for redirect
-        await driver.wait(until.urlIs("https://lesso.help/"), 10000);
+        // Wait for redirect to dashboard
+        await driver.wait(until.urlIs("http://localhost:3000/dashboard"), 10000);
 
-        // Verify login success
         let currentURL = await driver.getCurrentUrl();
-        if (currentURL === "https://lesso.help/") {
-            console.log("✅ Login successful. Redirected correctly!");
-        } else {
-            console.log("❌ Login failed.");
-        }
-    } finally {
-        await driver.quit();
-    }
-})();
+        assert.strictEqual(currentURL, "http://localhost:3000/dashboard");
+
+        console.log("✅ Test Passed: Redirected to dashboard!");
+    });
+
+    // Test Case 2: Display alert with 'Login successful!' message
+    it("should display alert with 'Login successful!' message", async function () {
+        await driver.get("http://localhost:3000/login");
+
+        await driver.findElement(By.name("username")).sendKeys("jane.smith@example.com");
+        await driver.findElement(By.name("password")).sendKeys("mypassword456");
+        await driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+        // Wait for alert
+        await driver.wait(until.alertIsPresent(), 10000);
+
+        // Get alert text
+        let alert = await driver.switchTo().alert();
+        let alertText = await alert.getText();
+
+        assert.strictEqual(alertText, "Login successful!");
+        console.log("✅ Test Passed: Correct alert displayed.");
+
+        await alert.accept();
+    });
+});
