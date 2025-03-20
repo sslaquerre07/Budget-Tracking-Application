@@ -87,7 +87,7 @@ function LoginPage() {
 
                 {/* ✅ Allow new users to try the app without creating an account */}
                 <button className="guest-access-button" onClick={handleGuestAccess}>
-                    Try the App as Guest
+                    Continue as a guest
                 </button>
 
                 <p className="loginPage-link">
