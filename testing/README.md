@@ -1,5 +1,5 @@
 ### Important Commands for Initialization (if needed)
-##### (Assuming inside the ./testing/ dir)
+##### (Assuming inside the "./testing/" dir)
 npm init -y
 <br>
 npm install selenium-webdriver mocha chromedriver
