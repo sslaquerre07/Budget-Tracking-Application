@@ -9,10 +9,11 @@
 
 /* Body Styling */
 body {
-    background-color: #f4f4f4;
-    /* Soft light gray background */
-    color: #222;
-    /* Darker text for better readability */
+
+    background: linear-gradient(to bottom, #033d5a, #b1e1e4); 
+    color: #222; /* Darker text for better readability */
+
+  
     overflow: auto;
     line-height: 1.6;
     padding: 10px;
