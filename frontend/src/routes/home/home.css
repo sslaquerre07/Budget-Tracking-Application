@@ -152,6 +152,15 @@
     .hero-image img {
         max-width: 80%;
     }
+
+    .nav-links {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .nav-links li a {
+        padding: 8px 12px;
+    }
 }
 
 /* For mobile devices (landscape) */
@@ -169,6 +178,21 @@
     .explore-button {
         width: 100%;
         text-align: center;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-links li {
+        display: block;
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 12px;
+        font-size: 1rem;
     }
 }
 
@@ -188,5 +212,24 @@
     }
     .hero-image img {
         max-width: 100%;
+    }
+    .navbar {
+        flex-direction: column;
+        padding: 10px 15px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-links li {
+        display: block;
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 10px;
+        font-size: 0.9rem;
     }
 }
