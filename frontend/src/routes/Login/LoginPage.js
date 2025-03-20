@@ -8,7 +8,7 @@ function LoginPage() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    // ✅ Redirect logged-in users to Dashboard immediately
+    //Redirect logged-in users to Dashboard immediately
     useEffect(() => {
         const userToken = localStorage.getItem("userToken");
         if (userToken) {
@@ -37,7 +37,7 @@ function LoginPage() {
                 console.log("User logged in:", data);
                 alert("Login successful!");
 
-                // ✅ Store user authentication details
+                //Store user authentication details
                 localStorage.setItem("userToken", data.token);
                 localStorage.setItem("userEmail", userData.email);
                 localStorage.setItem("userRole", "authenticated");
@@ -52,7 +52,7 @@ function LoginPage() {
         }
     };
 
-    // ✅ Guest Access: Allow users to try the app but NOT see saved budgets
+    // Guest Access: Allow users to try the app but NOT see saved budgets
     const handleGuestAccess = () => {
         alert("You are trying the app as a guest. Your budgets won't be saved.");
         
@@ -62,7 +62,7 @@ function LoginPage() {
         navigate("/dashboard"); // Redirect guest to a limited dashboard
     };
 
-    // ✅ Sign Out function
+    //Sign Out function
     const handleSignOut = () => {
         localStorage.clear();
         alert("You have been signed out.");
@@ -80,12 +80,12 @@ function LoginPage() {
                     <button type="submit">Log In</button>
                 </form>
 
-                {/* ✅ Forgot Password - Redirects to Settings */}
+                {/*Forgot Password - Redirects to Settings */}
                 <p className="forgot-password">
                     <Link to="/settings">Forgot Password?</Link>
                 </p>
 
-                {/* ✅ Allow new users to try the app without creating an account */}
+                {/*Allow new users to try the app without creating an account */}
                 <button className="guest-access-button" onClick={handleGuestAccess}>
                     Continue as a guest
                 </button>
@@ -94,7 +94,7 @@ function LoginPage() {
                     Don't have an account? <Link to="/sign-up">Sign Up</Link>
                 </p>
 
-                {/* ✅ Show Sign Out button only if the user is logged in */}
+                {/*Show Sign Out button only if the user is logged in */}
                 {localStorage.getItem("userToken") && (
                     <button className="signout-button" onClick={handleSignOut}>
                         Sign Out
