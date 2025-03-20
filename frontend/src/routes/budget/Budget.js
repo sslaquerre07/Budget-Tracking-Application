@@ -1,66 +1,73 @@
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
-import './budget.css';
+import Dashboard from '../dashboard/Dashboard';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 
 function Budget() {
-    const params = useParams();
-
-    const budgetId = params.budgetId || params.id || Object.values(params)[0];
-
-    const apiUrl = process.env.REACT_APP_BUDGETS_API;
-    const [budget, setBudget] = useState(null);
-
-    const { isPending, error, data } = useQuery({
-        queryKey: ['budget', budgetId],
-        queryFn: () =>
-            fetch(`${apiUrl}/user/budgets`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: "jane.smith@example.com", // !TEST
-                }),
-            }).then((res) => res.json()),
-    });
+    const { id } = useParams();
+    const [budgetData, setBudgetData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (data && data.response && budgetId) {
-            const budgetIdNumber = parseInt(budgetId, 10);
-            const foundBudget = data.response.find(b => b.budgetId === budgetIdNumber);
-            setBudget(foundBudget);
-        }
-    }, [data, budgetId]);
+        const fetchBudget = async () => {
+            try {
+                setLoading(true);
+                setError(null);
 
-    if (isPending) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+                const budgetId = id;
 
-    if (!budgetId) {
-        return <div className="Budget">
-            <h1>Missing Budget ID</h1>
-            <p>No budget ID was found in the URL parameters.</p>
-            <p>Check your route configuration in your router setup.</p>
-        </div>;
+                const response = await fetch(`http://localhost:8080/budget/${budgetId}`);
+
+                if (!response.ok) {
+                    throw new Error(`Error fetching budget: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                setBudgetData(data);
+            } catch (err) {
+                console.error("Error fetching budget data:", err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBudget();
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="loading-container" style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}>
+                <CircularProgress />
+            </div>
+        );
     }
 
-    if (!budget) {
+    if (error) {
         return (
-            <div className="Budget">
-                <h1>Budget not found</h1>
-                <p>No budget found with ID: {budgetId}</p>
-                <p>Please check the URL and try again.</p>
+            <div className="error-container" style={{ padding: '20px' }}>
+                <Alert severity="error">
+                    Failed to load budget data: {error}
+                </Alert>
+            </div>
+        );
+    }
+
+    if (!budgetData) {
+        return (
+            <div className="error-container" style={{ padding: '20px' }}>
+                <Alert severity="warning">
+                    No budget data found.
+                </Alert>
             </div>
         );
     }
 
     return (
-        <div className="Budget">
-            <h1>{budget.budgetTitle}</h1>
-            <span className="creation-date">Created on: {budget.creationDate}</span>
-            <div className="budget-details">
-                <p>Budget ID: {budgetId}</p>
-            </div>
+        <div className="budget-page">
+            <Dashboard budgetData={budgetData} />
         </div>
     );
 }

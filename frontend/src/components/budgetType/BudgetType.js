@@ -25,6 +25,10 @@ const BudgetType = forwardRef((props, ref) => {
         setCustomUnit(e.target.value);
     };
 
+    const setBudgetType = (type) => {
+        setSelectedType(type);
+    };
+
     useImperativeHandle(ref, () => ({
         getBudgetData: () => {
             const data = { selectedType };
@@ -33,7 +37,8 @@ const BudgetType = forwardRef((props, ref) => {
                 data.customUnit = customUnit;
             }
             return data;
-        }
+        },
+        setBudgetType
     }));
 
     return (

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.budgetGenerator.dto.CategoryDTO;
+import com.example.budgetGenerator.dto.category.CategoryDTO;
 import com.example.budgetGenerator.entity.categories.Category;
 import com.example.budgetGenerator.entity.categories.ExpenseCategory;
 import com.example.budgetGenerator.entity.categories.IncomeCategory;

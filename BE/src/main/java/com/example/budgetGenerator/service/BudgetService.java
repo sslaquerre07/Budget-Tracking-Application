@@ -6,7 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.budgetGenerator.dto.BudgetDTO;
+
+import com.example.budgetGenerator.dto.budget.BudgetDTO;
 import com.example.budgetGenerator.entity.accounts.Account;
 import com.example.budgetGenerator.entity.budgets.Budget;
 import com.example.budgetGenerator.entity.budgets.DailyBudget;

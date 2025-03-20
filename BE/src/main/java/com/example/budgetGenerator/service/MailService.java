@@ -15,10 +15,8 @@ public class MailService {
         this.mailSender = sender;
     }
 
+    //Sends budget receipt to the user
     public void sendBudgetReceipt(String userEmail, String budgetResponse) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
         String body = String.format(
             "Dear %s,<br><br>" +
             "I hope this email finds you well. Attached is your yearly budget breakdown based on the details you provided.<br>" +
@@ -30,13 +28,22 @@ public class MailService {
             userEmail, budgetResponse
         );
 
-        // Set email parameters
-        helper.setFrom("acmeplex2@gmail.com");
-        helper.setTo(userEmail);
-        helper.setSubject("Budget Receipt");
-        helper.setText(convertMarkdownToHtml(body), true);
+        sendEmail(userEmail, "Budget Receipt", body);
+    }
 
-        mailSender.send(message);
+    //Sets password update email to the user
+    public void sendPasswordUpdate(String userEmail) throws MessagingException{
+        String emailBody = String.format(
+            "Hello %s,\n\n" +
+            "We wanted to let you know that your password was successfully updated.\n\n" +
+            "If you did not make this change, please reset your password immediately or contact our support team.\n\n" +
+            "Best regards,<br>" +
+            "<strong>Budget Bozos</strong><br>" +
+            "SENG 401 L02 Group 10<br>",
+            userEmail
+        );
+
+        sendEmail(userEmail, "Password update", emailBody);
     }
 
     // Converts AI response to HTML from Markdown
@@ -49,4 +56,19 @@ public class MailService {
             .replaceAll("(?<=</li>)<br><br>", "") // Remove extra breaks after lists
             .replaceAll("<li>(.*?)</li>", "<ul><li>$1</li></ul>"); // Wrap in <ul>
     }
+
+    //Sets the basic params of an email and send it:
+    private void sendEmail(String recepient, String subject, String content) throws MessagingException{
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        // Set email parameters
+        helper.setFrom("acmeplex2@gmail.com");
+        helper.setTo(recepient);
+        helper.setSubject("Budget Receipt");
+        helper.setText(convertMarkdownToHtml(content), true);
+
+        mailSender.send(message);
+    }
+
 }
