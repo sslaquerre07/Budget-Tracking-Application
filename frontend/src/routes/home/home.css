@@ -44,7 +44,7 @@
     display: inline;
 }
 
-/* 🔥 Glowing and Fading Effect for Navbar Links */
+/*  Glowing and Fading Effect for Navbar Links */
 @keyframes glow {
     0% {
         opacity: 0.6;
@@ -124,17 +124,69 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+
+
+
+/* For large screens (laptops/desktops) */
+@media screen and (min-width: 1025px) {
+    .home-container {
+        max-width: 1200px;
+    }
+    .hero {
+        gap: 60px;
+    }
+}
+
+/* For tablets */
+@media screen and (max-width: 1024px) {
+    .home-container {
+        padding: 20px;
+    }
     .hero {
         flex-direction: column;
         text-align: center;
     }
-
     .hero-text {
-        margin-bottom: 20px;
+        max-width: 100%;
     }
-
     .hero-image img {
-        width: 80%;
+        max-width: 80%;
+    }
+}
+
+/* For mobile devices (landscape) */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        text-align: center;
+    }
+    .nav-links {
+        justify-content: center;
+    }
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+    .explore-button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* For small phones */
+@media screen and (max-width: 480px) {
+    .home-container {
+        padding: 15px;
+    }
+    .hero-text h1 {
+        font-size: 1.8rem;
+    }
+    .hero-text p {
+        font-size: 1rem;
+    }
+    .explore-button {
+        width: 100%;
+    }
+    .hero-image img {
+        max-width: 100%;
     }
 }

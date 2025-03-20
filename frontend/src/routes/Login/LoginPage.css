@@ -72,3 +72,118 @@
 .loginPage-link a:hover {
     text-decoration: underline;
 }
+
+
+/* Responsive Design */
+
+/* 🔥 Responsive Design */
+
+/* Large screens (laptops/desktops) */
+@media screen and (min-width: 1025px) {
+    .loginPage-container {
+        width: 50%;
+        height: 60%;
+    }
+
+    .RootLayout {
+        padding: 32px 128px;
+        height: 100vh;
+    }
+}
+
+/* Tablets */
+@media screen and (max-width: 1024px) {
+    .loginPage-container {
+        width: 70%;
+        height: auto;
+        padding: 1.5rem;
+    }
+    
+    .loginPage-container h1 {
+        font-size: 1.8rem;
+    }
+
+    .loginPage-form input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .loginPage-form button {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .RootLayout {
+        padding: 24px 64px;
+        height: 100vh;
+     }
+
+    
+}
+
+/* Mobile devices (landscape) */
+@media screen and (max-width: 768px) {
+    .loginPage {
+        height: auto;
+        padding: 20px;
+    }
+
+    .loginPage-container {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .loginPage-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .loginPage-form input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .loginPage-form button {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+
+    .RootLayout {
+        padding: 20px 32px;
+        height: 100vh;
+        
+    }
+}
+
+/* Small phones */
+@media screen and (max-width: 480px) {
+    .loginPage {
+        height: auto;
+        padding: 10px;
+    }
+
+    .loginPage-container {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .loginPage-container h1 {
+        font-size: 1.3rem;
+    }
+
+    .loginPage-form input {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .loginPage-form button {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .RootLayout {
+        padding: 12px 16px;
+        height: 100vh;
+    
+    }
+}
