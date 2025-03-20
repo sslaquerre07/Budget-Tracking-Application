@@ -7,7 +7,11 @@ function Home() {
             <div className="home-container">
                 {/* Navigation Bar */}
                 <header className="navbar">
-                    <div className="logoH">AutoBudget</div>
+                <div className="logoH">
+                    <span>A</span><span>u</span><span>t</span><span>o</span>
+                    <span>B</span><span>u</span><span>d</span><span>g</span><span>e</span><span>t</span>
+                </div>
+
                     <nav>
                         <ul className="nav-links">
                             <li><Link to="/login">Login</Link></li>
@@ -30,7 +34,7 @@ function Home() {
 
                     {/* Illustration Section */}
                     <div className="hero-image">
-                        <img src="/images/budget-illustration.WEBP" alt="Budget Planning" />
+                        <img src="/images/test.WEBP" alt="Budget Planning" />
                     </div>
                 </div>
             </div>
