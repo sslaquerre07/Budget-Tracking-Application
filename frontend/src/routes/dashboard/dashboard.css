@@ -128,3 +128,23 @@
     background-color: rgba(244, 67, 54, 0.1);
 }
 
+.logout-button {
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #ff4d4d, #d90000);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(217, 0, 0, 0.3);
+}
+
+.logout-button:hover {
+    background: linear-gradient(135deg, #d90000, #a30000);
+    box-shadow: 0 6px 15px rgba(217, 0, 0, 0.5);
+}
+
+.logout-button:active {
+    transform: scale(0.95);
+}

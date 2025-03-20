@@ -73,10 +73,33 @@
     text-decoration: underline;
 }
 
+.guest-access-button {
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #4da6ff, #0059b3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 89, 179, 0.3);
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.guest-access-button:hover {
+    background: linear-gradient(135deg, #0059b3, #003366);
+    box-shadow: 0 6px 15px rgba(0, 89, 179, 0.5);
+}
+
+.guest-access-button:active {
+    transform: scale(0.95);
+}
+
+
 
 /* Responsive Design */
-
-/* 🔥 Responsive Design */
 
 /* Large screens (laptops/desktops) */
 @media screen and (min-width: 1025px) {
