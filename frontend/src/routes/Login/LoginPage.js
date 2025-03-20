@@ -8,13 +8,13 @@ function LoginPage() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    // Check if the user is already logged in and redirect them (So that the same user doesn't constantly need to login again)
+    // ✅ Redirect logged-in users to Dashboard immediately
     useEffect(() => {
         const userToken = localStorage.getItem("userToken");
         if (userToken) {
-            navigate("/dashboard"); // Redirect to Dashboard if already logged in
+            navigate("/dashboard");
         }
-    }, []);
+    }, [navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -37,11 +37,12 @@ function LoginPage() {
                 console.log("User logged in:", data);
                 alert("Login successful!");
 
-                // Store the email in localStorage/sessionStorage for session management
+                // ✅ Store user authentication details
+                localStorage.setItem("userToken", data.token);
                 localStorage.setItem("userEmail", userData.email);
+                localStorage.setItem("userRole", "authenticated");
 
-                // Redirect to dashboard or home page
-                navigate("/dashboard");
+                navigate("/dashboard"); // Redirect logged-in user to Dashboard
             } else {
                 const errorData = await response.json();
                 setError(errorData.response || "Invalid credentials, please try again.");
@@ -51,31 +52,54 @@ function LoginPage() {
         }
     };
 
+    // ✅ Guest Access: Allow users to try the app but NOT see saved budgets
+    const handleGuestAccess = () => {
+        alert("You are trying the app as a guest. Your budgets won't be saved.");
+        
+        // Store "guest" role in localStorage
+        localStorage.setItem("userRole", "guest");
+
+        navigate("/dashboard"); // Redirect guest to a limited dashboard
+    };
+
+    // ✅ Sign Out function
+    const handleSignOut = () => {
+        localStorage.clear();
+        alert("You have been signed out.");
+        navigate("/");
+    };
+
     return (
         <div className="loginPage">
             <div className="loginPage-container">
                 <h1>Login</h1>
                 {error && <p className="error-message">{error}</p>}
                 <form className="loginPage-form" onSubmit={handleLogin}>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        ref={emailRef}
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        ref={passwordRef}
-                        required
-                    />
+                    <input type="email" name="email" placeholder="Email" ref={emailRef} required />
+                    <input type="password" name="password" placeholder="Password" ref={passwordRef} required />
                     <button type="submit">Log In</button>
                 </form>
+
+                {/* ✅ Forgot Password - Redirects to Settings */}
+                <p className="forgot-password">
+                    <Link to="/settings">Forgot Password?</Link>
+                </p>
+
+                {/* ✅ Allow new users to try the app without creating an account */}
+                <button className="guest-access-button" onClick={handleGuestAccess}>
+                    Try the App as Guest
+                </button>
+
                 <p className="loginPage-link">
                     Don't have an account? <Link to="/sign-up">Sign Up</Link>
                 </p>
+
+                {/* ✅ Show Sign Out button only if the user is logged in */}
+                {localStorage.getItem("userToken") && (
+                    <button className="signout-button" onClick={handleSignOut}>
+                        Sign Out
+                    </button>
+                )}
             </div>
         </div>
     );
