@@ -3,7 +3,8 @@
     gap: 50px;
     padding-top: 20px;
     height: 100%;
-    background-color: lightgoldenrodyellow;
+    background-color: rgb(219, 240, 239);
+    border-radius: 18px;
 
     .menu {
         flex: 1;
@@ -11,7 +12,7 @@
 
     .content {
         flex: 4;
-        background-color: lightsalmon;
+       
         overflow: auto;
     }
 }

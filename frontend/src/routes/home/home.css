@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap'); /* For writing */
+
+
 /* General Page Styling */
 .Home {
     display: flex;
@@ -62,6 +65,7 @@
     }
 }
 
+
 .nav-links li a {
     text-decoration: none;
     color: #333;
@@ -124,8 +128,6 @@
 }
 
 /* Responsive Design */
-
-
 
 /* For large screens (laptops/desktops) */
 @media screen and (min-width: 1025px) {
@@ -233,3 +235,57 @@
         font-size: 0.9rem;
     }
 }
+
+/*Make the container move*/
+@keyframes floatAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.home-container {
+    animation: floatAnimation 3s ease-in-out infinite;
+}
+
+@keyframes fadeInLetters {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logoH span {
+    display: inline-block;
+    opacity: 0;
+    animation: fadeInLetters 0.5s forwards;
+}
+
+/* Delay each letter */
+.logoH span:nth-child(1) { animation-delay: 0s; }  /* A */
+.logoH span:nth-child(2) { animation-delay: 0.1s; } /* u */
+.logoH span:nth-child(3) { animation-delay: 0.2s; } /* t */
+.logoH span:nth-child(4) { animation-delay: 0.3s; } /* o */
+.logoH span:nth-child(5) { animation-delay: 0.4s; } /* B */
+.logoH span:nth-child(6) { animation-delay: 0.5s; } /* u */
+.logoH span:nth-child(7) { animation-delay: 0.6s; } /* d */
+.logoH span:nth-child(8) { animation-delay: 0.7s; } /* g */
+.logoH span:nth-child(9) { animation-delay: 0.8s; } /* e */
+.logoH span:nth-child(10) { animation-delay: 0.9s; } /* t */
+
+
+.logoH {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
