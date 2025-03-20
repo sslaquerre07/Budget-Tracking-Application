@@ -17,7 +17,7 @@ public class UserService {
     public User getUser(String email) throws Exception{
         Optional<User> potentialUser = userRepository.findById(email);
         //If user already exists, notify the user
-        if(potentialUser.isPresent()){
+        if(!potentialUser.isPresent()){
             throw new Exception("Email does not have an account associated with it");
         }
         return potentialUser.get();

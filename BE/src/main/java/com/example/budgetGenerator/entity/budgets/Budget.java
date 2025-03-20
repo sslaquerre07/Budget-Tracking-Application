@@ -48,8 +48,6 @@ public abstract class Budget implements CreateString{
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
     private List<Category> categories;
     private Date creationDate;
-    //Response String to be put in here later
-    private String response;
     //Additional data member to map the reference in the DB, not needed for any other purpose
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_email")
@@ -61,7 +59,6 @@ public abstract class Budget implements CreateString{
         this.title = title;
         this.categories = categories;
         this.creationDate = new Date(System.currentTimeMillis());
-        this.response = null;
     }
 
     //Other public methods

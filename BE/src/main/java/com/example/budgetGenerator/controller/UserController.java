@@ -117,7 +117,6 @@ public class UserController {
             String response = LLMService.generateBudget(newBudget);
             //Save budget to the database
             newBudget.setUser(user);
-            newBudget.setResponse(response);
             budgetService.saveNewBudget(newBudget);
             //Potentially email the response to the user
             if(userBudgetDTO.isToBeEmailed()){

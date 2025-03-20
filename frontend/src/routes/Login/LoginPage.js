@@ -1,27 +1,61 @@
-import { Link } from "react-router-dom";
-import { useRef } from "react";
-import "./LoginPage.css"; // Make sure to create this CSS file
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import "./LoginPage.css";
 
 function LoginPage() {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    // Check if the user is already logged in and redirect them (So that the same user doesn't constantly need to login again)
+    useEffect(() => {
+        const userToken = localStorage.getItem("userToken");
+        if (userToken) {
+            navigate("/dashboard"); // Redirect to Dashboard if already logged in
+        }
+    }, []);
+
+    const handleLogin = async (e) => {
         e.preventDefault();
+        setError("");
 
         const userData = {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         };
 
-        console.log("User Logging In:", userData);
-        // Add authentication logic here (e.g., API call)
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BUDGETS_API}/user/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("User logged in:", data);
+                alert("Login successful!");
+
+                // Store the email in localStorage/sessionStorage for session management
+                localStorage.setItem("userEmail", userData.email);
+
+                // Redirect to dashboard or home page
+                navigate("/dashboard");
+            } else {
+                const errorData = await response.json();
+                setError(errorData.response || "Invalid credentials, please try again.");
+            }
+        } catch (error) {
+            setError("Server error. Please try again later.");
+        }
     };
 
     return (
         <div className="loginPage">
             <div className="loginPage-container">
                 <h1>Login</h1>
+                {error && <p className="error-message">{error}</p>}
                 <form className="loginPage-form" onSubmit={handleLogin}>
                     <input
                         type="email"

@@ -42,8 +42,17 @@ const Expenses = forwardRef((props, ref) => {
         setExpenses(filteredExpenses);
     };
 
+    const setExpensesData = (expensesData) => {
+        const formattedExpenses = expensesData.map(expense => ({
+            id: Date.now() + Math.random(), 
+            ...expense
+        }));
+        setExpenses(formattedExpenses);
+    };
+
     useImperativeHandle(ref, () => ({
-        getExpenseData: () => expenses.map(({ id, ...rest }) => rest)
+        getExpenseData: () => expenses.map(({ id, ...rest }) => rest),
+        setExpenses: setExpensesData
     }));
 
     return (

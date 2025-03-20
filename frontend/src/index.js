@@ -14,7 +14,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient();
 
-const router = createBrowserRouter([  
+const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
-        path: "/settings", 
+        path: "/settings",
         element: <SettingsPage />
       },
       {

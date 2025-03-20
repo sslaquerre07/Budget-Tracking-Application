@@ -3,13 +3,14 @@
   max-width: 1000px;
   margin: 80px auto;
   padding: 20px;
-  background-color: #dee4ed; 
+  background-color: #dee4ed;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   height: 700px;
-  border-radius: 20px; /* Curved edges */
+  border-radius: 20px;
+  /* Curved edges */
   box-shadow: 0 8px 16px rgba(2, 47, 92, 0.4);
 
- 
+
 }
 
 .settings-title {
@@ -97,5 +98,5 @@
 
   background-color: #6f0707;
 
- 
+
 }

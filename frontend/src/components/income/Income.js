@@ -42,10 +42,18 @@ const Income = forwardRef((props, ref) => {
         setIncomes(filteredIncomes);
     };
 
-    useImperativeHandle(ref, () => ({
-        getIncomeData: () => incomes.map(({ id, ...rest }) => rest)
-    }));
+    const setIncomesData = (incomesData) => {
+        const formattedIncomes = incomesData.map(income => ({
+            id: Date.now() + Math.random(), 
+            ...income
+        }));
+        setIncomes(formattedIncomes);
+    };
 
+    useImperativeHandle(ref, () => ({
+        getIncomeData: () => incomes.map(({ id, ...rest }) => rest),
+        setIncomes: setIncomesData
+    }));
 
     return (
         <div className="Income">
