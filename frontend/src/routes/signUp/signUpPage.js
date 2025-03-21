@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./signUpPage.css";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 function SignUpPage() {
     const firstNameRef = useRef(null);
@@ -8,10 +8,23 @@ function SignUpPage() {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
+    const signUpPageRef = useRef(null);
     const [error, setError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [passwordValid, setPasswordValid] = useState(true);
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const navigate = useNavigate();
+
+    // Add visibility animation effect similar to home page
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (signUpPageRef.current) {
+                signUpPageRef.current.classList.add("visible");
+            }
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     const validatePassword = (password) => {
         if (password.length < 6) {
@@ -54,9 +67,8 @@ function SignUpPage() {
             });
 
             if (response.ok) {
-                console.log("User signed up:", userData);
-                alert("Signup successful! Redirecting to login...");
-                window.location.href = "/login";
+                // Use navigate instead of window.location for better integration with React Router
+                navigate("/login");
             } else {
                 const errorData = await response.json();
                 setError(errorData.message || "Signup failed. Try again.");
@@ -67,14 +79,32 @@ function SignUpPage() {
     };
 
     return (
-        <div className="signUpPage">
+        <div className="signUpPage" ref={signUpPageRef}>
             <div className="signUpPage-container">
-                <h1>Sign Up</h1>
+                <h1>Create Account</h1>
                 {error && <p className="error-message">{error}</p>}
                 <form className="signUpPage-form" onSubmit={handleSubmit}>
-                    <input type="text" name="firstName" placeholder="First Name" ref={firstNameRef} required />
-                    <input type="text" name="lastName" placeholder="Last Name" ref={lastNameRef} required />
-                    <input type="email" name="email" placeholder="Email" ref={emailRef} required />
+                    <input
+                        type="text"
+                        name="firstName"
+                        placeholder="First Name"
+                        ref={firstNameRef}
+                        required
+                    />
+                    <input
+                        type="text"
+                        name="lastName"
+                        placeholder="Last Name"
+                        ref={lastNameRef}
+                        required
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        ref={emailRef}
+                        required
+                    />
                     <input
                         type="password"
                         name="password"

@@ -7,8 +7,20 @@ function LoginPage() {
     const passwordRef = useRef(null);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const loginPageRef = useRef(null);
 
-    //Redirect logged-in users to Dashboard immediately
+    // Add visibility animation effect similar to home page
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (loginPageRef.current) {
+                loginPageRef.current.classList.add("visible");
+            }
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Redirect logged-in users to Dashboard immediately
     useEffect(() => {
         const userToken = localStorage.getItem("userToken");
         if (userToken) {
@@ -34,10 +46,8 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("User logged in:", data);
-                alert("Login successful!");
 
-                //Store user authentication details
+                // Store user authentication details
                 localStorage.setItem("userToken", data.token);
                 localStorage.setItem("userEmail", userData.email);
                 localStorage.setItem("userRole", "authenticated");
@@ -54,25 +64,21 @@ function LoginPage() {
 
     // Guest Access: Allow users to try the app but NOT see saved budgets
     const handleGuestAccess = () => {
-        alert("You are trying the app as a guest. Your budgets won't be saved.");
-        
         // Store "guest" role in localStorage
         localStorage.setItem("userRole", "guest");
-
         navigate("/dashboard"); // Redirect guest to a limited dashboard
     };
 
-    //Sign Out function
+    // Sign Out function
     const handleSignOut = () => {
         localStorage.clear();
-        alert("You have been signed out.");
         navigate("/");
     };
 
     return (
-        <div className="loginPage">
+        <div className="loginPage" ref={loginPageRef}>
             <div className="loginPage-container">
-                <h1>Login</h1>
+                <h1>Welcome Back</h1>
                 {error && <p className="error-message">{error}</p>}
                 <form className="loginPage-form" onSubmit={handleLogin}>
                     <input type="email" name="email" placeholder="Email" ref={emailRef} required />
@@ -80,12 +86,10 @@ function LoginPage() {
                     <button type="submit">Log In</button>
                 </form>
 
-                {/*Forgot Password - Redirects to Settings */}
                 <p className="forgot-password">
                     <Link to="/settings">Forgot Password?</Link>
                 </p>
 
-                {/*Allow new users to try the app without creating an account */}
                 <button className="guest-access-button" onClick={handleGuestAccess}>
                     Continue as a guest
                 </button>
@@ -94,7 +98,6 @@ function LoginPage() {
                     Don't have an account? <Link to="/sign-up">Sign Up</Link>
                 </p>
 
-                {/*Show Sign Out button only if the user is logged in */}
                 {localStorage.getItem("userToken") && (
                     <button className="signout-button" onClick={handleSignOut}>
                         Sign Out

@@ -9,7 +9,8 @@ function RootLayout() {
             <header>
                 <Link to="/" className="logo">
                     {/* Change when we have a logo */}
-                    <ImageFiller />
+                    <img src="/images/logo.webp" alt="AutoBudget Logo" />
+
                     <span>AutoBudget</span>
                 </Link>
                 <div className="profile">
