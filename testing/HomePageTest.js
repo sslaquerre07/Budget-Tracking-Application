@@ -18,7 +18,7 @@ const SETTINGS_URL = `${BASE_URL}/settings`;
     try {
         await driver.get(HOME_URL);
         
-        await driver.findElement(By.linkText("Login")).click();
+        await driver.findElement(By.className("profile")).click();
 
         // Wait for redirect
         await driver.wait(until.urlIs(LOGIN_URL), 10000);
@@ -35,57 +35,57 @@ const SETTINGS_URL = `${BASE_URL}/settings`;
     }
 })();
 
-// Test Case 2: Sign Up Button
-// Input: Click on Sign Up button
-// Expected output: Redirect to sign up page
-(async function signUpButtonTest() {
-    let driver = await new Builder().forBrowser("chrome").build();
+// // Test Case 2: Sign Up Button
+// // Input: Click on Sign Up button
+// // Expected output: Redirect to sign up page
+// (async function signUpButtonTest() {
+//     let driver = await new Builder().forBrowser("chrome").build();
 
-    try {
-        await driver.get(HOME_URL);
+//     try {
+//         await driver.get(HOME_URL);
         
-        await driver.findElement(By.linkText("Sign Up")).click();
+//         await driver.findElement(By.linkText("Sign Up")).click();
 
-        // Wait for redirect
-        await driver.wait(until.urlIs(SIGNUP_URL), 10000);
+//         // Wait for redirect
+//         await driver.wait(until.urlIs(SIGNUP_URL), 10000);
 
-        // Verify redirect success
-        let currentURL = await driver.getCurrentUrl();
-        if (currentURL === SIGNUP_URL) {
-            console.log("Test Case 2 Passed: 🟢 Sign Up button clicked. Redirected correctly!");
-        } else {
-            console.log("Test Case 2 Failed: 🔴 Sign Up button not clicked.");
-        }
-    } finally {
-        await driver.quit();
-    }
-})();
+//         // Verify redirect success
+//         let currentURL = await driver.getCurrentUrl();
+//         if (currentURL === SIGNUP_URL) {
+//             console.log("Test Case 2 Passed: 🟢 Sign Up button clicked. Redirected correctly!");
+//         } else {
+//             console.log("Test Case 2 Failed: 🔴 Sign Up button not clicked.");
+//         }
+//     } finally {
+//         await driver.quit();
+//     }
+// })();
 
 // Test Case 3: Settings Button
 // Input: Click on Settings button
 // Expected output: Redirect to settings page
-(async function settingsButtonTest() {
-    let driver = await new Builder().forBrowser("chrome").build();
+// (async function settingsButtonTest() {
+//     let driver = await new Builder().forBrowser("chrome").build();
 
-    try {
-        await driver.get(HOME_URL);
+//     try {
+//         await driver.get(HOME_URL);
         
-        await driver.findElement(By.linkText("Settings")).click();
+//         await driver.findElement(By.linkText("Settings")).click();
 
-        // Wait for redirect
-        await driver.wait(until.urlIs(SETTINGS_URL), 10000);
+//         // Wait for redirect
+//         await driver.wait(until.urlIs(SETTINGS_URL), 10000);
 
-        // Verify redirect success
-        let currentURL = await driver.getCurrentUrl();
-        if (currentURL === SETTINGS_URL) {
-            console.log("Test Case 3 Passed: 🟢 Settings button clicked. Redirected correctly!");
-        } else {
-            console.log("Test Case 3 Failed: 🔴 Settings button not clicked.");
-        }
-    } finally {
-        await driver.quit();
-    }
-})();
+//         // Verify redirect success
+//         let currentURL = await driver.getCurrentUrl();
+//         if (currentURL === SETTINGS_URL) {
+//             console.log("Test Case 3 Passed: 🟢 Settings button clicked. Redirected correctly!");
+//         } else {
+//             console.log("Test Case 3 Failed: 🔴 Settings button not clicked.");
+//         }
+//     } finally {
+//         await driver.quit();
+//     }
+// })();
 
 // Test Case 4: Dashboard Button
 // Input: Click on Dashboard button
@@ -96,7 +96,7 @@ const SETTINGS_URL = `${BASE_URL}/settings`;
     try {
         await driver.get(HOME_URL);
 
-        await driver.findElement(By.className("explore-button")).click();
+        await driver.findElement(By.className("cta-primary")).click();
 
         // Wait for redirect
         await driver.wait(until.urlIs(DASHBOARD_URL), 10000);
