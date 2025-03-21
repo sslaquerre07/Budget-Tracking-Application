@@ -31,15 +31,14 @@ function DashboardLayout() {
                 setSidebarOpen(false);
             }
         };
-
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
         <div className="dashboard-container">
-            {/* Mobile sidebar toggle button */}
-            <button className="sidebar-toggle" onClick={toggleSidebar}>
+            {/* Mobile sidebar toggle button - Added open class */}
+            <button className={`sidebar-toggle ${sidebarOpen ? 'open' : ''}`} onClick={toggleSidebar}>
                 <MenuIcon />
             </button>
 
