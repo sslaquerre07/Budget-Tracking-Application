@@ -106,6 +106,7 @@ async function login(driver, email, password) {
     }
 })();
 
+// NOTE FOR TEST CASE 8 and 9: Nullified due to the fact that the sign-in button is unreachable due to auto-direct to dashboard (because user is already logged in)
 // // Test Case 8: Sign Out Alert
 // // Input: Click on Sign Out button
 // // Expected output: Alert popup with message "You have been signed out.".
@@ -146,6 +147,7 @@ async function login(driver, email, password) {
 //     }
 // })();
 
+// NOTE FOR TEST CASE 8 and 9: Nullified due to the fact that the sign-in button is unreachable due to auto-direct to dashboard (because user is already logged in)
 // // Test Case 9: Sign Out Redirect
 // // Input: Click on Sign Out button
 // // Expected output: Application successfully redirects to Login Page.
@@ -154,6 +156,11 @@ async function login(driver, email, password) {
 
 //     try {
 //         await login(driver, "jane.smith@example.com", "mypassword456");
+
+//         // Wait for alert to appear and accept it
+//         await driver.wait(until.alertIsPresent(), 10000);
+//         let alert2 = await driver.switchTo().alert();
+//         await alert2.accept();
 
 //         await driver.get(LOGIN_URL);
 
