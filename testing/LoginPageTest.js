@@ -255,37 +255,37 @@ async function login(driver, email, password) {
     }
 })();
 
-// // Test Case 12: Guest user redirect
-// // Input: Click on Guest user button
-// // Expected output: Application successfully redirects to Dashboard Page.
-// (async function guestUserRedirectTest() {
-//     let driver = await new Builder().forBrowser("chrome").build();
+// Test Case 12: Guest user redirect
+// Input: Click on Guest user button
+// Expected output: Application successfully redirects to Dashboard Page.
+(async function guestUserRedirectTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
 
-//     try {
-//         await driver.get(LOGIN_URL);
+    try {
+        await driver.get(LOGIN_URL);
 
-//         await driver.wait(until.elementLocated(By.className("guest-access-button")), 5000);
-//         await driver.findElement(By.className("guest-access-button")).click();
+        await driver.wait(until.elementLocated(By.className("guest-access-button")), 5000);
+        await driver.findElement(By.className("guest-access-button")).click();
 
-//         // Wait for alert to appear and accept it
-//         await driver.wait(until.alertIsPresent(), 5000);
-//         let alert = await driver.switchTo().alert();
-//         await alert.accept();
+        // Wait for alert to appear and accept it
+        await driver.wait(until.alertIsPresent(), 5000);
+        let alert = await driver.switchTo().alert();
+        await alert.accept();
 
-//         // Wait for redirect
-//         await driver.wait(until.urlIs(DASHBOARD_URL), 10000);
+        // Wait for redirect
+        await driver.wait(until.urlIs(DASHBOARD_URL), 10000);
 
-//         // Verify redirect success
-//         let currentURL = await driver.getCurrentUrl();
-//         if (currentURL === DASHBOARD_URL) {
-//             console.log("Test Case 12 Passed: 🟢 Guest user redirected to Dashboard page!");
-//         } else {
-//             console.log("Test Case 12 Failed: 🔴 Redirect unsuccessful.");
-//         }
-//     } finally {
-//         await driver.quit();
-//     }
-// })();
+        // Verify redirect success
+        let currentURL = await driver.getCurrentUrl();
+        if (currentURL === DASHBOARD_URL) {
+            console.log("Test Case 12 Passed: 🟢 Guest user redirected to Dashboard page!");
+        } else {
+            console.log("Test Case 12 Failed: 🔴 Redirect unsuccessful.");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
 
 // // Test Case 13: Sign Up Redirect
 // // Input: Click on Sign Up button
