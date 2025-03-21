@@ -46,6 +46,20 @@ const BudgetType = forwardRef((props, ref) => {
             <h1>Budget Type</h1>
             <div className="budget-options">
                 <div
+                    className={`option ${selectedType === "daily" ? "selected" : "unselected"}`}
+                    onClick={() => handleLabelClick("yearly")}
+                >
+                    <input
+                        type="radio"
+                        id="daily"
+                        name="budgetType"
+                        value="daily"
+                        checked={selectedType === "daily"}
+                        onChange={handleTypeChange}
+                    />
+                    <label htmlFor="daily">Daily</label>
+                </div>
+                <div
                     className={`option ${selectedType === "weekly" ? "selected" : "unselected"}`}
                     onClick={() => handleLabelClick("weekly")}
                 >
@@ -73,21 +87,6 @@ const BudgetType = forwardRef((props, ref) => {
                         onChange={handleTypeChange}
                     />
                     <label htmlFor="monthly">Monthly</label>
-                </div>
-
-                <div
-                    className={`option ${selectedType === "yearly" ? "selected" : "unselected"}`}
-                    onClick={() => handleLabelClick("yearly")}
-                >
-                    <input
-                        type="radio"
-                        id="yearly"
-                        name="budgetType"
-                        value="yearly"
-                        checked={selectedType === "yearly"}
-                        onChange={handleTypeChange}
-                    />
-                    <label htmlFor="yearly">Yearly</label>
                 </div>
             </div>
         </div>
