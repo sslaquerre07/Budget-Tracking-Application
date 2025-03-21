@@ -6,6 +6,7 @@ const DASHBOARD_URL = `${BASE_URL}/dashboard`;
 const LOGIN_URL = `${BASE_URL}/login`;
 const SIGNUP_URL = `${BASE_URL}/sign-up`;
 const PASSWORD_ERROR_SHORT = "Password must be at least 6 characters long.";
+const PASSWORD_ERROR_MATCH = "Passwords do not match.";
 
 ////////////////////////////////////////// Test Cases For Signup Page //////////////////////////////////////////
 
@@ -31,13 +32,49 @@ const PASSWORD_ERROR_SHORT = "Password must be at least 6 characters long.";
         // Get error message text
         let errorMessageElement = await driver.findElement(By.className("error-message"));
         let errorMessage = await errorMessageElement.getText();
-        console.log(`Error Message Displayed: "${errorMessage}"`);
+
+        // DEBUG
+        // console.log(`Error Message Displayed: "${errorMessage}"`);
 
         // Check error message
         if (errorMessage === PASSWORD_ERROR_SHORT) {
             console.log("Test Case 13 Passed: ✅ Password error message displayed correctly!");
         } else {
             console.log("Test Case 13 Failed: ❌ Password error message not displayed.");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
+
+// Test Case 14: Signup invalid mismatched passwords
+// Input: Enter mismatched passwords
+// Expected output: Mismatched password error message displayed
+(async function mismatchedPasswordsTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
+
+    try {
+        await driver.get(SIGNUP_URL);
+
+        await driver.findElement(By.name("firstName")).sendKeys("P");
+        await driver.findElement(By.name("lastName")).sendKeys("P");
+        await driver.findElement(By.name("email")).sendKeys("testing@testing.com");
+        await driver.findElement(By.name("password")).sendKeys("password123");
+        await driver.findElement(By.name("confirmPassword")).sendKeys("passwordmismatch");
+        await driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+        // Wait for the confirm password error message to appear
+        await driver.wait(until.elementLocated(By.className("error-message")), 5000);
+
+        // Get error message text
+        let errorMessageElement = await driver.findElement(By.className("error-message"));
+        let errorMessage = await errorMessageElement.getText();
+        
+        // Check error message
+        if (errorMessage === PASSWORD_ERROR_MATCH) {
+            console.log("Test Case 14 Passed: ✅ Mismatched password error message displayed correctly!");
+        } else {
+            console.log("Test Case 14 Failed: ❌ Mismatched password error message not displayed.");
         }
     } finally {
         await driver.quit();
