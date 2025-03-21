@@ -248,3 +248,57 @@
 .budget-item.animation-complete {
     background: transparent;
 }
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .ChatList {
+        padding: 20px;
+    }
+
+    .ChatList .title {
+        font-size: 1.1rem;
+    }
+
+    .budget-item a {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ChatList {
+        padding: 15px;
+    }
+
+    .ChatList .title {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .ChatList a {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        margin-bottom: 10px;
+    }
+
+    .ChatList hr {
+        margin: 15px 0;
+    }
+
+    .list {
+        gap: 8px;
+    }
+
+    .budget-item a {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .icon-btn {
+        font-size: 0.8rem;
+    }
+
+    .edit-form input {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
