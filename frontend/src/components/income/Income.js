@@ -53,7 +53,7 @@ const Income = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         getIncomeData: () => incomes.map(({ id, ...rest }) => rest),
         setIncomes: setIncomesData,
-        isValid: () => incomes.length > 0
+        isValid: () => incomes.length > 0 // Check if at least one income exists
     }));
 
     return (
