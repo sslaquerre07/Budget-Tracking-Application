@@ -1,15 +1,15 @@
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
+  seng401-sql:
+    build: ./sql
+    container_name: seng401-sql
+    volumes:
+      - ./sql/sql_files:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: budgetgeneratordatabase
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
-    volumes:
-      - ./sql_files:/docker-entrypoint-initdb.d
     networks:
       - mynetwork
     healthcheck:
@@ -17,24 +17,25 @@ services:
       timeout: 20s
       retries: 10
 
-  spring-boot-app:
+  seng401-be:
     build: ./BE
-    container_name: spring-app
+    container_name: seng401-be
     ports: 
       - "8080:8080"
     depends_on:
-      mysql:
-        condition: service_healthy
+      - seng401-sql
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/budgetgeneratordatabase
+      - SPRING_DATASOURCE_URL=jdbc:mysql://seng401-sql:3306/budgetgeneratordatabase
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
     networks:
       - mynetwork
 
-  react-app:
+  seng401-fe:
     build: ./frontend
-    container_name: react-app
+    depends_on:
+      - seng401-be
+    container_name: seng401-fe
     ports:
       - "3000:80"
     networks:

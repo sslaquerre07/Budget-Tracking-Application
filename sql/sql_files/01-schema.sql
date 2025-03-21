@@ -11,7 +11,7 @@ USE budgetgeneratordatabase;
 -- Alternate user definition
 -- -----------------------------------------------------
 CREATE USER IF NOT EXISTS 'myuser'@'%' IDENTIFIED WITH caching_sha2_password BY 'mypassword';
-GRANT ALL PRIVILEGES ON materialsdatabase.* TO 'myuser'@'%';
+GRANT ALL PRIVILEGES ON budgetgeneratordatabase.* TO 'myuser'@'%';
 FLUSH PRIVILEGES;
 
 -- -----------------------------------------------------
