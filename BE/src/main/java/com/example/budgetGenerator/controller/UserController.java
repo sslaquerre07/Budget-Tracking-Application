@@ -133,6 +133,21 @@ public class UserController {
         }
     }
 
+    //Send an email receipt of the budget to the user
+    @PostMapping("/emailReceipt")
+    public ResponseEntity<?> sendEmailReceipt(@RequestBody Map<String, String> request){
+        try {
+            mailService.sendBudgetReceipt(request.get("userEmail"), request.get("response"));
+            return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
+                Map.entry("response", "Email receipt sent")
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(
+                Map.entry("response", e.getMessage())
+            ));
+        }
+    }
+
     @PostMapping("/updatePassword")
     public ResponseEntity<?> updateUserPassword(@RequestBody BasicUserDTO newUserInfo){
         try {
