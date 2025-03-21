@@ -52,7 +52,8 @@ const Expenses = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => ({
         getExpenseData: () => expenses.map(({ id, ...rest }) => rest),
-        setExpenses: setExpensesData
+        setExpenses: setExpensesData,
+        isValid: () => expenses.length > 0 // Check if at least one expense exists
     }));
 
     return (
