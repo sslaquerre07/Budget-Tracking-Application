@@ -9,4 +9,8 @@ npm install selenium-webdriver mocha chromedriver
 ##### (Assuming whole app running)
 node {test_filename}.js
 <br>
-e.g., node test.js
+e.g.:
+<br>
+node test.js
+<br>
+node HomePageTest.js
