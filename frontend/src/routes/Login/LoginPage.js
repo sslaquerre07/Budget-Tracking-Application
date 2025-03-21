@@ -52,6 +52,9 @@ function LoginPage() {
                 localStorage.setItem("userEmail", userData.email);
                 localStorage.setItem("userRole", "authenticated");
 
+                window.dispatchEvent(new Event('loginStatusChanged'));
+
+
                 navigate("/dashboard"); // Redirect logged-in user to Dashboard
             } else {
                 const errorData = await response.json();

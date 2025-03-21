@@ -19,7 +19,7 @@ public class MailService {
     public void sendBudgetReceipt(String userEmail, String budgetResponse) throws MessagingException {
         String body = String.format(
             "Dear %s,<br><br>" +
-            "I hope this email finds you well. Attached is your yearly budget breakdown based on the details you provided.<br>" +
+            "I hope this email finds you well. Attached is your budget breakdown based on the details you provided.<br><br>" +
             "%s<br><br>" +
             "If you have any questions, feel free to reach out. We're here to help you stay on top of your finances!<br><br>" +
             "Best regards,<br>" +
