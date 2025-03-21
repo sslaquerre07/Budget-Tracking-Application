@@ -229,6 +229,13 @@ function Dashboard({ budgetData }) {
         const incomeData = incomeRef.current.getIncomeData();
         const expensesData = expensesRef.current.getExpenseData();
 
+        // New Validation: Ensure at least one income and one expense exists
+        if (incomeData.length === 0 || expensesData.length === 0) {
+            alert("Please add at least one income and one expense before generating the budget.");
+            setIsGenerating(false);
+            return; // Stop execution if data is missing
+        }
+
         // 2. Create the budget DTO
         const budgetDTO = {
             budgetType:
