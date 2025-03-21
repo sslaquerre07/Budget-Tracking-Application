@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import './chatList.css';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,6 +12,7 @@ function ChatList() {
     const queryClient = useQueryClient();
     const [editingId, setEditingId] = useState(null);
     const [editTitle, setEditTitle] = useState('');
+    const location = useLocation(); // This hook gives us access to the current URL
 
     const userToken = localStorage.getItem("userToken");
     const userEmail = localStorage.getItem("userEmail");
@@ -85,7 +86,6 @@ function ChatList() {
         }
     });
 
-
     const handleDelete = (e, budgetId) => {
         e.preventDefault();
         e.stopPropagation();
@@ -107,6 +107,10 @@ function ChatList() {
         }
     };
 
+    // Check if a budget is currently active
+    const isActiveBudget = (budgetId) => {
+        return location.pathname === `/dashboard/budgets/${budgetId}`;
+    };
 
     const budgets = data?.response || [];
     const sortedBudgets = [...budgets].sort((a, b) => {
@@ -125,7 +129,10 @@ function ChatList() {
                     : error
                         ? "Something went wrong!"
                         : sortedBudgets.map((budget) => (
-                            <div className="budget-item" key={budget.budgetId}>
+                            <div
+                                className={`budget-item ${isActiveBudget(budget.budgetId) ? 'active-budget' : ''}`}
+                                key={budget.budgetId}
+                            >
                                 {editingId === budget.budgetId ? (
                                     <form
                                         className="edit-form"
@@ -152,6 +159,9 @@ function ChatList() {
                                 ) : (
                                     <Link to={`/dashboard/budgets/${budget.budgetId}`}>
                                         {budget.budgetTitle}
+                                        {isActiveBudget(budget.budgetId) && (
+                                            <span className="active-indicator">• Current</span>
+                                        )}
                                         <div className="hover-controls">
                                             <button
                                                 className="icon-btn edit-btn"

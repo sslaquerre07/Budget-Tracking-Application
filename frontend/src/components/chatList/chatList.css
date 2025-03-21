@@ -123,3 +123,19 @@
         font-style: 12px;
     }
 }
+
+.budget-item.active-budget {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-left: 3px solid #007bff;
+}
+
+.active-indicator {
+    margin-left: 8px;
+    font-size: 0.8em;
+    color: #007bff;
+    font-weight: 600;
+}
+
+.budget-item.active-budget a {
+    font-weight: 600;
+}

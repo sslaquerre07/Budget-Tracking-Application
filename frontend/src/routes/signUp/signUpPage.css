@@ -1,215 +1,135 @@
-/* signUpPage.css */
-
-
 .signUpPage {
-    width: 800px;
-    padding: 100px;
-
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-
-    /* Centering */
-    margin: auto;
-    height: 100vh;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.signUpPage.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .signUpPage-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
+    background: rgba(3, 61, 90, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
 }
 
-.signUpPage-container h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
+.signUpPage h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    background: linear-gradient(90deg, #ffffff, #64ecf5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .signUpPage-form {
     display: flex;
     flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .signUpPage-form input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border 0.3s, background-color 0.3s;
+    padding: 15px;
+    border-radius: 50px;
+    border: 2px solid rgba(100, 236, 245, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #f5f5f5;
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
-/* 🚨 Invalid input styling */
+.signUpPage-form input:focus {
+    outline: none;
+    border-color: #64ecf5;
+    box-shadow: 0 0 10px rgba(100, 236, 245, 0.5);
+}
+
+.signUpPage-form input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
 .signUpPage-form input.invalid-input {
-    border: 2px solid red;
-    background-color: #ffe6e6;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 5px;
-    text-align: left;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
 }
 
 .signUpPage-form button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
     cursor: pointer;
-    transition: background-color 0.3s;
+    border: none;
+    background: #64ecf5;
+    color: #033d5a;
+    margin-top: 10px;
 }
 
 .signUpPage-form button:hover {
-    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.error-message {
+    color: #ff6b6b;
+    margin: -5px 0 5px;
+    background: rgba(255, 107, 107, 0.1);
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    text-align: left;
 }
 
 .signUpPage-link {
-    margin-top: 15px;
-    font-size: 14px;
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .signUpPage-link a {
-    color: #007bff;
+    color: #64ecf5;
     text-decoration: none;
-    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
 .signUpPage-link a:hover {
-    text-decoration: underline;
+    text-shadow: 0 0 10px rgba(100, 236, 245, 0.5);
 }
 
-
-
-/* Responsive Design */
-
-
-/*  Large screens (laptops/desktops) */
-@media screen and (min-width: 1200px) {
-    .signUpPage {
-        width: 1000px;
-        padding: 120px;
-    }
+@media (max-width: 768px) {
     .signUpPage-container {
-        width: 450px;
-        padding: 3rem;
-    }
-    .signUpPage-container h1 {
-        font-size: 28px;
-    }
-    .signUpPage-form input {
-        padding: 12px;
-        font-size: 18px;
-    }
-    .signUpPage-form button {
-        padding: 12px;
-        font-size: 18px;
-    }
-    .RootLayout {
-        padding: 32px 128px;
-        min-height: 100vh;
-    }
-}
-
-/*  Tablets (landscape & portrait) */
-@media screen and (max-width: 1024px) {
-    .signUpPage {
-        width: 90%;
-        padding: 60px 30px;
-    }
-    .signUpPage-container {
+        padding: 30px;
         width: 80%;
-        max-width: 450px;
-        padding: 2.5rem;
     }
-    .signUpPage-container h1 {
-        font-size: 26px;
-    }
-    .signUpPage-form input {
-        padding: 10px;
-        font-size: 16px;
-    }
-    .signUpPage-form button {
-        padding: 10px;
-        font-size: 16px;
-    }
-
-    .RootLayout {
-        padding: 24px 64px;
-        min-height: 100vh;
-     }
-
-    
 }
 
-/*  Mobile devices (landscape) */
-@media screen and (max-width: 768px) {
-    .signUpPage {
-        width: 95%;
-        padding: 40px 20px;
-    }
+@media (max-width: 480px) {
     .signUpPage-container {
+        padding: 20px;
         width: 90%;
-        max-width: 380px;
-        padding: 2rem;
-    }
-    .signUpPage-container h1 {
-        font-size: 22px;
-    }
-    .signUpPage-form input {
-        padding: 10px;
-        font-size: 15px;
-    }
-    .signUpPage-form button {
-        padding: 10px;
-        font-size: 15px;
     }
 
-    .RootLayout {
-        padding: 20px 32px;
-        min-height: 100vh;
-        margin: auto;
-        
-    }
-}
-
-/*  Small phones */
-@media screen and (max-width: 480px) {
-    .signUpPage {
-        width: 100%;
-        padding: 20px 10px;
-        height: auto; /* Prevent overflow */
-    }
-    .signUpPage-container {
-        width: 95%;
-        padding: 1.5rem;
-    }
-    .signUpPage-container h1 {
-        font-size: 20px;
-    }
-    .signUpPage-form input {
-        padding: 8px;
-        font-size: 14px;
-    }
-    .signUpPage-form button {
-        padding: 8px;
-        font-size: 14px;
-    }
-
-    .RootLayout {
-        padding: 12px 16px;
-        min-height: 100vh;
-        margin: auto;
-        
+    .signUpPage h1 {
+        font-size: 2rem;
     }
 }
