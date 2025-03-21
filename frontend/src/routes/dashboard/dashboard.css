@@ -286,6 +286,221 @@
     border: 1px solid rgba(100, 236, 245, 0.3);
 }
 
+.markdown-content {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+    color: #f5f5f5;
+    color: rgba(245, 245, 245, 0.9);
+}
+
+/* Headings */
+.markdown-content h1,
+.markdown-content h2 {
+    color: #64ecf5;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(90deg, rgba(100, 236, 245, 0.1), transparent, rgba(100, 236, 245, 0.1));
+    padding: 10px 0;
+    border-radius: 8px;
+}
+
+.markdown-content h2 {
+    font-size: 1.8rem;
+}
+
+.markdown-content h3 {
+    color: #64ecf5;
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    font-weight: 600;
+    border-left: 3px solid #64ecf5;
+    padding-left: 10px;
+}
+
+/* Lists */
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 20px;
+    margin-bottom: 1.5em;
+}
+
+.markdown-content li {
+    margin-bottom: 0.5em;
+}
+
+/* Nested lists */
+.markdown-content ul ul,
+.markdown-content ol ol {
+    margin-top: 0.5em;
+    margin-bottom: 0.75em;
+}
+
+/* Bold text */
+.markdown-content strong {
+    color: #64ecf5;
+    font-weight: 700;
+}
+
+/* Budget sections */
+.markdown-content p:has(strong:contains("Total")) {
+    background: rgba(100, 236, 245, 0.1);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin: 15px 0;
+    font-weight: 500;
+}
+
+/* Net income highlights */
+.markdown-content p:has(strong:contains("Net Income")),
+.markdown-content p:has(strong:contains("surplus")) {
+    background: rgba(100, 236, 245, 0.15);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #64ecf5;
+}
+
+/* Important notes section */
+.markdown-content p:has(strong:contains("Important Notes")),
+.markdown-content p:has(strong:contains("Remember")) {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-style: italic;
+}
+
+/* Improved anchor styling */
+.markdown-content a {
+    color: #64ecf5;
+    text-decoration: none;
+    border-bottom: 1px dotted #64ecf5;
+    transition: all 0.3s ease;
+}
+
+.markdown-content a:hover {
+    border-bottom: 1px solid #64ecf5;
+    text-shadow: 0 0 5px rgba(100, 236, 245, 0.5);
+}
+
+/* TABLE STYLING */
+.markdown-content table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 25px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: rgba(3, 61, 90, 0.5);
+}
+
+.markdown-content table thead tr {
+    background: rgba(100, 236, 245, 0.2);
+    color: #64ecf5;
+    text-align: left;
+    font-weight: bold;
+}
+
+.markdown-content table th {
+    padding: 12px 15px;
+    border-bottom: 2px solid rgba(100, 236, 245, 0.3);
+    font-size: 1.1rem;
+}
+
+.markdown-content table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.markdown-content table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.markdown-content table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.markdown-content table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Special styling for total rows */
+.markdown-content table tr:has(td:contains("Total")) {
+    background: rgba(100, 236, 245, 0.1);
+    font-weight: 600;
+}
+
+/* Amount columns (typically right-aligned) */
+.markdown-content table td:last-child {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+}
+
+/* Positive amounts (income) in green shade */
+.markdown-content table tr:has(td:contains("Income")) td:last-child {
+    color: #64ecf5;
+}
+
+/* Negative amounts (expenses) in red shade */
+.markdown-content table tr:has(td:contains("Expense")) td:last-child {
+    color: #ff9e9e;
+}
+
+/* Zebra striping for better readability */
+.markdown-content table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Table caption styling */
+.markdown-content table caption {
+    caption-side: top;
+    padding: 10px 0;
+    font-weight: 600;
+    color: #64ecf5;
+    text-align: center;
+}
+
+/* Responsive table for mobile */
+@media (max-width: 768px) {
+    .markdown-content table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .markdown-content table th,
+    .markdown-content table td {
+        padding: 8px 12px;
+    }
+}
+
+/* Add subtle animations */
+@keyframes highlight {
+    0% {
+        background-position: -100% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.markdown-content h2,
+.markdown-content p:has(strong:contains("surplus")),
+.markdown-content p:has(strong:contains("Net Income")) {
+    background-size: 200% 100%;
+    animation: highlight 3s ease infinite;
+}
+
 @keyframes pulse {
     0% {
         box-shadow: 0 0 10px rgba(100, 236, 245, 0.3);
@@ -334,6 +549,14 @@
     .dashboard-content>div {
         padding: 15px;
     }
+
+    .markdown-content {
+        padding: 15px;
+    }
+
+    .markdown-content h2 {
+        font-size: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -353,5 +576,12 @@
     .action-buttons button {
         padding: 10px 20px;
         font-size: 0.9rem;
+    }
+    .markdown-content {
+        padding: 12px;
+    }
+
+    .markdown-content h2 {
+        font-size: 1.3rem;
     }
 }
