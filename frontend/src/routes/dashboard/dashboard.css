@@ -296,6 +296,11 @@
     color: rgba(245, 245, 245, 0.9);
 }
 
+.markdown-content p {
+    color: #f8f9fa; /* Lighter text for better readability */
+}
+
+
 /* Headings */
 .markdown-content h1,
 .markdown-content h2 {
