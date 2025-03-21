@@ -36,48 +36,41 @@ function ChatList() {
             });
             return response.json();
         },
-        // Make sure we're always getting fresh data by disabling caching
         refetchOnWindowFocus: true,
         refetchOnMount: true,
-        // This is important to ensure data stays fresh
         staleTime: 0
     });
 
     // Check for new items by comparing with previous data
     useEffect(() => {
-        if (!data || !Array.isArray(data.response)) return; // If no data or data.response is not an array, return early
+        if (!data || !Array.isArray(data.response)) return;
 
-        const currentBudgets = data.response; // Ensure this is an array
+        const currentBudgets = data.response;
         const previousBudgets = previousBudgetsRef.current;
 
-        // If we have previous budgets to compare against
         if (previousBudgets.length > 0) {
             const previousIds = new Set(previousBudgets.map(b => b.budgetId));
             const newIds = new Set();
 
-            // Find any new budgets
             currentBudgets.forEach(budget => {
                 if (!previousIds.has(budget.budgetId)) {
                     newIds.add(budget.budgetId);
                 }
             });
 
-            // Set the new items for animation
             if (newIds.size > 0) {
                 setNewItemIds(newIds);
 
-                // After the animation completes, mark these as completed
                 setTimeout(() => {
                     setCompletedAnimations(prev => {
                         const updated = new Set(prev);
                         newIds.forEach(id => updated.add(id));
                         return updated;
                     });
-                }, 1500); // Match animation duration
+                }, 1500);
             }
         }
 
-        // Update our reference of previous budgets
         previousBudgetsRef.current = [...currentBudgets];
     }, [data]);
 
@@ -119,19 +112,12 @@ function ChatList() {
             return { budgetId, newTitle, data };
         },
         onMutate: async ({ budgetId, newTitle }) => {
-            // Cancel any outgoing refetches to avoid overwriting our optimistic update
             await queryClient.cancelQueries({ queryKey: ['budgets'] });
-
-            // Get the current data
             const previousData = queryClient.getQueryData(['budgets']);
 
-            // Optimistically update to the new value
             if (previousData) {
                 queryClient.setQueryData(['budgets'], old => {
-                    // Make sure we're handling the correct data structure
                     if (!old || !old.response) return old;
-
-                    // Create a new object with updated response array
                     return {
                         ...old,
                         response: old.response.map(budget =>
@@ -143,20 +129,17 @@ function ChatList() {
                 });
             }
 
-            // Return the previous data so we can revert if something goes wrong
             return { previousData };
         },
         onError: (err, variables, context) => {
-            // If the mutation fails, use the context returned from onMutate to roll back
             if (context?.previousData) {
                 queryClient.setQueryData(['budgets'], context.previousData);
             }
             console.error("Update Error:", err);
         },
         onSuccess: () => {
-            // Invalidate and refetch the budgets query to ensure we have the latest data
             queryClient.invalidateQueries({ queryKey: ['budgets'] });
-            setEditingId(null); // Reset editing state
+            setEditingId(null);
         },
     });
 
