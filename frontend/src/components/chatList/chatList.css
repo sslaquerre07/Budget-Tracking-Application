@@ -1,141 +1,239 @@
 .ChatList {
+    background: rgba(3, 61, 90, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    color: #f5f5f5;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    margin-top: 10px;
+}
 
-    hr {
-        border: none;
-        height: 2px;
-        background-color: black;
-        opacity: 0.1;
-        border-radius: 5px;
-        margin: 20px 0px;
-    }
+.ChatList .title {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #64ecf5;
+    letter-spacing: 1px;
+}
 
-    .title {
-        font-weight: 600;
-        font-size: 10px;
-        margin-bottom: 10px;
-    }
+.ChatList a {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 2px solid #64ecf5;
+    color: #64ecf5;
+    font-size: 0.9rem;
+}
 
-    .list {
-        display: flex;
-        flex-direction: column;
-        overflow: auto;
-    }
+.ChatList a:hover {
+    background: rgba(100, 236, 245, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
 
-    a {
-        padding: 10px;
-        border-radius: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
+.ChatList hr {
+    border: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
 
-        &:hover {
-            background-color: lightgray;
-        }
-    }
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding-right: 10px;
+    flex-grow: 1;
+    min-height: 0;
+}
 
-    .budget-item {
-        position: relative;
-    }
+.list::-webkit-scrollbar {
+    width: 6px;
+}
 
-    .hover-controls {
-        display: none;
-        gap: 8px;
-    }
+.list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
 
-    a:hover .hover-controls {
-        display: flex;
-    }
+.list::-webkit-scrollbar-thumb {
+    background: rgba(100, 236, 245, 0.3);
+    border-radius: 10px;
+}
 
-    .icon-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: none;
-        border: none;
-        cursor: pointer;
-        width: 32px;
-        height: 32px;
-        border-radius: 4px;
-        padding: 4px;
-    }
+.list::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 236, 245, 0.5);
+}
 
-    .edit-btn {
-        background-color: #e8e8e8;
-        color: #505050;
+.budget-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-        &:hover {
-            background-color: #d0d0d0;
-        }
-    }
+.budget-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15);
+}
 
-    .delete-btn {
-        background-color: #ffdddd;
-        color: #e63939;
-
-        &:hover {
-            background-color: #ffbbbb;
-        }
-    }
-
-    .edit-form {
-        display: flex;
-        width: 100%;
-        padding: 5px;
-        gap: 5px;
-        align-items: center;
-    }
-
-    .edit-form input {
-        flex-grow: 1;
-        padding: 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-
-    .save-btn {
-        background-color: #d1e7dd;
-        color: #0a6e31;
-
-        &:hover {
-            background-color: #badbcc;
-        }
-    }
-
-    .cancel-btn {
-        background-color: #ffdddd;
-        color: #e63939;
-
-        &:hover {
-            background-color: #ffbbbb;
-        }
-    }
-
-    .profile {
-        margin-top: auto;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-style: 12px;
-    }
+.budget-item a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    border: none;
+    margin: 0;
 }
 
 .budget-item.active-budget {
-    background-color: rgba(0, 123, 255, 0.1);
-    border-left: 3px solid #007bff;
+    background: rgba(100, 236, 245, 0.25);
+    border: 1px solid rgba(100, 236, 245, 0.4);
+    box-shadow: 0 0 15px rgba(100, 236, 245, 0.2);
 }
 
 .active-indicator {
-    margin-left: 8px;
-    font-size: 0.8em;
-    color: #007bff;
-    font-weight: 600;
+    display: none;
 }
 
 .budget-item.active-budget a {
-    font-weight: 600;
+    border-left: 3px solid #64ecf5;
+    padding-left: 12px;
+}
+
+.hover-controls {
+    display: none;
+    gap: 8px;
+}
+
+.budget-item:hover .hover-controls {
+    display: flex;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-btn:hover {
+    color: #64ecf5;
+    background: rgba(100, 236, 245, 0.1);
+}
+
+.delete-btn:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.save-btn:hover {
+    color: #4cd137;
+    background: rgba(76, 209, 55, 0.1);
+}
+
+.cancel-btn:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.edit-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+}
+
+.edit-form input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(100, 236, 245, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.edit-form input:focus {
+    border-color: #64ecf5;
+    box-shadow: 0 0 0 2px rgba(100, 236, 245, 0.2);
+}
+
+.edit-form .icon-btn {
+    margin-left: 10px;
+}
+
+/* Animation styles */
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 100%
+    }
+}
+
+@keyframes blink-caret {
+
+    from,
+    to {
+        border-right-color: transparent
+    }
+
+    50% {
+        border-right-color: #64ecf5
+    }
+}
+
+.budget-item.new-item a {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    animation:
+        typing 1.5s steps(40, end),
+        blink-caret .75s step-end infinite;
+    border-right: 2px solid #64ecf5;
+}
+
+.budget-item.animation-complete a {
+    animation: none;
+    border-right: none;
+}
+
+.budget-item.new-item {
+    background: rgba(100, 236, 245, 0.1);
+    transition: background 2s ease;
+}
+
+.budget-item.animation-complete {
+    background: transparent;
 }

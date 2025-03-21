@@ -89,41 +89,6 @@ const BudgetType = forwardRef((props, ref) => {
                     />
                     <label htmlFor="yearly">Yearly</label>
                 </div>
-
-                <div
-                    className={`option ${selectedType === "custom" ? "selected" : "unselected"}`}
-                    onClick={() => handleLabelClick("custom")}
-                >
-                    <input
-                        type="radio"
-                        id="custom"
-                        name="budgetType"
-                        value="custom"
-                        checked={selectedType === "custom"}
-                        onChange={handleTypeChange}
-                    />
-                    <label htmlFor="custom">Custom</label>
-
-                    {selectedType === "custom" && (
-                        <div className="custom-inputs" onClick={(e) => e.stopPropagation()}>
-                            <input
-                                type="number"
-                                min="1"
-                                value={customValue}
-                                onChange={handleCustomValueChange}
-                            />
-                            <select
-                                value={customUnit}
-                                onChange={handleCustomUnitChange}
-                            >
-                                <option value="days">Days</option>
-                                <option value="weeks">Weeks</option>
-                                <option value="months">Months</option>
-                                <option value="years">Years</option>
-                            </select>
-                        </div>
-                    )}
-                </div>
             </div>
         </div>
     );

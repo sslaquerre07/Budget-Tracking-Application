@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './chatList.css';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,7 +12,10 @@ function ChatList() {
     const queryClient = useQueryClient();
     const [editingId, setEditingId] = useState(null);
     const [editTitle, setEditTitle] = useState('');
-    const location = useLocation(); // This hook gives us access to the current URL
+    const location = useLocation();
+    const [newItemIds, setNewItemIds] = useState(new Set());
+    const [completedAnimations, setCompletedAnimations] = useState(new Set());
+    const previousBudgetsRef = useRef([]);
 
     const userToken = localStorage.getItem("userToken");
     const userEmail = localStorage.getItem("userEmail");
@@ -27,11 +30,53 @@ function ChatList() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email: userEmail, // !TEST
+                    email: userEmail,
                 }),
             }).then((res) => res.json()),
+        onSuccess: (data) => {
+            console.log("API Response:", data); // Log the API response
+        },
     });
 
+    // Check for new items by comparing with previous data
+    useEffect(() => {
+        if (!data || !Array.isArray(data.response)) return; // If no data or data.response is not an array, return early
+
+        const currentBudgets = data.response; // Ensure this is an array
+        const previousBudgets = previousBudgetsRef.current;
+
+        // If we have previous budgets to compare against
+        if (previousBudgets.length > 0) {
+            const previousIds = new Set(previousBudgets.map(b => b.budgetId));
+            const newIds = new Set();
+
+            // Find any new budgets
+            currentBudgets.forEach(budget => {
+                if (!previousIds.has(budget.budgetId)) {
+                    newIds.add(budget.budgetId);
+                }
+            });
+
+            // Set the new items for animation
+            if (newIds.size > 0) {
+                setNewItemIds(newIds);
+
+                // After the animation completes, mark these as completed
+                setTimeout(() => {
+                    setCompletedAnimations(prev => {
+                        const updated = new Set(prev);
+                        newIds.forEach(id => updated.add(id));
+                        return updated;
+                    });
+                }, 1500); // Match animation duration
+            }
+        }
+
+        // Update our reference of previous budgets
+        previousBudgetsRef.current = [...currentBudgets];
+    }, [data]);
+
+    // Mutation for deleting a budget
     const deleteMutation = useMutation({
         mutationFn: async (budgetId) => {
             const response = await fetch(`${apiUrl}/budget/${budgetId}`, {
@@ -44,6 +89,7 @@ function ChatList() {
         }
     });
 
+    // Mutation for updating a budget title
     const updateMutation = useMutation({
         mutationFn: async ({ budgetId, newTitle }) => {
             const payload = {
@@ -51,8 +97,6 @@ function ChatList() {
                 budgetTitle: newTitle,
                 creationDate: new Date().toISOString().split('T')[0]
             };
-
-            console.log('UPDATE request', JSON.stringify(payload, null, 2));
 
             const response = await fetch(`${apiUrl}/budget/updateBasics`, {
                 method: 'POST',
@@ -63,7 +107,6 @@ function ChatList() {
             });
 
             const data = await response.json();
-            console.log('Update Response:', data);
             return { budgetId, newTitle, data };
         },
         onSuccess: (result) => {
@@ -72,13 +115,13 @@ function ChatList() {
             queryClient.setQueryData(['budgets'], (oldData) => {
                 if (!oldData) return oldData;
 
-                const updatedBudgets = oldData.response.map(budget =>
+                const updatedBudgets = oldData.map(budget =>
                     budget.budgetId === budgetId
                         ? { ...budget, budgetTitle: newTitle }
                         : budget
                 );
 
-                return { ...oldData, response: updatedBudgets };
+                return updatedBudgets; // Return the updated array
             });
 
             queryClient.invalidateQueries({ queryKey: ['budgets'] });
@@ -86,12 +129,14 @@ function ChatList() {
         }
     });
 
+    // Handle delete button click
     const handleDelete = (e, budgetId) => {
         e.preventDefault();
         e.stopPropagation();
         deleteMutation.mutate(budgetId);
     };
 
+    // Handle edit button click
     const handleEditStart = (e, budget) => {
         e.preventDefault();
         e.stopPropagation();
@@ -99,6 +144,7 @@ function ChatList() {
         setEditTitle(budget.budgetTitle);
     };
 
+    // Handle save button click for editing
     const handleEditSave = (e, budgetId) => {
         e.preventDefault();
         e.stopPropagation();
@@ -112,7 +158,36 @@ function ChatList() {
         return location.pathname === `/dashboard/budgets/${budgetId}`;
     };
 
-    const budgets = data?.response || [];
+    // Check if a budget is new (should have typing animation)
+    const isNewBudget = (budgetId) => {
+        return newItemIds.has(budgetId);
+    };
+
+    // Check if the animation has completed for a budget
+    const isAnimationComplete = (budgetId) => {
+        return completedAnimations.has(budgetId);
+    };
+
+    // Get CSS classes for a budget item
+    const getBudgetItemClasses = (budget) => {
+        let classes = "budget-item";
+
+        if (isActiveBudget(budget.budgetId)) {
+            classes += " active-budget";
+        }
+
+        if (isNewBudget(budget.budgetId)) {
+            classes += " new-item";
+
+            if (isAnimationComplete(budget.budgetId)) {
+                classes += " animation-complete";
+            }
+        }
+
+        return classes;
+    };
+
+    const budgets = Array.isArray(data?.response) ? data.response : [];
     const sortedBudgets = [...budgets].sort((a, b) => {
         return new Date(b.creationDate) - new Date(a.creationDate);
     });
@@ -130,7 +205,7 @@ function ChatList() {
                         ? "Something went wrong!"
                         : sortedBudgets.map((budget) => (
                             <div
-                                className={`budget-item ${isActiveBudget(budget.budgetId) ? 'active-budget' : ''}`}
+                                className={getBudgetItemClasses(budget)}
                                 key={budget.budgetId}
                             >
                                 {editingId === budget.budgetId ? (

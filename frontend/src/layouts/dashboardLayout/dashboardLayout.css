@@ -1,18 +1,93 @@
 .DashboardLayout {
     display: flex;
-    gap: 50px;
-    padding-top: 20px;
+    height: 100vh;
+    background: linear-gradient(135deg, #033d5a, #0c1a22);
+    color: #f5f5f5;
+    font-family: 'Poppins', sans-serif;
+}
+
+.menu {
+    width: 300px;
     height: 100%;
-    background-color: rgb(219, 240, 239);
-    border-radius: 18px;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(3, 61, 90, 0.7);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+}
+
+.content {
+    flex-grow: 1;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+/* Custom Scrollbar Styling */
+.menu::-webkit-scrollbar,
+.content::-webkit-scrollbar,
+.income-list::-webkit-scrollbar,
+.expense-list::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.menu::-webkit-scrollbar-track,
+.content::-webkit-scrollbar-track,
+.income-list::-webkit-scrollbar-track,
+.expense-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.menu::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb,
+.income-list::-webkit-scrollbar-thumb,
+.expense-list::-webkit-scrollbar-thumb {
+    background: rgba(100, 236, 245, 0.3);
+    border-radius: 10px;
+}
+
+.menu::-webkit-scrollbar-thumb:hover,
+.content::-webkit-scrollbar-thumb:hover,
+.income-list::-webkit-scrollbar-thumb:hover,
+.expense-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 236, 245, 0.5);
+}
+
+/* Firefox scrollbar styling */
+.menu,
+.content,
+.income-list,
+.expense-list {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 236, 245, 0.3) rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+    .DashboardLayout {
+        flex-direction: column;
+    }
 
     .menu {
-        flex: 1;
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .content {
-        flex: 4;
-       
-        overflow: auto;
+        height: calc(100vh - 240px);
+    }
+}
+
+@media (max-width: 480px) {
+
+    .menu,
+    .content {
+        padding: 15px;
     }
 }

@@ -34,6 +34,16 @@ function Dashboard({ budgetData }) {
     const initialBudgetId = budgetData?.response?.budgetId;
     const [budgetId, setBudgetId] = useState(initialBudgetId || null);
 
+    useEffect(() => {
+        const dashboardElement = document.querySelector('.Dashboard');
+        if (dashboardElement) {
+            // Add a small delay for the animation to work properly
+            setTimeout(() => {
+                dashboardElement.classList.add('visible');
+            }, 100);
+        }
+    }, []);
+
     // Check if we have an LLM response in the URL state (from navigation)
     useEffect(() => {
         if (location.state?.llmResponse) {
@@ -591,61 +601,59 @@ function Dashboard({ budgetData }) {
 
     return (
         <div className="Dashboard">
-            <Paper>
-                <div className="dashboard-tabs">
-                    <button
-                        className={`tab-button ${activeTab === 'form' ? 'active' : ''}`}
-                        onClick={() => handleTabChange('form')}
+            <div className="dashboard-tabs">
+                <button
+                    className={`tab-button ${activeTab === 'form' ? 'active' : ''}`}
+                    onClick={() => handleTabChange('form')}
+                >
+                    Enter Info
+                </button>
+
+                {isEditingTitle ? (
+                    <form
+                        className="edit-title-form"
+                        onSubmit={handleEditSave}
                     >
-                        Enter Info
-                    </button>
-
-                    {isEditingTitle ? (
-                        <form
-                            className="edit-title-form"
-                            onSubmit={handleEditSave}
-                        >
-                            <input
-                                type="text"
-                                value={editTitle}
-                                onChange={(e) => setEditTitle(e.target.value)}
-                                autoFocus
-                                className="title-input"
-                            />
-                            <button type="submit" className="icon-btn save-btn" title="Save">
-                                <CheckIcon fontSize="small" />
-                            </button>
-                            <button
-                                type="button"
-                                className="icon-btn cancel-btn"
-                                onClick={handleEditCancel}
-                                title="Cancel"
-                            >
-                                <CloseIcon fontSize="small" />
-                            </button>
-                        </form>
-                    ) : (
-                        <h1 className="budget-title" onClick={handleEditStart}>
-                            {title}
-                            <EditIcon fontSize="small" className="edit-icon" />
-                        </h1>
-                    )}
-
-                    <button
-                        className={`tab-button ${activeTab === 'response' ? 'active' : ''}`}
-                        onClick={() => handleTabChange('response')}
-                        disabled={!hasLlmResponse}
-                    >
-                        LLM Budget Response
-                    </button>
-
-                    {!isGuest && (
-                        <button className="logout-button" onClick={handleLogout}>
-                            Logout
+                        <input
+                            type="text"
+                            value={editTitle}
+                            onChange={(e) => setEditTitle(e.target.value)}
+                            autoFocus
+                            className="title-input"
+                        />
+                        <button type="submit" className="icon-btn save-btn" title="Save">
+                            <CheckIcon fontSize="small" />
                         </button>
-                    )}
-                </div>
-            </Paper>
+                        <button
+                            type="button"
+                            className="icon-btn cancel-btn"
+                            onClick={handleEditCancel}
+                            title="Cancel"
+                        >
+                            <CloseIcon fontSize="small" />
+                        </button>
+                    </form>
+                ) : (
+                    <h1 className="budget-title" onClick={handleEditStart}>
+                        {title}
+                        <EditIcon fontSize="small" className="edit-icon" />
+                    </h1>
+                )}
+
+                <button
+                    className={`tab-button ${activeTab === 'response' ? 'active' : ''}`}
+                    onClick={() => handleTabChange('response')}
+                    disabled={!hasLlmResponse}
+                >
+                    Budget Response
+                </button>
+
+                {!isGuest && (
+                    <button className="logout-button" onClick={handleLogout}>
+                        Logout
+                    </button>
+                )}
+            </div>
 
             <div className="dashboard-content">
                 {activeTab === 'form' && (
@@ -654,7 +662,6 @@ function Dashboard({ budgetData }) {
                             <BudgetType ref={budgetTypeRef} />
                             <Income ref={incomeRef} />
                             <Expenses ref={expensesRef} />
-                            <FinancialNotes ref={financialNotesRef} />
                         </Paper>
                         <div className="action-buttons">
                             <button type="button" onClick={handleGenerateBudget} disabled={isGenerating}>
