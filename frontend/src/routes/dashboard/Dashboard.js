@@ -309,11 +309,12 @@ function Dashboard({ budgetData }) {
 
     // Guest flow - directly generate LLM response without saving/redirecting
     const handleGuestBudgetGeneration = async (budgetDTO) => {
-        const generateRequestData = {
-            "userEmail": userEmail || "guest@example.com",
-            "budgetDTO": budgetDTO,
-            "toBeEmailed": false
-        };
+        // const generateRequestData = {
+        //     "userEmail": userEmail || "guest@example.com",
+        //     "budgetDTO": budgetDTO,
+        //     "toBeEmailed": false
+        // };
+
 
         const generateUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/generate`;
 
@@ -321,7 +322,7 @@ function Dashboard({ budgetData }) {
             const response = await fetch(generateUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(generateRequestData)
+                body: JSON.stringify(budgetDTO)
             });
 
             const generateData = await response.json();
