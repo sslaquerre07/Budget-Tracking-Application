@@ -106,11 +106,12 @@ function Dashboard({ budgetData }) {
         }
     }, [budgetsList, budgetId]);
 
-    // Handle logout
     const handleLogout = () => {
         localStorage.removeItem("userToken");
         localStorage.removeItem("userEmail");
-        navigate("/login");
+        window.dispatchEvent(new Event('loginStatusChanged'));
+
+        navigate('/');
     };
 
     const [processedData, setProcessedData] = useState({
