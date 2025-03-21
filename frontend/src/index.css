@@ -11,7 +11,7 @@
 body {
 
     background: linear-gradient(to bottom, #033d5a, #b1e1e4); 
-    color: #222; /* Darker text for better readability */
+    color: white; /* Darker text for better readability */
 
   
     overflow: auto;
@@ -41,7 +41,7 @@ a:hover {
     max-width: 1200px;
     margin: auto;
     padding: 20px;
-    background: white;
+    /* background: white; */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

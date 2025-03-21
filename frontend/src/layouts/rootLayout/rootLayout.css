@@ -1,26 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;600;800&display=swap');
+
 .RootLayout {
-    padding: 16px 64px;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(to bottom, #033d5a, #b1e1e4);
+    min-height: 100vh;
+    background: linear-gradient(135deg, #033d5a 0%, #0a617d 50%, #b1e1e4 100%);
+    position: relative;
+    overflow-x: hidden;
+}
 
-
+/* Add subtle background pattern */
+.RootLayout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.05) 1%, transparent 3%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 1%, transparent 3%);
+    background-size: 100px 100px;
+    z-index: 0;
 }
 
 header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 24px 64px;
+    position: relative;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+    background: rgba(3, 61, 90, 0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
     display: flex;
     align-items: center;
-    font-weight: bold;
-    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.8rem;
+    gap: 12px;
     text-decoration: none;
-    color: rgb(204, 217, 232);
-    height: 70px;
+    background: linear-gradient(90deg, #ffffff, #64ecf5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 .logo img {
@@ -28,7 +62,7 @@ header {
     height: 40px;
     object-fit: contain;
     border-radius: 50%;
-    /* Optional: Makes it circular */
+    box-shadow: 0 0 15px rgba(100, 236, 245, 0.6);
 }
 
 .profile {
@@ -36,7 +70,72 @@ header {
     align-items: center;
 }
 
+.profile a {
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.profile a:hover {
+    color: #64ecf5;
+    transform: scale(1.1);
+}
+
+.profile svg {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+}
+
 main {
     flex: 1;
+    padding: 16px 64px;
+    position: relative;
+    z-index: 5;
     overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1024px) {
+
+    header,
+    main {
+        padding: 16px 32px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    header,
+    main {
+        padding: 12px 24px;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+    }
+
+    .logo img {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    header,
+    main {
+        padding: 10px 16px;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    .logo img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .profile svg {
+        font-size: 1.6rem;
+    }
 }

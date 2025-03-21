@@ -1,117 +1,185 @@
 .Expenses {
     width: 100%;
-    margin: 0;
+    height: 100%;
     padding: 20px;
-    text-align: left;
-    box-sizing: border-box;
+    color: #f5f5f5;
+    background: rgba(3, 61, 90, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    display: flex;
+    flex-direction: column;
 }
 
-h1 {
+.Expenses h1 {
+    font-size: 2.2rem;
     margin-bottom: 20px;
-    text-align: left;
+    color: #64ecf5;
+    text-align: center;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .expense-form {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
     flex-wrap: wrap;
-    justify-content: flex-start;
-    width: 100%;
+    gap: 15px;
+    margin-bottom: 20px;
+    justify-content: center;
 }
 
 .expense-form input {
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-family: 'Poppins', sans-serif;
     flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     min-width: 120px;
-    width: 100%;
-    box-sizing: border-box;
+}
+
+.expense-form input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.expense-form input:focus {
+    outline: none;
+    border-color: #64ecf5;
+    box-shadow: 0 0 0 2px rgba(100, 236, 245, 0.3);
 }
 
 .expense-form button {
-    background-color: #FF5722;
-    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    background: #64ecf5;
+    color: #033d5a;
+    font-weight: 600;
     border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
     cursor: pointer;
-    white-space: nowrap;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
 }
 
 .expense-form button:hover {
-    background-color: #E64A19;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.expense-form button:last-child {
-    background-color: #f44336;
-}
-
-.expense-form button:last-child:hover {
-    background-color: #d32f2f;
+.expense-form button:nth-child(4) {
+    background: transparent;
+    border: 2px solid #64ecf5;
+    color: #64ecf5;
 }
 
 .expense-list {
+    overflow-y: auto;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-    width: 100%;
+    gap: 12px;
 }
 
 .expense-item {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    background-color: #fff0f0;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    box-sizing: border-box;
-    border-left: 3px solid #d32f2f;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.expense-item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
 }
 
 .expense-details {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    text-align: left;
-    flex: 1;
 }
 
 .expense-type {
-    font-weight: bold;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .expense-amount {
-    color: #c62828;
-    font-size: 1.1em;
+    font-size: 1.2rem;
+    color: #64ecf5;
+    font-weight: 700;
 }
 
 .expense-actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
 .expense-actions button {
-    background-color: #2196F3;
+    padding: 8px 15px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
     color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
 }
 
 .expense-actions button:hover {
-    background-color: #0b7dda;
+    background: rgba(100, 236, 245, 0.2);
+    border-color: #64ecf5;
 }
 
-.expense-actions button:last-child {
-    background-color: #f44336;
+.expense-actions button:first-child {
+    background: rgba(100, 236, 245, 0.2);
 }
 
-.expense-actions button:last-child:hover {
-    background-color: #d32f2f;
+@media (max-width: 768px) {
+    .Expenses h1 {
+        font-size: 1.8rem;
+    }
+
+    .expense-form {
+        flex-direction: column;
+    }
+
+    .expense-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Expenses {
+        padding: 15px;
+    }
+
+    .Expenses h1 {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+
+    .expense-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .expense-actions {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .expense-actions button {
+        flex: 1;
+        text-align: center;
+    }
 }
