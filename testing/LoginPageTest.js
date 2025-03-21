@@ -219,38 +219,41 @@ async function login(driver, email, password) {
     }
 })();
 
-// // Test Case 11: Guest user alert
-// // Input: Click on Guest user button
-// // Expected output: Alert popup with message "You are trying the app as a guest. Your budgets won't be saved.".
+// Test Case 11: Guest user alert
+// Input: Click on Guest user button
+// Expected output: Alert popup with message "You are trying the app as a guest. Your budgets won't be saved.".
 
-// (async function guestUserAlertTest() {
-//     let driver = await new Builder().forBrowser("chrome").build();
+(async function guestUserAlertTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
 
-//     try {
-//         await driver.get(LOGIN_URL);
+    try {
+        await driver.get(LOGIN_URL);
 
-//         await driver.wait(until.elementLocated(By.className("guest-access-button")), 5000);
-//         await driver.findElement(By.className("guest-access-button")).click();
+        await driver.wait(until.elementLocated(By.className("guest-access-button")), 5000);
+        await driver.findElement(By.className("guest-access-button")).click();
 
-//         // Wait for alert
-//         await driver.wait(until.alertIsPresent(), 10000);
+        // Wait for alert
+        await driver.wait(until.alertIsPresent(), 10000);
 
-//         // Get Alert Text
-//         let alert = await driver.switchTo().alert();
-//         let alertText = alert.getText();
+        // Get Alert Text
+        let alert = await driver.switchTo().alert();
+        let alertText = await alert.getText();
 
-//         // Verify alert message
-//         if(alertText === GUEST_ALERT) {
-//             console.log("Test Case 11 Passed: 🟢 Alert displayed: You are trying the app as a guest. Your budgets won't be saved.");
-//         } else {
-//             console.log("Test Case 11 Failed: 🔴 Alert not displayed.");
-//         }
-//         await alert.accept();
+        // DEBUG
+        // console.log("Alert Text: ", alertText);
 
-//     } finally {
-//         await driver.quit();
-//     }
-// })();
+        // Verify alert message
+        if(alertText === GUEST_ALERT) {
+            console.log("Test Case 11 Passed: 🟢 Alert displayed: You are trying the app as a guest. Your budgets won't be saved.");
+        } else {
+            console.log("Test Case 11 Failed: 🔴 Alert not displayed.");
+        }
+        await alert.accept();
+
+    } finally {
+        await driver.quit();
+    }
+})();
 
 // // Test Case 12: Guest user redirect
 // // Input: Click on Guest user button
