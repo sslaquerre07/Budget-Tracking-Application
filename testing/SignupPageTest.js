@@ -7,6 +7,7 @@ const LOGIN_URL = `${BASE_URL}/login`;
 const SIGNUP_URL = `${BASE_URL}/sign-up`;
 const PASSWORD_ERROR_SHORT = "Password must be at least 6 characters long.";
 const PASSWORD_ERROR_MATCH = "Passwords do not match.";
+const EMAIL_EXISTS_ERROR = "Signup failed. Try again.";
 
 // Helper function to signup
 async function signin(driver, fname, lname, email, password, confirmpassword) {
@@ -112,4 +113,35 @@ async function signin(driver, fname, lname, email, password, confirmpassword) {
 })();
 
 // Run this SQL query to remove the email from the database to run the test case again.
-// DELETE FROM users WHERE email = 'testing@test.com';
+// DELETE FROM user WHERE email = 'test@testing.com';
+
+// Test Case 18: Signup Existing Email
+// Input: Enter an existing email
+// Expected output: Email error message displayed
+(async function existingEmailTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
+
+    try {
+        // Sign up with existing email
+        await signin(driver, "P", "P", "john.doe@example.com", "password123", "password123");
+
+        // Wait for the email error message to appear
+        await driver.wait(until.elementLocated(By.className("error-message")), 5000);
+
+        // Get error message text
+        let errorMessageElement = await driver.findElement(By.className("error-message"));
+        let errorMessage = await errorMessageElement.getText();
+
+        // DEBUG
+        console.log(`Error Message Displayed: "${EMAIL_EXISTS_ERROR}"`);
+
+        // Check error message
+        if (errorMessage === EMAIL_EXISTS_ERROR) {
+            console.log("Test Case 18 Passed: 🟢 \"Signup failed. Try again. error message displayed correctly!\"");
+        } else {
+            console.log("Test Case 18 Failed: 🔴 \"Signup failed. Try again. error message not displayed.\"");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
