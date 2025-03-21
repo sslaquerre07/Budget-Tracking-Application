@@ -13,6 +13,10 @@ function ChatList() {
     const [editingId, setEditingId] = useState(null);
     const [editTitle, setEditTitle] = useState('');
 
+    const userToken = localStorage.getItem("userToken");
+    const userEmail = localStorage.getItem("userEmail");
+    const isGuest = !userToken;
+
     const { isPending, error, data } = useQuery({
         queryKey: ['budgets'],
         queryFn: () =>
@@ -22,7 +26,7 @@ function ChatList() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email: "jane.smith@example.com", // !TEST
+                    email: userEmail, // !TEST
                 }),
             }).then((res) => res.json()),
     });

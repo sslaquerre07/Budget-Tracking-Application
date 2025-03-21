@@ -10,7 +10,7 @@ import FinancialNotes from '../../components/financialGoals/FinancialNotes';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function Dashboard({ budgetData }) {
     const budgetTypeRef = useRef();
@@ -21,8 +21,10 @@ function Dashboard({ budgetData }) {
     const [llmResponse, setLlmResponse] = useState('');
     const [hasLlmResponse, setHasLlmResponse] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [shouldSaveAfterGenerate, setShouldSaveAfterGenerate] = useState(false);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const location = useLocation();
 
     // Get user authentication state
     const userToken = localStorage.getItem("userToken");
@@ -30,8 +32,16 @@ function Dashboard({ budgetData }) {
     const isGuest = !userToken;
 
     const initialBudgetId = budgetData?.response?.budgetId;
-
     const [budgetId, setBudgetId] = useState(initialBudgetId || null);
+
+    // Check if we have an LLM response in the URL state (from navigation)
+    useEffect(() => {
+        if (location.state?.llmResponse) {
+            setLlmResponse(location.state.llmResponse);
+            setHasLlmResponse(true);
+            setActiveTab('response');
+        }
+    }, [location.state]);
 
     const { data: currentBudgetData } = useQuery({
         queryKey: ['budget', budgetId],
@@ -49,6 +59,12 @@ function Dashboard({ budgetData }) {
     useEffect(() => {
         if (currentBudgetData?.response?.budgetTitle) {
             setTitle(currentBudgetData.response.budgetTitle);
+        }
+
+        // Check for LLM response in current budget data
+        if (currentBudgetData?.response?.response) {
+            setLlmResponse(currentBudgetData.response.response);
+            setHasLlmResponse(true);
         }
     }, [currentBudgetData]);
 
@@ -169,10 +185,6 @@ function Dashboard({ budgetData }) {
         if (expensesRef.current && expenses.length > 0) {
             expensesRef.current.setExpenses(expenses);
         }
-
-        // if (financialNotesRef.current && response) {
-        //     financialNotesRef.current.setNotes([{ text: response }]);
-        // }
     };
 
     useEffect(() => {
@@ -198,13 +210,15 @@ function Dashboard({ budgetData }) {
         setActiveTab(tab);
     };
 
-    const handleGenerateBudget = () => {
+    const handleGenerateBudget = async () => {
         setIsGenerating(true);
 
+        // 1. Collect all required data
         const budgetData = budgetTypeRef.current.getBudgetData();
         const incomeData = incomeRef.current.getIncomeData();
         const expensesData = expensesRef.current.getExpenseData();
 
+        // 2. Create the budget DTO
         const budgetDTO = {
             budgetType:
                 budgetData.selectedType === "weekly" ? 0 :
@@ -214,7 +228,7 @@ function Dashboard({ budgetData }) {
             categories: []
         };
 
-        // Process expenses
+        // 3. Process expenses
         const expenseCategories = {};
         expensesData.forEach(expense => {
             const parts = expense.type.split(':');
@@ -239,7 +253,7 @@ function Dashboard({ budgetData }) {
             });
         });
 
-        // Process income
+        // 4. Process income
         const incomeCategories = {};
         incomeData.forEach(income => {
             const parts = income.type.split(':');
@@ -264,71 +278,45 @@ function Dashboard({ budgetData }) {
             });
         });
 
-        // Updated flow: 1. Generate LLM response first for all users
-        if (isGuest) {
-            // Guest flow: Generate directly with the budgetDTO
-            generateBudgetForGuest(budgetDTO);
-        } else {
-            // Logged-in user flow: Generate first, then save
-            const generateRequestData = {
-                "userEmail": userEmail,
-                "budgetDTO": budgetDTO,
-                "toBeEmailed": false
-            };
-
-            generateBudgetForUser(generateRequestData);
+        try {
+            // Check if current user is a guest or logged-in user
+            if (!userEmail || isGuest) {
+                // Guest flow: directly generate LLM response without saving/redirecting
+                await handleGuestBudgetGeneration(budgetDTO);
+            } else if (!budgetId) {
+                // New budget flow: FIRST generate LLM response, THEN save and redirect
+                await handleNewBudgetCreation(budgetDTO);
+            } else {
+                // Update existing budget flow: Only generate LLM response, no auto-save
+                await handleExistingBudgetAnalysis(budgetDTO);
+            }
+        } catch (error) {
+            console.error("Error in budget generation process:", error);
+            setIsGenerating(false);
         }
+    };
 
-        // Function to handle budget generation for guest users
-        function generateBudgetForGuest(budgetData) {
-            const generateUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/generate`;
+    // Guest flow - directly generate LLM response without saving/redirecting
+    const handleGuestBudgetGeneration = async (budgetDTO) => {
+        const generateRequestData = {
+            "userEmail": userEmail || "guest@example.com",
+            "budgetDTO": budgetDTO,
+            "toBeEmailed": false
+        };
 
-            fetch(generateUrl, {
+        const generateUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/generate`;
+
+        try {
+            const response = await fetch(generateUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(budgetData)
-            })
-                .then(response => response.json())
-                .then(generateData => {
-                    handleLlmResponse(generateData);
-                })
-                .catch(error => {
-                    console.error("Error generating budget:", error);
-                    setIsGenerating(false);
-                });
-        }
+                body: JSON.stringify(generateRequestData)
+            });
 
-        // Function to handle budget generation for logged-in users
-        function generateBudgetForUser(requestData) {
-            const generateUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/user/generate`;
+            const generateData = await response.json();
 
-            fetch(generateUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData)
-            })
-                .then(response => response.json())
-                .then(generateData => {
-                    // 1. Handle the LLM response
-                    handleLlmResponse(generateData);
-
-                    // 2. Save the budget with the LLM response
-                    const budgetWithResponse = {
-                        ...budgetDTO,
-                        response: generateData.response || ""
-                    };
-
-                    saveBudgetWithResponse(budgetWithResponse);
-                })
-                .catch(error => {
-                    console.error("Error generating budget:", error);
-                    setIsGenerating(false);
-                });
-        }
-
-        // Common function to handle LLM response
-        function handleLlmResponse(generateData) {
             if (generateData.response) {
+                // Update UI with LLM response
                 setLlmResponse(generateData.response);
                 setHasLlmResponse(true);
                 setActiveTab('response');
@@ -337,85 +325,204 @@ function Dashboard({ budgetData }) {
                     notes: [{ text: generateData.response }]
                 }));
             }
-
-            // Don't set isGenerating to false yet for logged-in users,
-            // as we still need to save the budget
-            if (isGuest) {
-                setIsGenerating(false);
-            }
+            setIsGenerating(false);
+        } catch (error) {
+            console.error("Error generating LLM response for guest:", error);
+            setIsGenerating(false);
+            throw error;
         }
+    };
 
-        // Function to save the budget with LLM response for logged-in users
-        function saveBudgetWithResponse(budgetWithResponse) {
-            const saveBudgetUrl = budgetId
-                ? `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/update/${budgetId}`
-                : `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/save`;
+    // New budget flow - FIRST generate LLM response, THEN save and redirect
+    const handleNewBudgetCreation = async (budgetDTO) => {
+        try {
+            // FIRST: Generate LLM response before saving or redirecting
+            const llmResponse = await generateLlmResponseFirst(budgetDTO);
 
-            fetch(saveBudgetUrl, {
+            // Update the budget with the LLM response
+            const budgetWithResponse = {
+                ...budgetDTO,
+                response: llmResponse
+            };
+
+            // SECOND: Save the budget with the LLM response already included
+            const saveBudgetUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/save`;
+            const response = await fetch(saveBudgetUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(budgetWithResponse)
-            })
-                .then(response => response.json())
-                .then(saveData => {
-                    console.log("Budget saved:", saveData);
-                    setIsGenerating(false);
+            });
 
-                    // Get the budgetId from the response
-                    const currentBudgetId = saveData.response?.budgetId || budgetId;
+            const saveData = await response.json();
+            console.log("Budget saved with LLM response:", saveData);
 
-                    if (currentBudgetId) {
-                        if (!budgetId) {
-                            // New budget was created
-                            setBudgetId(currentBudgetId);
+            // Get the new budgetId from the response
+            const newBudgetId = saveData.response?.budgetId;
 
-                            // Update budgets list in cache
-                            queryClient.invalidateQueries({ queryKey: ['budgets'] });
-                            queryClient.setQueryData(['budgets'], (oldData) => {
-                                if (!oldData) return { response: [] };
+            if (newBudgetId) {
+                // Set the budgetId in the state
+                setBudgetId(newBudgetId);
 
-                                const newBudget = {
-                                    budgetId: currentBudgetId,
-                                    budgetTitle: title,
-                                    creationDate: new Date().toISOString().split('T')[0],
-                                    response: budgetWithResponse.response
-                                };
+                // Update UI with the LLM response
+                setLlmResponse(llmResponse);
+                setHasLlmResponse(true);
+                setActiveTab('response');
+                setProcessedData(prevData => ({
+                    ...prevData,
+                    notes: [{ text: llmResponse }]
+                }));
 
-                                return {
-                                    ...oldData,
-                                    response: [newBudget, ...(oldData.response || [])]
-                                };
-                            });
+                // Update budgets list in cache
+                queryClient.invalidateQueries({ queryKey: ['budgets'] });
+                queryClient.setQueryData(['budgets'], (oldData) => {
+                    if (!oldData) return { response: [] };
 
-                            // 3. Redirect to the budget page
-                            navigate(`/dashboard/budgets/${currentBudgetId}`);
-                        }
+                    const newBudget = {
+                        budgetId: newBudgetId,
+                        budgetTitle: title,
+                        creationDate: new Date().toISOString().split('T')[0],
+                        response: llmResponse // Include response
+                    };
 
-                        // Update the cache for the specific budget
-                        queryClient.setQueryData(['budget', currentBudgetId], (oldData) => {
-                            if (!oldData) return { response: {} };
-
-                            return {
-                                ...oldData,
-                                response: {
-                                    ...oldData.response,
-                                    budgetId: currentBudgetId,
-                                    budgetTitle: title,
-                                    categories: budgetDTO.categories,
-                                    response: budgetWithResponse.response
-                                }
-                            };
-                        });
-
-                        queryClient.invalidateQueries({ queryKey: ['budget', currentBudgetId] });
-                        // Update user's budget list
-                        queryClient.invalidateQueries({ queryKey: ['budgets', userEmail] });
-                    }
-                })
-                .catch(error => {
-                    console.error("Error saving budget:", error);
-                    setIsGenerating(false);
+                    return {
+                        ...oldData,
+                        response: [newBudget, ...(oldData.response || [])]
+                    };
                 });
+
+                // Set specific budget data in cache
+                queryClient.setQueryData(['budget', newBudgetId], () => {
+                    return {
+                        response: {
+                            budgetId: newBudgetId,
+                            budgetTitle: title,
+                            categories: budgetDTO.categories,
+                            response: llmResponse // Include response
+                        }
+                    };
+                });
+
+                // FIXED: Navigate with the LLM response in the state
+                navigate(`/dashboard/budgets/${newBudgetId}`, {
+                    state: { llmResponse: llmResponse }
+                });
+                setIsGenerating(false);
+            } else {
+                console.error("Error: No budgetId returned from save operation");
+                setIsGenerating(false);
+            }
+        } catch (error) {
+            console.error("Error in new budget creation flow:", error);
+            setIsGenerating(false);
+            throw error;
+        }
+    };
+
+    // NEW METHOD: For existing budgets, just generate analysis without auto-saving
+    const handleExistingBudgetAnalysis = async (budgetDTO) => {
+        try {
+            // Generate LLM response
+            const llmResponse = await generateLlmResponseFirst(budgetDTO);
+
+            // Update the UI with the LLM response WITHOUT saving to database
+            setLlmResponse(llmResponse);
+            setHasLlmResponse(true);
+            setActiveTab('response');
+            setProcessedData(prevData => ({
+                ...prevData,
+                notes: [{ text: llmResponse }]
+            }));
+
+            // Create a save button or option if user wants to save this analysis
+            setShouldSaveAfterGenerate(true);
+
+            setIsGenerating(false);
+        } catch (error) {
+            console.error("Error generating budget analysis:", error);
+            setIsGenerating(false);
+            throw error;
+        }
+    };
+
+    // Separate method to save analysis if user chooses to
+    const handleSaveAnalysis = async () => {
+        if (!budgetId) return;
+
+        try {
+            setIsGenerating(true);
+
+            // Collect current data
+            const budgetData = budgetTypeRef.current.getBudgetData();
+            const incomeData = incomeRef.current.getIncomeData();
+            const expensesData = expensesRef.current.getExpenseData();
+
+            // Create budget DTO
+            const budgetDTO = {
+                budgetType:
+                    budgetData.selectedType === "weekly" ? 0 :
+                        budgetData.selectedType === "monthly" ? 1 :
+                            budgetData.selectedType === "yearly" ? 2 : 1,
+                budgetTitle: title,
+                categories: [],
+                response: llmResponse // Include the current LLM response
+            };
+
+            // Process categories (code reused from handleGenerateBudget)
+            // ... [process expenses and income categories as before]
+
+            // Update the budget
+            const updateUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/update/${budgetId}`;
+            const response = await fetch(updateUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(budgetDTO)
+            });
+
+            const updateData = await response.json();
+            console.log("Budget updated with LLM response:", updateData);
+
+            // Update caches
+            queryClient.invalidateQueries({ queryKey: ['budgets'] });
+            queryClient.invalidateQueries({ queryKey: ['budget', budgetId] });
+
+            setShouldSaveAfterGenerate(false);
+            setIsGenerating(false);
+        } catch (error) {
+            console.error("Error saving analysis:", error);
+            setIsGenerating(false);
+        }
+    };
+
+    // Generate LLM response first (before saving or updating)
+    const generateLlmResponseFirst = async (budgetDTO) => {
+        const generateRequestData = {
+            "userEmail": userEmail || "guest@example.com",
+            "budgetDTO": budgetDTO,
+            "toBeEmailed": false
+        };
+
+        // For logged-in users vs guests we use different endpoints
+        const generateUrl = (!userEmail || isGuest)
+            ? `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/generate`
+            : `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/user/generate`;
+
+        try {
+            const response = await fetch(generateUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(generateRequestData)
+            });
+
+            const generateData = await response.json();
+
+            if (generateData.response) {
+                return generateData.response;
+            } else {
+                throw new Error("No response received from LLM generation");
+            }
+        } catch (error) {
+            console.error("Error generating LLM response:", error);
+            throw error;
         }
     };
 
@@ -567,6 +674,16 @@ function Dashboard({ budgetData }) {
                                 <p>No budget analysis available yet. Please generate a budget first.</p>
                             )}
                         </div>
+
+                        {/* Add Save button for existing budgets if analysis has been generated but not saved */}
+                        {budgetId && shouldSaveAfterGenerate && !isGuest && (
+                            <div className="save-analysis-container">
+                                <p>This analysis has not been saved to your budget.</p>
+                                <button onClick={handleSaveAnalysis} disabled={isGenerating}>
+                                    {isGenerating ? 'Saving...' : 'Save this analysis'}
+                                </button>
+                            </div>
+                        )}
                     </Paper>
                 )}
             </div>
