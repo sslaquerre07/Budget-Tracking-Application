@@ -187,31 +187,37 @@ async function login(driver, email, password) {
 //     }
 // })();
 
-// // Test Case 10: Signed in user redirect
-// // Input: User is already signed in
-// // Expected output: Redirect to Dashboard Page.
-// (async function signedinUserRedirectTest() {
-//     let driver = await new Builder().forBrowser("chrome").build();
+// Test Case 10: Signed in user redirect
+// Input: User is already signed in
+// Expected output: Redirect to Dashboard Page.
+(async function signedinUserRedirectTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
 
-//     try {
-//         await login(driver, "jane.smith@example.com", "mypassword456");
+    try {
+        await login(driver, "jane.smith@example.com", "mypassword456");
 
-//         await driver.get(LOGIN_URL);
+        // Wait for alert to appear and accept it
+        await driver.wait(until.alertIsPresent(), 10000);
+        let alert2 = await driver.switchTo().alert();
+        await alert2.accept();
 
-//         // Wait for redirect
-//         await driver.wait(until.urlIs(DASHBOARD_URL), 10000);
+        // Manually redirect to login page
+        await driver.get(LOGIN_URL);
 
-//         // Verify redirect success
-//         let currentURL = await driver.getCurrentUrl();
-//         if (currentURL === DASHBOARD_URL) {
-//             console.log("Test Case 10 Passed: 🟢 Redirected to Dashboard page!");
-//         } else {
-//             console.log("Test Case 10 Failed: 🔴 Redirect unsuccessful.");
-//         }
-//     } finally {
-//         await driver.quit();
-//     }
-// })();
+        // Wait for redirect
+        await driver.wait(until.urlIs(DASHBOARD_URL), 10000);
+
+        // Verify redirect success
+        let currentURL = await driver.getCurrentUrl();
+        if (currentURL === DASHBOARD_URL) {
+            console.log("Test Case 10 Passed: 🟢 Redirected to Dashboard page!");
+        } else {
+            console.log("Test Case 10 Failed: 🔴 Redirect unsuccessful.");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
 
 // // Test Case 11: Guest user alert
 // // Input: Click on Guest user button
