@@ -20,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -32,41 +33,65 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "budget")
-//Following annotations used for Inheritance purposes
+// Following annotations used for Inheritance purposes
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "budget_type", discriminatorType = DiscriminatorType.STRING)
-public abstract class Budget implements CreateString{
-    //ID for the class in the DB
+public abstract class Budget implements CreateString {
+    // ID for the class in the DB
     @Id
-    @Column(name= "budget_id")
+    @Column(name = "budget_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long budgetId;
 
-    //Other data members
+    // Other data members
     private String title;
-    //Setting up the relationship for the DB
+    // Setting up the relationship for the DB
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
     private List<Category> categories;
     private Date creationDate;
-    //Additional data member to map the reference in the DB, not needed for any other purpose
+
+    // Add the llmResponse field for storing the generated analysis
+    @Lob // Use @Lob for potentially large text content
+    @Column(name = "llm_response", columnDefinition = "TEXT")
+    private String llmResponse;
+
+    // Additional data member to map the reference in the DB, not needed for any
+    // other purpose
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_email")
     @JsonIgnore
     private User user;
 
-    //CTOR
-    public Budget(String title, List<Category> categories){
+    // CTOR
+    public Budget(String title, List<Category> categories) {
         this.title = title;
         this.categories = categories;
         this.creationDate = new Date(System.currentTimeMillis());
     }
 
-    //Other public methods
-    public String categorySummaryString(){
+    // Update existing constructor to include llmResponse
+    public Budget(String title, List<Category> categories, String llmResponse) {
+        this.title = title;
+        this.categories = categories;
+        this.creationDate = new Date(System.currentTimeMillis());
+        this.llmResponse = llmResponse;
+    }
+
+    // Other public methods
+    public String categorySummaryString() {
         String finalStr = "";
-        for(Category category: this.categories){
+        for (Category category : this.categories) {
             finalStr = finalStr + category.createPromptString();
         }
         return finalStr;
+    }
+
+    // Add getter and setter if lombok's @Data doesn't generate them
+    public String getLlmResponse() {
+        return llmResponse;
+    }
+
+    public void setLlmResponse(String llmResponse) {
+        this.llmResponse = llmResponse;
     }
 }
