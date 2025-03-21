@@ -26,9 +26,9 @@ const SETTINGS_URL = `${BASE_URL}/settings`;
         // Verify login success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === LOGIN_URL) {
-            console.log("Test Case 1 Passed: ✅ Login button clicked. Redirected correctly!");
+            console.log("Test Case 1 Passed: 🟢 Login button clicked. Redirected correctly!");
         } else {
-            console.log("Test Case 1 Failed: ❌ Login button not clicked.");
+            console.log("Test Case 1 Failed: 🔴 Login button not clicked.");
         }
     } finally {
         await driver.quit();
@@ -52,9 +52,9 @@ const SETTINGS_URL = `${BASE_URL}/settings`;
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === SIGNUP_URL) {
-            console.log("Test Case 2 Passed: ✅ Sign Up button clicked. Redirected correctly!");
+            console.log("Test Case 2 Passed: 🟢 Sign Up button clicked. Redirected correctly!");
         } else {
-            console.log("Test Case 2 Failed: ❌ Sign Up button not clicked.");
+            console.log("Test Case 2 Failed: 🔴 Sign Up button not clicked.");
         }
     } finally {
         await driver.quit();
@@ -78,9 +78,9 @@ const SETTINGS_URL = `${BASE_URL}/settings`;
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === SETTINGS_URL) {
-            console.log("Test Case 3 Passed: ✅ Settings button clicked. Redirected correctly!");
+            console.log("Test Case 3 Passed: 🟢 Settings button clicked. Redirected correctly!");
         } else {
-            console.log("Test Case 3 Failed: ❌ Settings button not clicked.");
+            console.log("Test Case 3 Failed: 🔴 Settings button not clicked.");
         }
     } finally {
         await driver.quit();
@@ -104,9 +104,9 @@ const SETTINGS_URL = `${BASE_URL}/settings`;
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === DASHBOARD_URL) {
-            console.log("Test Case 4 Passed: ✅ Dashboard button clicked. Redirected correctly!");
+            console.log("Test Case 4 Passed: 🟢 Dashboard button clicked. Redirected correctly!");
         } else {
-            console.log("Test Case 4 Failed: ❌ Dashboard button not clicked.");
+            console.log("Test Case 4 Failed: 🔴 Dashboard button not clicked.");
         }
     } finally {
         await driver.quit();

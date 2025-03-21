@@ -35,9 +35,9 @@ async function login(driver, email, password) {
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === DASHBOARD_URL) {
-            console.log("Test Case 5 Passed: ✅ Login successful. Redirected to Dashboard page!");
+            console.log("Test Case 5 Passed: 🟢 Login successful. Redirected to Dashboard page!");
         } else {
-            console.log("Test Case 5 Failed: ❌ Login unsuccessful.");
+            console.log("Test Case 5 Failed: 🔴 Login unsuccessful.");
         }
     }
     finally {
@@ -63,9 +63,9 @@ async function login(driver, email, password) {
 
         // Verify alert message
         if(alertText === LOGIN_SUCCESS_ALERT) {
-            console.log("Test Case 6 Passed: ✅ Alert displayed: Login successful!");
+            console.log("Test Case 6 Passed: 🟢 Alert displayed: Login successful!");
         } else {
-            console.log("Test Case 6 Failed: ❌ Alert not displayed.");
+            console.log("Test Case 6 Failed: 🔴 Alert not displayed.");
         }
 
         await alert.accept();
@@ -90,9 +90,9 @@ async function login(driver, email, password) {
 
         // Verify error message
         if(errorText === LOGIN_FAIL_ERROR) {
-            console.log("Test Case 7 Passed: ✅ Alert displayed: Invalid credentials, please try again.");
+            console.log("Test Case 7 Passed: 🟢 Alert displayed: Invalid credentials, please try again.");
         } else {
-            console.log("Test Case 7 Failed: ❌ Alert not displayed.");
+            console.log("Test Case 7 Failed: 🔴 Alert not displayed.");
         }
     } finally {
         await driver.quit();
@@ -122,9 +122,9 @@ async function login(driver, email, password) {
 
         // Verify alert message
         if(alertText === SIGNOUT_ALERT) {
-            console.log("Test Case 8 Passed: ✅ Alert displayed: You have been signed out.");
+            console.log("Test Case 8 Passed: 🟢 Alert displayed: You have been signed out.");
         } else {
-            console.log("Test Case 8 Failed: ❌ Alert not displayed.");
+            console.log("Test Case 8 Failed: 🔴 Alert not displayed.");
         }
         await alert.accept();
 
@@ -158,9 +158,9 @@ async function login(driver, email, password) {
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === "http://localhost:3000/") {
-            console.log("Test Case 9 Passed: ✅ Sign Out successful. Redirected to Home page!");
+            console.log("Test Case 9 Passed: 🟢 Sign Out successful. Redirected to Home page!");
         } else {
-            console.log("Test Case 9 Failed: ❌ Sign Out unsuccessful.");
+            console.log("Test Case 9 Failed: 🔴 Sign Out unsuccessful.");
         }
     } finally {
         await driver.quit();
@@ -184,9 +184,9 @@ async function login(driver, email, password) {
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === DASHBOARD_URL) {
-            console.log("Test Case 10 Passed: ✅ Redirected to Dashboard page!");
+            console.log("Test Case 10 Passed: 🟢 Redirected to Dashboard page!");
         } else {
-            console.log("Test Case 10 Failed: ❌ Redirect unsuccessful.");
+            console.log("Test Case 10 Failed: 🔴 Redirect unsuccessful.");
         }
     } finally {
         await driver.quit();
@@ -215,9 +215,9 @@ async function login(driver, email, password) {
 
         // Verify alert message
         if(alertText === GUEST_ALERT) {
-            console.log("Test Case 11 Passed: ✅ Alert displayed: You are trying the app as a guest. Your budgets won't be saved.");
+            console.log("Test Case 11 Passed: 🟢 Alert displayed: You are trying the app as a guest. Your budgets won't be saved.");
         } else {
-            console.log("Test Case 11 Failed: ❌ Alert not displayed.");
+            console.log("Test Case 11 Failed: 🔴 Alert not displayed.");
         }
         await alert.accept();
 
@@ -249,9 +249,9 @@ async function login(driver, email, password) {
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === DASHBOARD_URL) {
-            console.log("Test Case 12 Passed: ✅ Guest user redirected to Dashboard page!");
+            console.log("Test Case 12 Passed: 🟢 Guest user redirected to Dashboard page!");
         } else {
-            console.log("Test Case 12 Failed: ❌ Redirect unsuccessful.");
+            console.log("Test Case 12 Failed: 🔴 Redirect unsuccessful.");
         }
     } finally {
         await driver.quit();
@@ -276,9 +276,9 @@ async function login(driver, email, password) {
         // Verify redirect success
         let currentURL = await driver.getCurrentUrl();
         if (currentURL === SIGNUP_URL) {
-            console.log("Test Case 13 Passed: ✅ Sign Up button clicked. Redirected correctly!");
+            console.log("Test Case 13 Passed: 🟢 Sign Up button clicked. Redirected correctly!");
         } else {
-            console.log("Test Case 13 Failed: ❌ Sign Up button not clicked.");
+            console.log("Test Case 13 Failed: 🔴 Sign Up button not clicked.");
         }
     } finally {
         await driver.quit();
