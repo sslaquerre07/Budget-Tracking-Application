@@ -287,29 +287,29 @@ async function login(driver, email, password) {
     }
 })();
 
-// // Test Case 13: Sign Up Redirect
-// // Input: Click on Sign Up button
-// // Expected output: Application successfully redirects to Sign Up Page.
-// (async function signupRedirectTest() {
-//     let driver = await new Builder().forBrowser("chrome").build();
+// Test Case 13: Sign Up Redirect
+// Input: Click on Sign Up button
+// Expected output: Application successfully redirects to Sign Up Page.
+(async function signupRedirectTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
 
-//     try {
-//         await driver.get(LOGIN_URL);
+    try {
+        await driver.get(LOGIN_URL);
 
-//         await driver.wait(until.elementLocated(By.linkText("Sign Up")), 5000);
-//         await driver.findElement(By.linkText("Sign Up")).click();
+        await driver.wait(until.elementLocated(By.linkText("Sign Up")), 5000);
+        await driver.findElement(By.linkText("Sign Up")).click();
 
-//         // Wait for redirect
-//         await driver.wait(until.urlIs(SIGNUP_URL), 10000);
+        // Wait for redirect
+        await driver.wait(until.urlIs(SIGNUP_URL), 10000);
 
-//         // Verify redirect success
-//         let currentURL = await driver.getCurrentUrl();
-//         if (currentURL === SIGNUP_URL) {
-//             console.log("Test Case 13 Passed: 🟢 Sign Up button clicked. Redirected correctly!");
-//         } else {
-//             console.log("Test Case 13 Failed: 🔴 Sign Up button not clicked.");
-//         }
-//     } finally {
-//         await driver.quit();
-//     }
-// })();
+        // Verify redirect success
+        let currentURL = await driver.getCurrentUrl();
+        if (currentURL === SIGNUP_URL) {
+            console.log("Test Case 13 Passed: 🟢 Sign Up button clicked. Redirected correctly!");
+        } else {
+            console.log("Test Case 13 Failed: 🔴 Sign Up button not clicked.");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
