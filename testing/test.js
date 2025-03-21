@@ -105,33 +105,33 @@ const { Builder, By, Key, until } = require("selenium-webdriver");
     }
 })();
 
-// // Test Case 1: Login
-// // Input: valid username and password
-// // Expected output: Redirect to dashboard page
-// (async function loginTest1() {
-//     let driver = await new Builder().forBrowser("chrome").build();
+// Test Case 1: Login
+// Input: valid username and password
+// Expected output: Redirect to dashboard page
+(async function loginTest1() {
+    let driver = await new Builder().forBrowser("chrome").build();
 
-//     try {
-//         await driver.get("http://localhost:3000/login");
+    try {
+        await driver.get("http://localhost:3000/login");
 
-//         await driver.findElement(By.name("username")).sendKeys("john.doe@example.com");
-//         await driver.findElement(By.name("password")).sendKeys("password123");
-//         await driver.findElement(By.xpath("//button[@type='submit']")).click();
+        await driver.findElement(By.name("username")).sendKeys("john.doe@example.com");
+        await driver.findElement(By.name("password")).sendKeys("password123");
+        await driver.findElement(By.xpath("//button[@type='submit']")).click();
 
-//         // Wait for redirect
-//         await driver.wait(until.urlIs("http://localhost:3000/dashboard"), 10000);
+        // Wait for redirect
+        await driver.wait(until.urlIs("http://localhost:3000/dashboard"), 10000);
 
-//         // Verify login success
-//         let currentURL = await driver.getCurrentUrl();
-//         if (currentURL === "http://localhost:3000/dashboard") {
-//             console.log("Test Case 1 Passed: ✅ Login successful. Redirected correctly!");
-//         } else {
-//             console.log("Test Case 2 Failed: ❌ Login failed.");
-//         }
-//     } finally {
-//         await driver.quit();
-//     }
-// })();
+        // Verify login success
+        let currentURL = await driver.getCurrentUrl();
+        if (currentURL === "http://localhost:3000/dashboard") {
+            console.log("Test Case 1 Passed: ✅ Login successful. Redirected correctly!");
+        } else {
+            console.log("Test Case 2 Failed: ❌ Login failed.");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
 
 // // Test Case 2: Login
 // // Input: valid username and password
