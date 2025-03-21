@@ -133,13 +133,39 @@ async function signin(driver, fname, lname, email, password, confirmpassword) {
         let errorMessage = await errorMessageElement.getText();
 
         // DEBUG
-        console.log(`Error Message Displayed: "${EMAIL_EXISTS_ERROR}"`);
+        // console.log(`Error Message Displayed: "${EMAIL_EXISTS_ERROR}"`);
 
         // Check error message
         if (errorMessage === EMAIL_EXISTS_ERROR) {
             console.log("Test Case 18 Passed: 🟢 \"Signup failed. Try again. error message displayed correctly!\"");
         } else {
             console.log("Test Case 18 Failed: 🔴 \"Signup failed. Try again. error message not displayed.\"");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
+
+// Test Case 19: Login Button Redirect
+// Input: Click on Login button
+// Expected output: Redirect to login page
+(async function loginButtonTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
+
+    try {
+        await driver.get(BASE_URL);
+        
+        await driver.findElement(By.css('a[href="/login"]')).click();
+
+        // Wait for redirect
+        await driver.wait(until.urlIs(LOGIN_URL), 10000);
+        
+        // Verify login success
+        let currentURL = await driver.getCurrentUrl();
+        if (currentURL === LOGIN_URL) {
+            console.log("Test Case 19 Passed: 🟢 Login button clicked. Redirected correctly!");
+        } else {
+            console.log("Test Case 19 Failed: 🔴 Login button not clicked.");
         }
     } finally {
         await driver.quit();

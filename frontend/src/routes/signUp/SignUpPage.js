@@ -26,6 +26,14 @@ function SignUpPage() {
         return () => clearTimeout(timer);
     }, []);
 
+    // Redirect logged-in users to Dashboard immediately
+    useEffect(() => {
+        const userToken = localStorage.getItem("userToken");
+        if (userToken) {
+            navigate("/dashboard");
+        }
+    }, [navigate]);
+
     const validatePassword = (password) => {
         if (password.length < 6) {
             setPasswordError("Password must be at least 6 characters long.");
