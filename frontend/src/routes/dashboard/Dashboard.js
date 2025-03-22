@@ -357,27 +357,31 @@ function Dashboard({ budgetData }) {
     const handleNewBudgetCreation = async (budgetDTO) => {
         try {
             // FIRST: Generate LLM response before saving or redirecting
-            const llmResponse = await generateLlmResponseFirst(budgetDTO);
+            const response = await generateLlmResponseFirst(budgetDTO);
+            console.log("Response:", response);
+            
+            // // Update the budget with the LLM response
+            // const budgetWithResponse = {
+            //     ...budgetDTO,
+            //     response: llmResponse
+            // };
+            //// this was the one making the 2nd copy
+            // // SECOND: Save the budget with the LLM response already included
+            // const saveBudgetUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/save`;
+            // const response = await fetch(saveBudgetUrl, {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(budgetWithResponse)
+            // });
 
-            // Update the budget with the LLM response
-            const budgetWithResponse = {
-                ...budgetDTO,
-                response: llmResponse
-            };
+            // const saveData = await response.json();
+            // console.log("Budget saved with LLM response:", saveData);
 
-            // SECOND: Save the budget with the LLM response already included
-            const saveBudgetUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/save`;
-            const response = await fetch(saveBudgetUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(budgetWithResponse)
-            });
-
-            const saveData = await response.json();
-            console.log("Budget saved with LLM response:", saveData);
+            const llmResponse = response.response;
+            console.log("LLM response:", llmResponse);
 
             // Get the new budgetId from the response
-            const newBudgetId = saveData.response?.budgetId;
+            const newBudgetId = response.id;
 
             if (newBudgetId) {
                 // Set the budgetId in the state
