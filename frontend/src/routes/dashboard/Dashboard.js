@@ -554,7 +554,7 @@ function Dashboard({ budgetData }) {
 
             const emailData = {
                 userEmail: userEmail,
-                response: llmResponse
+                response: typeof llmResponse === 'object' ? JSON.stringify(llmResponse) : llmResponse
             };
 
             const emailUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/user/emailReceipt`;
