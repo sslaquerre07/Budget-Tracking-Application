@@ -21,10 +21,11 @@ function ChatList() {
     const userEmail = localStorage.getItem("userEmail");
     const isGuest = !userToken;
 
+    // Query for fetching budgets
     const { isPending, error, data } = useQuery({
         queryKey: ['budgets'],
-        queryFn: () =>
-            fetch(`${apiUrl}/user/budgets`, {
+        queryFn: async () => {
+            const response = await fetch(`${apiUrl || 'http://localhost:8080'}/user/budgets`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,60 +33,61 @@ function ChatList() {
                 body: JSON.stringify({
                     email: userEmail,
                 }),
-            }).then((res) => res.json()),
-        onSuccess: (data) => {
-            console.log("API Response:", data); // Log the API response
+            });
+            return response.json();
         },
+        refetchOnWindowFocus: true,
+        refetchOnMount: true,
+        staleTime: 0
     });
 
     // Check for new items by comparing with previous data
     useEffect(() => {
-        if (!data || !Array.isArray(data.response)) return; // If no data or data.response is not an array, return early
+        if (!data || !Array.isArray(data.response)) return;
 
-        const currentBudgets = data.response; // Ensure this is an array
+        const currentBudgets = data.response;
         const previousBudgets = previousBudgetsRef.current;
 
-        // If we have previous budgets to compare against
         if (previousBudgets.length > 0) {
             const previousIds = new Set(previousBudgets.map(b => b.budgetId));
             const newIds = new Set();
 
-            // Find any new budgets
             currentBudgets.forEach(budget => {
                 if (!previousIds.has(budget.budgetId)) {
                     newIds.add(budget.budgetId);
                 }
             });
 
-            // Set the new items for animation
             if (newIds.size > 0) {
                 setNewItemIds(newIds);
 
-                // After the animation completes, mark these as completed
                 setTimeout(() => {
                     setCompletedAnimations(prev => {
                         const updated = new Set(prev);
                         newIds.forEach(id => updated.add(id));
                         return updated;
                     });
-                }, 1500); // Match animation duration
+                }, 1500);
             }
         }
 
-        // Update our reference of previous budgets
         previousBudgetsRef.current = [...currentBudgets];
     }, [data]);
 
     // Mutation for deleting a budget
     const deleteMutation = useMutation({
         mutationFn: async (budgetId) => {
-            const response = await fetch(`${apiUrl}/budget/${budgetId}`, {
+            const response = await fetch(`${apiUrl || 'http://localhost:8080'}/budget/${budgetId}`, {
                 method: 'DELETE'
             });
-            return data;
+            return response.json();
         },
         onSuccess: () => {
+            // Invalidate and refetch the budgets query
             queryClient.invalidateQueries({ queryKey: ['budgets'] });
+        },
+        onError: (error) => {
+            console.error("Delete Error:", error);
         }
     });
 
@@ -98,7 +100,7 @@ function ChatList() {
                 creationDate: new Date().toISOString().split('T')[0]
             };
 
-            const response = await fetch(`${apiUrl}/budget/updateBasics`, {
+            const response = await fetch(`${apiUrl || 'http://localhost:8080'}/budget/updateBasics`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,24 +111,36 @@ function ChatList() {
             const data = await response.json();
             return { budgetId, newTitle, data };
         },
-        onSuccess: (result) => {
-            const { budgetId, newTitle } = result;
+        onMutate: async ({ budgetId, newTitle }) => {
+            await queryClient.cancelQueries({ queryKey: ['budgets'] });
+            const previousData = queryClient.getQueryData(['budgets']);
 
-            queryClient.setQueryData(['budgets'], (oldData) => {
-                if (!oldData) return oldData;
+            if (previousData) {
+                queryClient.setQueryData(['budgets'], old => {
+                    if (!old || !old.response) return old;
+                    return {
+                        ...old,
+                        response: old.response.map(budget =>
+                            budget.budgetId === budgetId
+                                ? { ...budget, budgetTitle: newTitle }
+                                : budget
+                        )
+                    };
+                });
+            }
 
-                const updatedBudgets = oldData.map(budget =>
-                    budget.budgetId === budgetId
-                        ? { ...budget, budgetTitle: newTitle }
-                        : budget
-                );
-
-                return updatedBudgets; // Return the updated array
-            });
-
+            return { previousData };
+        },
+        onError: (err, variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['budgets'], context.previousData);
+            }
+            console.error("Update Error:", err);
+        },
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['budgets'] });
             setEditingId(null);
-        }
+        },
     });
 
     // Handle delete button click

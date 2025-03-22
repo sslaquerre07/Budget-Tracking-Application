@@ -122,9 +122,15 @@ public class UserController {
             if(userBudgetDTO.isToBeEmailed()){
                 mailService.sendBudgetReceipt(user.getEmail(), response);
             }
+            
+            // Create a Map with the response and ID
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("response", response);
+            responseData.put("id", newBudget.getBudgetId());
+            
             //Return the AI response to the user
             return ResponseEntity.status(HttpStatus.OK).body(Map.ofEntries(
-                Map.entry("response", response)
+                Map.entry("response", responseData)
             ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.ofEntries(

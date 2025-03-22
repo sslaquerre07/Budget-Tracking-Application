@@ -296,6 +296,11 @@
     color: rgba(245, 245, 245, 0.9);
 }
 
+.markdown-content p {
+    color: #f8f9fa; /* Lighter text for better readability */
+}
+
+
 /* Headings */
 .markdown-content h1,
 .markdown-content h2 {
@@ -583,5 +588,95 @@
 
     .markdown-content h2 {
         font-size: 1.3rem;
+    }
+}
+
+/* Save and Email button container styling */
+.action-button-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.action-button-container p {
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Common styling for action buttons */
+.action-button {
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: #64ecf5;
+    color: #033d5a;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    margin: 0 5px;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.action-button:disabled {
+    background: rgba(100, 236, 245, 0.5);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Specific styling for save button */
+.save-button {
+    background: #64ecf5;
+}
+
+.save-button:hover {
+    background: #4cd9e2;
+}
+
+/* Specific styling for email button */
+.email-button {
+    background: #64ecf5;
+}
+
+.email-button:hover {
+    background: #4cd9e2;
+}
+
+/* Response actions container */
+.response-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .action-button {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .action-button-container {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .action-button {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .response-actions {
+        flex-direction: column;
     }
 }
