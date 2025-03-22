@@ -128,7 +128,7 @@ function Dashboard({ budgetData }) {
             const { response } = budgetData.response;
 
             if (response) {
-                console.log("Initial LLM response found:", response);
+
                 setLlmResponse(response);
                 setHasLlmResponse(true);
             }
@@ -208,7 +208,6 @@ function Dashboard({ budgetData }) {
     }, [activeTab, processedData]);
 
     const handleTabChange = (tab) => {
-        console.log(`Changing tab from ${activeTab} to ${tab}`);
 
         // If user is clicking from response to form
         if (activeTab === 'response' && tab === 'form') {
@@ -317,13 +316,6 @@ function Dashboard({ budgetData }) {
 
     // Guest flow - directly generate LLM response without saving/redirecting
     const handleGuestBudgetGeneration = async (budgetDTO) => {
-        // const generateRequestData = {
-        //     "userEmail": userEmail || "guest@example.com",
-        //     "budgetDTO": budgetDTO,
-        //     "toBeEmailed": false
-        // };
-
-
         const generateUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/generate`;
 
         try {
@@ -358,27 +350,8 @@ function Dashboard({ budgetData }) {
         try {
             // FIRST: Generate LLM response before saving or redirecting
             const response = await generateLlmResponseFirst(budgetDTO);
-            console.log("Response:", response);
-
-            // // Update the budget with the LLM response
-            // const budgetWithResponse = {
-            //     ...budgetDTO,
-            //     response: llmResponse
-            // };
-            //// this was the one making the 2nd copy
-            // // SECOND: Save the budget with the LLM response already included
-            // const saveBudgetUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/save`;
-            // const response = await fetch(saveBudgetUrl, {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(budgetWithResponse)
-            // });
-
-            // const saveData = await response.json();
-            // console.log("Budget saved with LLM response:", saveData);
 
             const llmResponse = response.response;
-            console.log("LLM response:", llmResponse);
 
             // Get the new budgetId from the response
             const newBudgetId = response.id;
@@ -499,7 +472,6 @@ function Dashboard({ budgetData }) {
             });
 
             const updateData = await response.json();
-            console.log("Budget updated with LLM response:", updateData);
 
             // Update caches
             queryClient.invalidateQueries({ queryKey: ['budgets'] });
@@ -608,7 +580,6 @@ function Dashboard({ budgetData }) {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Title updated:', data);
                         queryClient.setQueryData(['budget', budgetId], (oldData) => {
                             if (!oldData) return oldData;
                             return {
