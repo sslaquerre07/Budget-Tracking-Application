@@ -22,6 +22,7 @@ function Dashboard({ budgetData }) {
     const [hasLlmResponse, setHasLlmResponse] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [shouldSaveAfterGenerate, setShouldSaveAfterGenerate] = useState(false);
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const location = useLocation();
@@ -545,6 +546,42 @@ function Dashboard({ budgetData }) {
         }
     };
 
+    // New function to handle sending email of the budget analysis
+    const handleSendEmail = async () => {
+        if (!userEmail || isGuest || !llmResponse) return;
+
+        try {
+            setIsSendingEmail(true);
+
+            const emailData = {
+                userEmail: userEmail,
+                response: llmResponse
+            };
+
+            const emailUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/user/emailReceipt`;
+
+            const response = await fetch(emailUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(emailData)
+            });
+
+            const responseData = await response.json();
+
+            if (responseData.success) {
+                alert("Budget analysis has been sent to your email!");
+            } else {
+                alert("Failed to send email. Please try again later.");
+            }
+
+            setIsSendingEmail(false);
+        } catch (error) {
+            console.error("Error sending email:", error);
+            alert("An error occurred while sending the email.");
+            setIsSendingEmail(false);
+        }
+    };
+
     const handleEditStart = () => {
         setIsEditingTitle(true);
         setEditTitle(title);
@@ -691,15 +728,35 @@ function Dashboard({ budgetData }) {
                             )}
                         </div>
 
-                        {/* Add Save button for existing budgets if analysis has been generated but not saved */}
-                        {budgetId && shouldSaveAfterGenerate && !isGuest && (
-                            <div className="save-analysis-container">
-                                <p>This analysis has not been saved to your budget.</p>
-                                <button onClick={handleSaveAnalysis} disabled={isGenerating}>
-                                    {isGenerating ? 'Saving...' : 'Save this analysis'}
-                                </button>
-                            </div>
-                        )}
+                        {/* Action buttons for the response tab */}
+                        <div className="response-actions">
+                            {/* Save button for existing budgets if analysis has been generated but not saved */}
+                            {budgetId && shouldSaveAfterGenerate && !isGuest && (
+                                <div className="action-button-container">
+                                    <p>This analysis has not been saved to your budget.</p>
+                                    <button
+                                        onClick={handleSaveAnalysis}
+                                        disabled={isGenerating}
+                                        className="action-button save-button"
+                                    >
+                                        {isGenerating ? 'Saving...' : 'Save this analysis'}
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Email button for logged-in users */}
+                            {!isGuest && llmResponse && (
+                                <div className="action-button-container">
+                                    <button
+                                        onClick={handleSendEmail}
+                                        disabled={isSendingEmail}
+                                        className="action-button email-button"
+                                    >
+                                        {isSendingEmail ? 'Sending...' : 'Email this analysis'}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </Paper>
                 )}
             </div>

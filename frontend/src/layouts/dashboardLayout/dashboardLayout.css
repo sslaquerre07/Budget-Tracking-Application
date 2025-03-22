@@ -107,6 +107,28 @@
     background: rgba(100, 236, 245, 0.5);
 }
 
+@media (min-width: 768px) {
+    .sidebar-wrapper {
+        position: relative;
+        left: 0;
+        width: 280px;
+        background: transparent;
+    }
+
+    .dashboard-container {
+        display: flex;
+    }
+
+    .dashboard-content {
+        flex: 1;
+        margin-left: 0;
+    }
+
+    .sidebar-toggle {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar-wrapper {
         width: 280px;
