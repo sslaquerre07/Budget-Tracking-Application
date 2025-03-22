@@ -177,11 +177,11 @@ function Dashboard({ budgetData }) {
             setProcessedData({
                 expensesArray,
                 incomesArray,
-                budgetType: "monthly",
+                budgetType: "weekly",
                 notes: response ? [{ text: response }] : []
             });
 
-            applyDataToForms(expensesArray, incomesArray, "monthly", response);
+            applyDataToForms(expensesArray, incomesArray, "weekly", response);
         }
     }, [budgetData]);
 
@@ -484,13 +484,9 @@ function Dashboard({ budgetData }) {
                             budgetData.selectedType === "yearly" ? 2 : 1,
                 budgetTitle: title,
                 categories: [],
-                response: llmResponse // Include the current LLM response
+                response: llmResponse
             };
 
-            // Process categories (code reused from handleGenerateBudget)
-            // ... [process expenses and income categories as before]
-
-            // Update the budget
             const updateUrl = `${process.env.REACT_APP_BUDGETS_API || 'http://localhost:8080'}/budget/update/${budgetId}`;
             const response = await fetch(updateUrl, {
                 method: 'POST',
@@ -737,7 +733,7 @@ function Dashboard({ budgetData }) {
                                         disabled={isSendingEmail}
                                         className="action-button email-button"
                                     >
-                                        {isSendingEmail ? 'Sending...' : 'Email this analysis'}
+                                        {isSendingEmail ? 'Sending...' : 'Email Me This'}
                                     </button>
                                 </div>
                             )}
