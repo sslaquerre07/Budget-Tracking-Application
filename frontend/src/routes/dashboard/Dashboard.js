@@ -359,7 +359,7 @@ function Dashboard({ budgetData }) {
             // FIRST: Generate LLM response before saving or redirecting
             const response = await generateLlmResponseFirst(budgetDTO);
             console.log("Response:", response);
-            
+
             // // Update the budget with the LLM response
             // const budgetWithResponse = {
             //     ...budgetDTO,
@@ -721,7 +721,11 @@ function Dashboard({ budgetData }) {
                         <h2>Budget Analysis</h2>
                         <div className="response-content markdown-content">
                             {llmResponse ? (
-                                <ReactMarkdown>{llmResponse}</ReactMarkdown>
+                                <ReactMarkdown>
+                                    {typeof llmResponse === 'object' && llmResponse.response
+                                        ? llmResponse.response
+                                        : (typeof llmResponse === 'string' ? llmResponse : '')}
+                                </ReactMarkdown>
                             ) : (
                                 <p>No budget analysis available yet. Please generate a budget first.</p>
                             )}
