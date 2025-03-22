@@ -82,7 +82,6 @@ function Home() {
         <div className={`home ${isVisible ? 'visible' : ''}`}>
             <Helmet>
                 <title>Home - AutoBudget</title>
-                <link rel="icon" href="/images/home.svg" />
             </Helmet>
             {/* Hero Section */}
             <section className="hero">

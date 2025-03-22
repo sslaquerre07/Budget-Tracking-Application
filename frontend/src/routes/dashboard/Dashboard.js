@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import React, { useRef, useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
@@ -239,7 +240,7 @@ function Dashboard({ budgetData }) {
         // 2. Create the budget DTO
         const budgetDTO = {
             budgetType:
-                budgetData.selectedType === "weekly" ? 0 :
+                budgetData.selectedType === "daily" ? 0 :
                     budgetData.selectedType === "monthly" ? 1 :
                         budgetData.selectedType === "yearly" ? 2 : 1,
             budgetTitle: title,
@@ -617,6 +618,9 @@ function Dashboard({ budgetData }) {
 
     return (
         <div className="Dashboard">
+            <Helmet>
+                <title>Dashboard - AutoBudget</title>
+            </Helmet>
             <div className="dashboard-tabs">
                 <button
                     className={`tab-button ${activeTab === 'form' ? 'active' : ''}`}

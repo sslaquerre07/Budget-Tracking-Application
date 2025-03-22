@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from "react-router-dom";
 import "./signUpPage.css";
 import { useRef, useState, useEffect } from "react";
@@ -88,6 +89,9 @@ function SignUpPage() {
 
     return (
         <div className="signUpPage" ref={signUpPageRef}>
+            <Helmet>
+                <title>Signup - AutoBudget</title>
+            </Helmet>
             <div className="signUpPage-container">
                 <h1>Create Account</h1>
                 {error && <p className="error-message">{error}</p>}

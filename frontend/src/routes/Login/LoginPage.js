@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import "./LoginPage.css";
@@ -80,6 +81,9 @@ function LoginPage() {
 
     return (
         <div className="loginPage" ref={loginPageRef}>
+            <Helmet>
+                <title>Login - AutoBudget</title>
+            </Helmet>
             <div className="loginPage-container">
                 <h1>Welcome Back</h1>
                 {error && <p className="error-message">{error}</p>}

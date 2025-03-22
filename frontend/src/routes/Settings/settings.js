@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import "./settings.css";
@@ -75,6 +76,9 @@ const SettingsPage = () => {
 
   return (
     <div className="settings-container">
+      <Helmet>
+        <title>Signup - AutoBudget</title>
+      </Helmet>
       <h2 className="settings-title">User Settings</h2>
 
       {/* Change Password Section */}

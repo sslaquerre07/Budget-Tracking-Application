@@ -47,7 +47,7 @@ const BudgetType = forwardRef((props, ref) => {
             <div className="budget-options">
                 <div
                     className={`option ${selectedType === "daily" ? "selected" : "unselected"}`}
-                    onClick={() => handleLabelClick("yearly")}
+                    onClick={() => handleLabelClick("daily")}
                 >
                     <input
                         type="radio"
@@ -59,21 +59,6 @@ const BudgetType = forwardRef((props, ref) => {
                     />
                     <label htmlFor="daily">Daily</label>
                 </div>
-                <div
-                    className={`option ${selectedType === "weekly" ? "selected" : "unselected"}`}
-                    onClick={() => handleLabelClick("weekly")}
-                >
-                    <input
-                        type="radio"
-                        id="weekly"
-                        name="budgetType"
-                        value="weekly"
-                        checked={selectedType === "weekly"}
-                        onChange={handleTypeChange}
-                    />
-                    <label htmlFor="weekly">Weekly</label>
-                </div>
-
                 <div
                     className={`option ${selectedType === "monthly" ? "selected" : "unselected"}`}
                     onClick={() => handleLabelClick("monthly")}
@@ -87,6 +72,21 @@ const BudgetType = forwardRef((props, ref) => {
                         onChange={handleTypeChange}
                     />
                     <label htmlFor="monthly">Monthly</label>
+                </div>
+
+                <div
+                    className={`option ${selectedType === "yearly" ? "selected" : "unselected"}`}
+                    onClick={() => handleLabelClick("yearly")}
+                >
+                    <input
+                        type="radio"
+                        id="yearly"
+                        name="budgetType"
+                        value="yearly"
+                        checked={selectedType === "yearly"}
+                        onChange={handleTypeChange}
+                    />
+                    <label htmlFor="yearly">Yearly</label>
                 </div>
             </div>
         </div>
