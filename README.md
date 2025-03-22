@@ -1,79 +1,109 @@
-# Budget Tracking Application
+# 💰 Auto Budget - Smart Financial Management
 
-## Overview
-The Budget Tracking Application is an intelligent financial management system that helps users track their income and expenses. Leveraging Google's Gemini AI, the application provides personalized budget recommendations based on users' financial data.
+## 📋 Overview
 
-## Features
-- Track income and expenses
-- Categorize spending
-- Visualize financial data through interactive charts
-- Generate AI-powered budget recommendations
-- Set financial goals and track progress
-- Receive insights on spending patterns
+Auto Budget is an intelligent financial management system designed to simplify personal finance management. By leveraging Google's Gemini AI, the application provides data-driven insights and personalized budget recommendations tailored to your financial habits and goals.
 
-## Technologies
-- **Backend**: Java Spring Boot
-- **Frontend**: React.js
-- **AI Integration**: Google Gemini LLM
-- **Database**: MongoDB
+---
 
-## Getting Started
+## ✨ Key Features
+
+- 📊 **Intelligent Tracking** - Seamlessly monitor income and expenses
+- 🏷️ **Smart Categorization** - Automatically organize spending into meaningful categories
+- 📈 **Visual Analytics** - Understand your finances through intuitive charts and graphs
+- 🤖 **AI-Powered Recommendations** - Get personalized budget advice from Gemini LLM
+- 🎯 **Goal Setting** - Define and track progress toward financial objectives
+- 🔮 **Predictive Insights** - Receive forecasts based on your spending patterns
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| **Backend** | Java Spring Boot |
+| **Frontend** | React.js |
+| **AI Engine** | Google Gemini LLM |
+| **Database** | MySQL |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
+
 - Java JDK 11 or higher
-- Node.js and npm
-- Maven
-- MongoDB (local or cloud instance)
+- Node.js (v14+) and npm
+- Maven 3.6+
+- MySQL
 
 ### Backend Setup
-1. Navigate to the backend directory:
-   ```
-   cd ./BE/
-   ```
-2. Install dependencies and build the project:
-   ```
-   mvn clean install
-   ```
-3. Run the Spring Boot application:
-   ```
-   mvn spring-boot:run
-   ```
-   The backend server will start on http://localhost:8080
+
+```bash
+# Navigate to backend directory
+cd ./BE/
+
+# Install dependencies and build
+mvn clean install
+
+# Launch the application
+mvn spring-boot:run
+```
+> 🌐 Backend server will be available at http://localhost:8080
 
 ### Frontend Setup
-1. Navigate to the frontend directory:
-   ```
-   cd ./FE/
-   ```
-2. Install dependencies:
-   ```
-   npm install
-   ```
-3. Start the React development server:
-   ```
-   npm start
-   ```
-   The frontend application will be available at http://localhost:3000
 
-## Usage
-1. Create an account or login
-2. Add your income sources and recurring expenses
-3. Track daily spending by adding transactions
-4. View generated reports and AI recommendations for budget optimization
-5. Set financial goals and monitor your progress
+```bash
+# Navigate to frontend directory
+cd ./FE/
 
-## AI-Powered Budget Analysis
-Auto Budget utilizes Google's Gemini LLM to analyze user financial data and provide:
-- Spending pattern insights
-- Budget optimization recommendations
-- Financial goal suggestions
-- Personalized saving strategies
+# Install dependencies
+npm install
 
-## Project Team
-This application was developed for SENG 401 at the University of Calgary by:
-- Samuel Laquerre
-- Ahron Ramos
-- Paulo Pineda
-- Grazia Mena
-- Jolie Jony
-- Maliha Chowdhury Adrita
+# Start development server
+npm start
+```
+> 🖥️ Frontend application will be accessible at http://localhost:3000
+
+---
+
+## 📱 Application Workflow
+
+1. **Register/Login** - Create an account or sign in to your existing profile
+2. **Setup Income** - Add your salary and other revenue sources
+3. **Add Expenses** - Enter your recurring and one-time expenses
+4. **Explore Insights** - View AI-generated reports and recommendations
+
+---
+
+## 🧠 AI-Powered Features
+
+Auto Budget's integration with Google's Gemini LLM provides:
+
+- 🔍 **Pattern Recognition** - Identifies spending habits you might miss
+- 💡 **Smart Suggestions** - Offers actionable advice to optimize your budget
+- 🔮 **Financial Forecasting** - Projects future scenarios based on current behavior
+- 🎯 **Goal Optimization** - Recommends adjustments to help you reach targets faster
+
+---
+
+## 👥 Development Team
+
+This project was developed for SENG 401 at the University of Calgary by:
+
+| Team Member |
+|-------------|
+| Samuel Laquerre 
+| Ahron Ramos 
+| Paulo Pineda
+| Grazia Mena 
+| Jolie Jony 
+| Maliha Chowdhury Adrita
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE)
+
+---
