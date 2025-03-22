@@ -10,7 +10,6 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
 }
 
 .ChatList .title {
@@ -168,6 +167,7 @@
     align-items: center;
     width: 100%;
     padding: 10px;
+    box-sizing: border-box;
 }
 
 .edit-form input {
@@ -180,6 +180,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.9rem;
     outline: none;
+    max-width: calc(100% - 80px);
 }
 
 .edit-form input:focus {
@@ -189,6 +190,16 @@
 
 .edit-form .icon-btn {
     margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.edit-form .icon-btn.save-btn,
+.edit-form .icon-btn.cancel-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Animation styles */
@@ -236,4 +247,58 @@
 
 .budget-item.animation-complete {
     background: transparent;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .ChatList {
+        padding: 20px;
+    }
+
+    .ChatList .title {
+        font-size: 1.1rem;
+    }
+
+    .budget-item a {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ChatList {
+        padding: 15px;
+    }
+
+    .ChatList .title {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .ChatList a {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        margin-bottom: 10px;
+    }
+
+    .ChatList hr {
+        margin: 15px 0;
+    }
+
+    .list {
+        gap: 8px;
+    }
+
+    .budget-item a {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .icon-btn {
+        font-size: 0.8rem;
+    }
+
+    .edit-form input {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
 }
