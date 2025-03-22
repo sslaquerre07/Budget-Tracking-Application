@@ -546,7 +546,6 @@ function Dashboard({ budgetData }) {
         }
     };
 
-    // New function to handle sending email of the budget analysis
     const handleSendEmail = async () => {
         if (!userEmail || isGuest || !llmResponse) return;
 
@@ -566,21 +565,21 @@ function Dashboard({ budgetData }) {
                 body: JSON.stringify(emailData)
             });
 
-            const responseData = await response.json();
-
-            if (responseData.success) {
+            if (response.ok) {
                 alert("Budget analysis has been sent to your email!");
             } else {
+                const errorText = await response.text();
+                console.error("Error response:", errorText);
                 alert("Failed to send email. Please try again later.");
             }
-
-            setIsSendingEmail(false);
         } catch (error) {
             console.error("Error sending email:", error);
             alert("An error occurred while sending the email.");
+        } finally {
             setIsSendingEmail(false);
         }
     };
+
 
     const handleEditStart = () => {
         setIsEditingTitle(true);
@@ -730,20 +729,6 @@ function Dashboard({ budgetData }) {
 
                         {/* Action buttons for the response tab */}
                         <div className="response-actions">
-                            {/* Save button for existing budgets if analysis has been generated but not saved */}
-                            {budgetId && shouldSaveAfterGenerate && !isGuest && (
-                                <div className="action-button-container">
-                                    <p>This analysis has not been saved to your budget.</p>
-                                    <button
-                                        onClick={handleSaveAnalysis}
-                                        disabled={isGenerating}
-                                        className="action-button save-button"
-                                    >
-                                        {isGenerating ? 'Saving...' : 'Save this analysis'}
-                                    </button>
-                                </div>
-                            )}
-
                             {/* Email button for logged-in users */}
                             {!isGuest && llmResponse && (
                                 <div className="action-button-container">
