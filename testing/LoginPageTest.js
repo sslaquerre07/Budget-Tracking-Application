@@ -1,24 +1,12 @@
 const { Builder, By, Key, until } = require("selenium-webdriver");
+const { login, signin, BASE_URL, HOME_URL, DASHBOARD_URL, LOGIN_URL, SIGNUP_URL } = require('./TestHelperFunctionsAndURLs');
 
-// Constants for test cases
-const BASE_URL = "http://localhost:3000";
-const HOME_URL = `${BASE_URL}/`;
-const DASHBOARD_URL = `${BASE_URL}/dashboard`;
-const LOGIN_URL = `${BASE_URL}/login`;
-const SIGNUP_URL = `${BASE_URL}/sign-up`;
+// Constants for test cases (specifically for login page)
 const GUEST_ALERT = "You are trying the app as a guest. Your budgets won't be saved.";
 const LOGIN_SUCCESS_ALERT = "Login successful!";
 const SIGNOUT_ALERT = "You have been signed out.";
 const LOGIN_FAIL_ERROR = "Email does not have an account associated with it";
 const LOGIN_FAIL_WRONG_PASSWORD = "Bad Username/Password, please try again";
-
-// Helper function to login
-async function login(driver, email, password) {
-    await driver.get(LOGIN_URL);
-    await driver.findElement(By.name("email")).sendKeys(email);
-    await driver.findElement(By.name("password")).sendKeys(password);
-    await driver.findElement(By.xpath("//button[@type='submit']")).click();
-}
 
 ////////////////////////////////////////// Test Cases For Login Page //////////////////////////////////////////
 
@@ -95,8 +83,8 @@ async function login(driver, email, password) {
 
         // Verify error message
         if(errorText === LOGIN_FAIL_ERROR) {
-            console.log("Test Case 7 Passed: 🟢 Alert displayed: Email does not have an account associated with it");
-        } else {
+            console.log("Test Case 7 Passed: 🟢 Alert displayed: \"Email does not have an account associated with it\"");
+        } else {                                                   
             console.log("Test Case 7 Failed: 🔴 Alert not displayed.");
         }
     } finally {
@@ -194,7 +182,7 @@ async function login(driver, email, password) {
     try {
         await login(driver, "jane.smith@example.com", "mypassword456");
         
-        // Manually redirect to login page
+        // Manually redirect to home page then click on login button
         await driver.get(LOGIN_URL);
 
         // Wait for redirect
@@ -320,7 +308,7 @@ async function login(driver, email, password) {
 
         // Verify error message
         if(errorText === LOGIN_FAIL_WRONG_PASSWORD) {
-            console.log("Test Case 14 Passed: 🟢 Alert displayed: \"Bad Username/Password, please try again\" is displayed");
+            console.log("Test Case 14 Passed: 🟢 Alert displayed: \"Bad Username/Password, please try again\"");
         } else {
             console.log("Test Case 14 Failed: 🔴 Alert not displayed.");
         }

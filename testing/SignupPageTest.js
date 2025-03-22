@@ -1,25 +1,11 @@
 const { Builder, By, Key, until } = require("selenium-webdriver");
+const { login, signin, BASE_URL, HOME_URL, DASHBOARD_URL, LOGIN_URL, SIGNUP_URL } = require('./TestHelperFunctionsAndURLs');
 
-// Constants for test cases
-const BASE_URL = "http://localhost:3000";
-const DASHBOARD_URL = `${BASE_URL}/dashboard`;
-const LOGIN_URL = `${BASE_URL}/login`;
-const SIGNUP_URL = `${BASE_URL}/sign-up`;
+
+// Constants for test cases (specifically for sign-up page)
 const PASSWORD_ERROR_SHORT = "Password must be at least 6 characters long.";
 const PASSWORD_ERROR_MATCH = "Passwords do not match.";
 const EMAIL_EXISTS_ERROR = "Signup failed. Try again.";
-
-// Helper function to signup
-async function signin(driver, fname, lname, email, password, confirmpassword) {
-    await driver.get(SIGNUP_URL);
-
-    await driver.findElement(By.name("firstName")).sendKeys(fname);
-    await driver.findElement(By.name("lastName")).sendKeys(lname);
-    await driver.findElement(By.name("email")).sendKeys(email);
-    await driver.findElement(By.name("password")).sendKeys(password);
-    await driver.findElement(By.name("confirmPassword")).sendKeys(confirmpassword);
-    await driver.findElement(By.xpath("//button[@type='submit']")).click();
-}
 
 ////////////////////////////////////////// Test Cases For Signup Page //////////////////////////////////////////
 
@@ -45,9 +31,9 @@ async function signin(driver, fname, lname, email, password, confirmpassword) {
 
         // Check error message
         if (errorMessage === PASSWORD_ERROR_SHORT) {
-            console.log("Test Case 15 Passed: 🟢 Password error message displayed correctly!");
+            console.log("Test Case 15 Passed: 🟢 \"Password must be at least 6 characters long.\" error message displayed correctly!");
         } else {
-            console.log("Test Case 15 Failed: 🔴 Password error message not displayed.");
+            console.log("Test Case 15 Failed: 🔴 \"Password must be at least 6 characters long.\" error message not displayed.");
         }
     } finally {
         await driver.quit();
@@ -73,13 +59,13 @@ async function signin(driver, fname, lname, email, password, confirmpassword) {
 
 
         // DEBUG
-        // console.log(`Error Message Displayedd: "${errorMessage}"`);
+        // console.log(`Error Message Displayed: "${errorMessage}"`);
         
         // Check error message
         if (errorMessage === PASSWORD_ERROR_MATCH) {
-            console.log("Test Case 16 Passed: 🟢 Mismatched password error message displayed correctly!");
+            console.log("Test Case 16 Passed: 🟢 \"Passwords do not match.\" error message displayed correctly!");
         } else {
-            console.log("Test Case 16 Failed: 🔴 Mismatched password error message not displayed.");
+            console.log("Test Case 16 Failed: 🔴 \"Passwords do not match.\" error message not displayed.");
         }
     } finally {
         await driver.quit();
@@ -137,9 +123,9 @@ async function signin(driver, fname, lname, email, password, confirmpassword) {
 
         // Check error message
         if (errorMessage === EMAIL_EXISTS_ERROR) {
-            console.log("Test Case 18 Passed: 🟢 \"Signup failed. Try again. error message displayed correctly!\"");
+            console.log("Test Case 18 Passed: 🟢 \"Signup failed. Try again.\" error message displayed correctly!");
         } else {
-            console.log("Test Case 18 Failed: 🔴 \"Signup failed. Try again. error message not displayed.\"");
+            console.log("Test Case 18 Failed: 🔴 \"Signup failed. Try again.\" error message not displayed.");
         }
     } finally {
         await driver.quit();
@@ -153,7 +139,7 @@ async function signin(driver, fname, lname, email, password, confirmpassword) {
     let driver = await new Builder().forBrowser("chrome").build();
 
     try {
-        await driver.get(BASE_URL);
+        await driver.get(SIGNUP_URL);
         
         await driver.findElement(By.css('a[href="/login"]')).click();
 
@@ -166,6 +152,34 @@ async function signin(driver, fname, lname, email, password, confirmpassword) {
             console.log("Test Case 19 Passed: 🟢 Login button clicked. Redirected correctly!");
         } else {
             console.log("Test Case 19 Failed: 🔴 Login button not clicked.");
+        }
+    } finally {
+        await driver.quit();
+    }
+})();
+
+// Test Case 20: Dashboard Button Redirect for logged-in users
+// Input: Click on Dashboard button
+// Expected output: Redirect to dashboard page
+(async function dashboardButtonTest() {
+    let driver = await new Builder().forBrowser("chrome").build();
+
+    try {        
+        // Login
+        // await signin(driver, "John", "Doe", "test2@testing.com", "password123", "password123");
+        await login(driver, "john.doe@example.com", "password123");
+
+        await driver.get(SIGNUP_URL);
+
+        // Wait for redirect
+        await driver.wait(until.urlIs(DASHBOARD_URL), 10000);
+
+        // Verify redirect success
+        let currentURL = await driver.getCurrentUrl();
+        if (currentURL === DASHBOARD_URL) {
+            console.log("Test Case 20 Passed: 🟢 Dashboard button clicked. Redirected correctly!");
+        } else {
+            console.log("Test Case 20 Failed: 🔴 Dashboard button not clicked.");
         }
     } finally {
         await driver.quit();
