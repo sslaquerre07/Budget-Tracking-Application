@@ -6,11 +6,11 @@
 }
 
 .sidebar-wrapper {
-    width: 280px;
+    width: 350px;
     flex-shrink: 0;
     height: 100%;
     position: fixed;
-    left: -280px;
+    left: -320px;
     top: 0;
     bottom: 0;
     z-index: 999;
@@ -109,11 +109,11 @@
 
 @media (min-width: 768px) {
     .sidebar-wrapper {
-        position: relative;
-        left: 0;
-        width: 280px;
-        background: transparent;
-    }
+            position: relative;
+            left: 0;
+            width: 350px;
+            background: transparent;
+        }
 
     .dashboard-container {
         display: flex;
